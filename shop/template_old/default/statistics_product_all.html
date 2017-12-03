@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - 订货宝 网上订货系统</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link href="template/default/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/list.css" rel="stylesheet" type="text/css" media="screen" />
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/function.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="./plugin/Highcharts/js/highcharts.js"></script>
+<script type="text/javascript" src="./plugin/Highcharts/js/modules/exporting.js"></script>
+</head>
+
+<body>
+<div id="contentbody">    	
+		  <div class="line">
+
+         	<div class="list_line">
+			<form id="MainForm" name="MainForm" method="post" action=""  >
+             <table width="100%" border="0" cellspacing="0" cellpadding="0">
+     			 <tr>
+       				 <td height="10" ></td>
+     			 </tr>
+				 <!--{if !empty($rmsgt)}-->{$rmsgt}<!--{else}-->
+				 <!--{if !empty($statdata)}-->
+     			 <tr>
+       				 <td  >
+		<script type="text/javascript">
+		
+			var chart;
+			$(document).ready(function() {
+				chart = new Highcharts.Chart({
+					chart: {
+						renderTo: 'container',
+						defaultSeriesType: 'column'
+					},
+					title: {
+						text: '（{$pinfo[Name]}） 订购数据'
+					},
+					xAxis: {
+						categories: [{$cmsg}]
+					},
+					yAxis: {
+						min: 0,
+						title: {
+							text: '订单个数'
+						},
+						stackLabels: {
+							enabled: true,
+							style: {
+								fontWeight: 'bold',
+								color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+							}
+						}
+					},
+					legend: {
+						align: 'right',
+						x: -100,
+						verticalAlign: 'top',
+						y: 20,
+						floating: true,
+						backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid) || 'white',
+						borderColor: '#CCC',
+						borderWidth: 1,
+						shadow: false
+					},
+					tooltip: {
+						formatter: function() {
+							return '<b>'+ this.x +'</b><br/>'+
+								 this.series.name +': '+ this.y +'<br/>'+
+								 '共: '+ this.point.stackTotal;
+						}
+					},
+					plotOptions: {
+						column: {
+							stacking: 'normal',
+							dataLabels: {
+								enabled: true,
+								color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+							}
+						}
+					},
+				    series: [{
+						name: '实际订购数',
+						data: [{$pmsg}]
+					}, {
+						name: '退货数',
+						data: [{$rmsg}]
+					}]
+				});	
+			});				
+		</script>
+					<div id="container" style="width: 700px; height: 400px; margin: 0 auto"></div>
+					</td>
+     			 </tr>
+
+     			 <tr>
+       				 <td height="30" bgcolor="#efefef" >&nbsp;&nbsp;&nbsp;&nbsp; <strong>（{$pinfo['Name']}） 订购数据 - 颜色</strong></td>
+     			 </tr>
+     			 <tr>
+       				 <td >
+
+        	  <table width="100%" border="0" cellspacing="0" cellpadding="0">               
+               <thead>
+                <tr>
+                  <td width="2%" class="bottomlinebold"><label>
+                 &nbsp;
+                  </label></td>
+                  <td width="10%" class="bottomlinebold">序号</td>
+				  <td  class="bottomlinebold">商品</td>
+				  <td width="12%" class="bottomlinebold">颜色</td>
+					<td width="12%" class="bottomlinebold">规格</td>
+				  <td width="12%" class="bottomlinebold">订购数量</td>
+				  <td width="12%" class="bottomlinebold">退货数量</td>
+                  <td width="12%" class="bottomlinebold">实际数量</td>
+                </tr>
+     		 </thead>
+			 
+			 <tbody>
+			 <!--{loop $statdata $skey $var}-->
+			 <!--{if !empty($var['ContentName'])}-->
+			 <tr class="bottomline" onmouseover="inStyle(this)"  onmouseout="outStyle(this)">
+                  <td>&nbsp;</td>
+				  <td>&nbsp;<!--{echo $n++}--></td>
+				  <td >&nbsp;{$var['ContentName']}</td>
+				  <td >&nbsp;{$var['ContentColor']}</td>
+				  <td >&nbsp;{$var['ContentSpecification']}</td>
+                  <td >&nbsp;{$var['onum']}</td>
+				  <td >&nbsp;{$var['rnum']}</td>
+				  <td >&nbsp;{$var['cnum']}</td>
+			 </tr>
+			 <!--{/if}-->
+			 <!--{/loop}-->
+			 <tr class="bottomline" onmouseover="inStyle(this)"  onmouseout="outStyle(this)">
+                  <td>&nbsp;</td>
+				  <td ><strong>合计：</strong></td>
+				  <td>&nbsp;</td>
+				  <td>&nbsp;</td>
+				  <td ><strong>&nbsp;<!--{echo count($statdata)}--></strong></td>
+                  <td ><strong> {$totalm} 件</strong></td>
+				  <td ><strong> {$totalr} 件</strong></td>
+				  <td ><strong> {$total} 件</strong></td>
+			 </tr>
+			 </tbody>
+			</table>
+
+					 </td>
+     			 </tr>
+			<!--{else}-->
+     			 <tr>
+       				 <td height="130" bgcolor="#ffffff" align="center">&nbsp; 暂无符合条件的数据!</td>
+     			 </tr>
+			<!--{/if}-->
+			<!--{/if}-->
+              </table>
+			  </form>
+
+            </div>
+    
+        </div> 
+
+ </div> 
+</body>
+</html>

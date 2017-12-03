@@ -1,0 +1,21 @@
+        <div id="gg_div">
+        	<div class="leftdiv"><img src="template/default/img/gg_1.jpg" /></div>
+            <div class="centerdiv">
+				 
+				<div style="width:640px; height:46px; overflow:hidden; margin-top:8px;">
+				<marquee  behavior="scroll" direction="left" onMouseOver="this.stop()" onMouseOut="this.start()" truespeed="12" scrollAmount="1" scrollDelay="25"  > 
+					<table border="0" cellspacing="0" cellpadding="0">  
+					<tr>
+					<!--{loop $gg_info $ggkey $ggvar}-->
+					<td height="40"  style="white-space:nowrap; cursor: pointer; font-size:14px; color:{$ggvar[ArticleColor]}; border:0;" onclick="document.location.href='infomation.php?sid=0&ID={$ggvar[ArticleID]}#locationname'">
+					<span class="font11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<!--{echo date("Y-m-d",$ggvar[ArticleDate])}-->]</span>
+					<br />&nbsp;&nbsp; - {$ggvar[ArticleTitle]}
+					</td>
+					<!--{/loop}-->
+					</tr>
+					</table>
+				</marquee>
+				</div>
+			</div>
+            <div class="rightdiv"><img src="template/default/img/gg_3.jpg" /></div>
+        </div>

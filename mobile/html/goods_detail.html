@@ -1,0 +1,136 @@
+<!-- 商品详情  -->
+<div style="position:absolute;z-index:3;width:100%;background:white;left:0;top:0;bottom:0;overflow:hidden;" class="page-goods-info" data-ng-controller="goodsDetailController">
+    <!-- 标题 -->
+    <header class="common">
+        <em data-back><a href="javascript:;" class="arrow-left"></a></em>
+        <p>商品详情</p>
+        <span ng-show="showScanner" data-start-scanner class="scanner"></span>
+    </header>
+    
+    <!-- 商品信息 -->
+    <div style="position: absolute;top: 5rem;left: 0;bottom: 5rem;width: 100%;" data-iscroll>
+        <div class="goods-info" id="detail-img" style="position: static;">
+            <div>
+                <div><!-- <img src="" alt="" data-ng-src="{{goodsDetail.PictureBig}}" /> -->
+                    <div class="banner" data-zoom-img>
+                        <ol data-banner-switch data-img-length="{{goodsDetail.PicArray.length}}">
+                            <li ng-repeat="img in goodsDetail.PicArray"><img data-img-loaded data-page="info" data-ng-src="{{img}}" style="max-height: 23.0rem;" src="" alt=""/></li>
+                        </ol>
+                        <ul>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <p class="ellipsis text-indent">
+                <span data-trans-html html-text="goodsDetail.Name"></span>
+                <span class="commend">{{goodsDetail.CommendName}}</span>
+            </p>
+            <p style="display: block;" class="text-indent" ng-if="goodsDetail.Coding"><strong>编号：</strong>{{goodsDetail.Coding}}</p>
+            <span class="text-indent" >订货价：¥ <em class="red">{{goodsDetail.Price | number:2}}</em></span>
+            <span> / {{goodsDetail.Units}}</span>
+            <span ng-if="goodsDetail.price_name && goodsDetail.show_price" class="text-indent" style="display:none;">{{goodsDetail.price_name}}：¥ {{goodsDetail.show_price}}</span>
+            <span ng-if="goodsDetail.price_name && goodsDetail.show_price" style="display:none;"> / {{goodsDetail.Units}}</span>
+            <div class="divider"></div>
+            <!-- 启用多选 -->
+            <div ng-if="goodsDetail.Specification.length>1 || goodsDetail.Color.length>1" class="choice-more clearfix" ng-click="choiceMore.toggleChoiceMore();">
+                <span class="l"><em ng-class="{'checked':choiceMore.isChoiceMore}" class=""></em></span>
+                <span class="l">启用多选</span>
+            </div>
+            
+            <div ng-if="goodsDetail.Specification && choiceMore.isChoiceMore" class="specification">
+                <h3>规格</h3>
+                <div id="info-spec" data-choice-spec>
+                    <span ng-class="{'goods-active':$index==0}" data-ng-repeat="specification in goodsDetail.Specification" data-trans-html html-text="specification"></span>
+                </div>
+            </div>
+            <div ng-if="goodsDetail.Color && choiceMore.isChoiceMore" class="color">
+                <h3>颜色</h3>
+                <div id="info-color" data-choice-color>
+                    <span ng-class="{'goods-active':$index==0}" data-ng-repeat="color in goodsDetail.Color" data-trans-html html-text="color"></span>
+                </div>
+            </div>
+            
+            <!-- 未启用多选 -->
+            <div ng-if="goodsDetail.Specification && !choiceMore.isChoiceMore" class="specification">
+                <h3>规格</h3>
+                <div data-choice-spec>
+                    <span ng-class="{'goods-active':$index==0}" data-ng-repeat="specification in goodsDetail.Specification" data-trans-html html-text="specification"></span>
+                </div>
+            </div>
+            <div ng-if="goodsDetail.Color && !choiceMore.isChoiceMore" class="color">
+                <h3>颜色</h3>
+                <div data-choice-color>
+                    <span ng-class="{'goods-active':$index==0}" data-ng-repeat="color in goodsDetail.Color" data-trans-html html-text="color"></span>
+                </div>
+            </div>
+            
+            <div>
+                <h3>订货数量</h3>
+                <div style="margin-bottom: 1.0rem;">
+                    <button data-minus class="l">－</button>
+                    <div class="replace" data-replace-input></div>
+                    <input ng-model="goods.num" class="l" type="text" value="1" />
+                    <button data-plus class="l">＋</button>
+                    <span ng-if="goodsDetail.showLibrary=='Y'">&nbsp;库存 {{goodsDetail.allLibrary + ' ' + goodsDetail.Units}}</span>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="color">
+                <h3 ng-if="goodsDetail.BrandName"><strong style="color: #C8ACAC;">品牌：</strong>{{goodsDetail.BrandName}}</h3>
+                <h3 ng-if="goodsDetail.Model"><strong style="color: #C8ACAC;">规格：</strong>{{goodsDetail.Model}}</h3>
+                <h3 ng-if="goodsDetail.Barcode"><strong style="color: #C8ACAC;">条码：</strong>{{goodsDetail.Barcode}}</h3>
+                <h3 ng-if="goodsDetail.Casing"><strong style="color: #C8ACAC;">包装：</strong>{{goodsDetail.Casing}}</h3>
+                <h3 ng-if="goodsDetail.Package!='' && goodsDetail.Package!=0"><strong style="color: #C8ACAC;">整包装出库数量：</strong>{{goodsDetail.Package}}</h3>
+            </div>
+            <div ng-if="goodsDetail.FieldContent" class="divider"></div>
+            <div ng-repeat="field in goodsDetail.FieldContent" class="color">
+                <h3><strong style="color: #C8ACAC;">{{field.name}}：</strong>{{field.value}}</h3>
+            </div>
+            <div ng-if="goodsDetail.Content" class="divider"></div>
+            <div ng-if="goodsDetail.Content" class="content" data-trans-html html-text="goodsDetail.Content"></div>
+            
+        </div>
+    </div>    
+    <!-- 数字键盘 -->
+    <div class="num-key animated" data-stop-bubble>
+        <h4><input id="input-num" class="input-num" type="text" readonly /></h4>
+        <ul data-input-num>
+            <li><span>1</span></li>
+            <li><span>2</span></li>
+            <li><span>3</span></li>
+            <li><span style="line-height:5.0rem;" class="icon icon-delete"></span></li>
+            <li><span>4</span></li>
+            <li><span>5</span></li>
+            <li><span>6</span></li>
+            <li><span>0</span></li>
+            <li><span>7</span></li>
+            <li><span>8</span></li>
+            <li><span>9</span></li>
+            <li data-input-infofinish><span>完成</span></li>
+        </ul>
+    </div>
+    
+    <!-- 页面底部 -->
+    <footer class="info-footer">
+        <div class="l">
+            <ul>
+                <li data-back>
+                    <p><span class="icon icon-arrow-left"></span></p>
+                </li>
+                <li ng-click="setContentFav('add');">
+                    <p ng-class="{'grey':goodsDetail.isFav!='Y','red':goodsDetail.isFav=='Y'}" class="icon icon-heart"></p>
+                    <p>{{favText}}</p>
+                </li>
+                <li ng-click="changePath('/my-cart',false)">
+                    <p class="icon icon-cart red"></p>
+                    <p>购物车</p>
+                    <span ng-show="cartGoods.length>0" class="caret" ng-bind="cartGoods.length"></span>
+                </li>
+            </ul>
+        </div>
+        <div ng-if="goodsDetail.CommendID!='9'" data-add-cart data-from="info" data-refresh-cart="refreshCart();" class="r">加入购物车</div>
+        <div ng-if="goodsDetail.CommendID=='9'" style="background-color: #FF5C1E;color: #FFFFFF; text-align: center;">缺货</div>
+    </footer>
+</div>
+

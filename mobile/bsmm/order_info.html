@@ -1,0 +1,113 @@
+<!-- 订单详情 -->
+<div class="order-info common-style" style="background-color: white;top: 0;">
+    <header>
+        <span data-back class="icon">&#x34;</span>
+        <h4>订单详情</h4>
+    </header>
+    <div ng-class="{'bottom':orderes.selectOrder.header.OrderStatus>1&&(myInfo.module.order.pope_audit!=='Y'||myInfo.UserFlag!=='9'&&myInfo.UserType!=='M')}" data-iscroll class="list">
+        <!-- 订单信息 -->
+        <div class="info">
+            <div class="info-common">
+                <p><span>订单编号：{{orderes.selectOrder.header.OrderSN}}</span></p>
+                <address>
+                    <span>订单金额：<em class="color-red">¥ {{orderes.selectOrder.header.OrderTotal}}</em></span>
+                    <p>下单时间：{{orderes.selectOrder.header.OrderDate*1000 | date:'yyyy-MM-dd HH:mm:ss'}}</p>
+                    <p>订单状态：<em ng-show="!orderes.selectOrder.header.OrderSalerStatusName" class="state state-green">{{orderes.selectOrder.header.OrderStatusName}}</em>
+                        <em ng-show="orderes.selectOrder.header.OrderSalerStatusName" class="state state-green">{{orderes.selectOrder.header.OrderSalerStatusName}}</em>
+                    </p>
+                </address>
+            </div>
+            <div class="info-common">
+                <p><span>收货信息</span></p>
+                <address>
+                    <span>{{orderes.selectOrder.header.OrderReceiveName}} {{orderes.selectOrder.header.OrderReceivePhone}}</span>
+                    <p>{{orderes.selectOrder.header.OrderReceiveCompany}}</p>
+                    <p>{{orderes.selectOrder.header.OrderReceiveAdd}}</p>
+                </address>
+            </div>
+            <div class="info-common">
+                <p><span>支付及配送方式</span></p>
+                <address>
+                    <span>配送方式：{{orderes.selectOrder.header.OrderSendType}}</span>
+                    <p>配送状态：<em class="status">{{orderes.selectOrder.header.OrderSendStatusName}}</em></p>
+                    <p>支付方式：{{orderes.selectOrder.header.OrderPayType}}</p>
+                    <p>支付状态：<em class="status">{{orderes.selectOrder.header.OrderPayStatusName}}</em></p>
+                    <p ng-show="orderes.selectOrder.header.DeliveryDate!='0000-00-00'">交货时间：{{orderes.selectOrder.header.DeliveryDate}}</p>
+                </address>
+            </div>
+            <div class="info-common" ng-show="orderes.selectOrder.header.OrderRemark">
+                <p><span>备注</span></p>
+                <address>
+                    <span data-trans-html html-text="orderes.selectOrder.header.OrderRemark"></span>
+                </address>
+            </div>
+            <div data-toggle-goods class="goods-num" style="background: rgb(250,250,250);border-bottom: 1px solid #eae9e9;">
+                <span class="f_right">共<em>{{orderes.selectOrder.body.length}}</em>种<span class="icon">&#x33;</span></span>
+                <span>商品清单</span>
+            </div>
+            <!-- 商品清单 -->
+            <div class="info-goods animated order-goods">
+                <ul>
+                    <li data-ng-repeat="goods in orderes.selectOrder.body">
+                        <span class="ellipsis-one"><em ng-show="goods.conType=='g'" style="color:#ff5c1e;">[赠品] </em><em data-trans-html html-text="goods.Name"></em> {{goods.Coding}}</span>
+                        <span>
+                            <span ng-show="goods.ContentSpecification">规格：<em trans-html html-text="goods.ContentSpecification"></em></span> 
+                            <span ng-show="goods.ContentColor">颜色：<em trans-html html-text="goods.ContentColor"></em></span> 
+                        </span>
+                        <span>¥ {{goods.ContentPrice}} * {{goods.ContentNumber + ' ' + goods.Units}}
+                            <em ng-show="goods.conType=='c'">
+                             * {{goods.ContentPercent + ' 折 ='}}
+                            {{goods.ContentPrice*goods.ContentNumber*goods.ContentPercent/10 | currency: '¥ '}}
+                            </em>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="divider"></div>
+            <div data-toggle-log class="goods-num" style="background: rgb(250,250,250);border-bottom: 1px solid #eae9e9;">
+                <span class="f_right">共<em>{{orderes.selectOrder.log.length}}</em>条<span class="icon">&#x33;</span></span>
+                <span>操作日志 </span>
+            </div>
+            <!-- 操作日志 -->
+            <div class="info-goods info-log animated order-log">
+                <ul>
+                    <li data-ng-repeat="log in orderes.selectOrder.log">
+                        <span>{{log.Name}} <span>{{log.Date * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</span></span>
+                        <span>{{log.Status}}</span>
+                        <span>{{log.Content}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 订单取消 -->
+    <div class="animated fadeIn order-cancel common-model">
+        <div>
+            <h4>订单取消</h4>
+            <ul>
+                <li>确认取消该订单？</li>
+            </ul>
+            <div class="btn-group">
+                <button ng-click="orderes.orderOperator('cancel');" data-toggle data-selector="div.order-cancel">确定</button>
+                <button data-toggle data-selector="div.order-cancel">取消</button>
+            </div>
+        </div>
+    </div>
+    <footer ng-show="orderes.selectOrder.header.OrderStatus<=1&&(myInfo.module.order.pope_audit==='Y'||myInfo.UserFlag==='9'&&myInfo.UserType==='M')">
+        <div ng-show="orderes.selectOrder.header.OrderStatus==='0'&&orderes.selectOrder.showAuditBtn" ng-click="orderes.checkStatus('audit');">
+            <span class="icon color" style="color: #68c8ef;">&#x68;</span>
+            <span>审核订单</span>
+             <!-- ng-class="{'grey':orderes.selectOrder.header.OrderStatus!=='0'}"
+                  ng-class="{'grey':orderes.selectOrder.header.OrderStatus!=='0'}"
+                  ng-class="{'grey':orderes.selectOrder.header.OrderStatus!=='0'}" -->
+        </div>
+        <div ng-show="orderes.selectOrder.header.OrderStatus==='1'&&orderes.selectOrder.showAuditBtn" ng-click="orderes.checkStatus('unaudit');">
+            <span class="icon color" style="color: #68c8ef;">&#x4a;</span>
+            <span>反审核</span>
+        </div>
+        <div ng-show="orderes.selectOrder.header.OrderStatus==='0'&&myInfo.UserType!=='S'" ng-click="orderes.checkStatus('cancel');" style="border-right: 1px solid #eae9e9;">
+            <span class="icon" style="color: #65c2b0;">&#x51;</span>
+            <span>取消订单</span>
+        </div>
+    </footer>
+</div>

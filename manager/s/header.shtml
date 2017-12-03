@@ -1,0 +1,21 @@
+<?php
+include_once ("../common.php");
+include_once ("../class/logins.class.php");
+
+$inv = new Input();
+$in   = $inv->parse_incoming();
+$db  = dbconnect::dataconnect()->getdb();
+
+$menu_arr = array(
+		'order'			=>  '订单管理',
+		'consignment'   =>  '发货管理',
+		'client'		=>  '药店管理',
+		'inventory'	    =>  '库存状况',
+		'deduct'		=>  '业务提成',
+        'statistics'    =>  '销售统计',
+ 	 );
+$pope_arr = $menu_arr;
+
+$skey = think_encrypt('m,'.$_SESSION['uinfo']['userid'].','.$_SESSION['uinfo']['username'],ENCODE_KEY);
+define("HELP_URL",'http://help.dhb.net.cn/manager.shtml?skey='.$skey);
+?>

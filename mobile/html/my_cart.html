@@ -1,0 +1,87 @@
+<!-- 购物车 -->
+<div data-ng-controller="cartController">
+    <div class="page-cart">
+        <!-- 标题 -->
+        <header class="common">
+            <em data-back>
+                <img src="../img/comebackj.png" style="width: 20px;height: 20px;" alt=""/>
+            </em>
+            <!--<em data-back><a href="javascript:;" class="arrow-left"></a></em>-->
+            <p>购物车</p>
+            <span ng-click="cartEdit()" style="padding-right: .4rem;">{{cartEditText}}</span>
+        </header>
+        <div data-iscroll class="cart-list">
+            <ul>
+                <li data-ng-repeat="goods in goodses">
+                    <div ng-click="toggleChecked(goods);"><span ng-class="{'checked' : goods.isChecked}"></span></div><div>
+                        <div>
+                            <!--<img src="../img/demo.png" alt="">-->
+                            <img src="" alt=""  />
+                        </div>
+                    </div><div>
+                        <p ng-click="changePath('/goods-list/0/goods-detail/'+goods.id);">
+                            <span class="ellipsis-one" data-trans-html html-text="goods.name"></span>
+                            <span ng-show="goods.code">编号：{{goods.code}}</span>
+                        </p>
+                        <span class="ellipsis-one">
+                            <span class="red4">¥ {{goods.price | number:2}} / {{goods.units}}</span>
+                            <span ng-show="goods.color" class="min-size"> &nbsp;&nbsp;颜色：<em trans-html html-text="goods.color"></em></span>
+                            <span ng-show="goods.specify" class="min-size"> &nbsp;规格：<em trans-html html-text="goods.specify"></em></span>
+                        </span>
+                        <span style="width: 100%; overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                           <span style="float:left;">
+                            <button data-minus class="l">－</button>
+                            <div data-replace-input></div>
+                            <input ng-model="goods.num" class="l" type="text" name="num" value="1" />
+                            <button data-plus class="l">＋</button></span>
+                            <span ng-show="goods.isShow=='Y'">&ensp;库存 {{goods.stock + ' ' + goods.units}}</span>
+                        </span>
+                    </div>
+                </li>
+            </ul>
+            <!-- 无商品提示框 -->
+            <div class="no-data" ng-show="cartGoods.noData">
+                <div>
+                    <p></p>
+                    <p>一件商品都没有哦~</p>
+                    <button ng-click="changePath('/goods-list/0')">开始订购</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 数字键盘 -->
+        <div class="num-key animated" data-stop-bubble>
+            <h4><input class="input-num" type="text" readonly /></h4>
+            <ul data-input-num>
+                <li><span>1</span></li>
+                <li><span>2</span></li>
+                <li><span>3</span></li>
+                <li><span style="line-height:5.0rem;" class="icon icon-delete"></span></li>
+                <li><span>4</span></li>
+                <li><span>5</span></li>
+                <li><span>6</span></li>
+                <li><span>0</span></li>
+                <li><span>7</span></li>
+                <li><span>8</span></li>
+                <li><span>9</span></li>
+                <li data-input-finish><span>完成</span></li>
+            </ul>
+        </div>
+        <footer>
+            <div class="l" ng-click="selectAll();"><span ng-class="{'checked' : selectAllBtn}"></span></div>
+            <!-- <div ng-show="!isEdit" class="l" ng-click="clearSelectGoods();"><span class="icon icon-trashcan" style="vertical-align: middle;"></span></div> -->
+            <div ng-show="!isEdit" class="l">合计 : &nbsp;<span class="red7" id="totals" datas-total="{{totalAmount}}">¥ {{totalAmount}}</span></div>
+            <div ng-show="!isEdit" class="r" data-ng-click="settleMent();">去结算</div>
+            <div ng-show="isEdit" class="r" style="width: 30%;text-align: center;">
+                <button ng-click="clearSelectGoods();" style="padding: 2% 18.76%; border:1px solid;background-color: #f5f5f5;border-color: #41c960 #73db57 #42ca60 #13ba68;border-radius: 1.5rem;">
+                    <small class="icon icon-trashcan" style=""></small>&nbsp;删除</button>
+            </div>
+            <div ng-show="isEdit" class="r" data-ng-click="" style="width: 40%;text-align: center;">
+                <button ng-click="setContentFav('add');" style="padding: 2% 11%;background-color: #f5f5f5;border: 1px solid;border-color:#ff5b44 #ff4434  #ff6149 #ff4031; border-radius: 1.5rem;">加入收藏</button>
+            </div>
+        </footer>
+        
+        
+    </div>
+    <div data-ui-view class="animated fadeIn"></div>
+</div>

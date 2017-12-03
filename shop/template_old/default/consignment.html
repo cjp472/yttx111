@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - 订货宝 网上订货系统</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="template/default/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/list.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/showpage.css" rel="stylesheet" type="text/css" media="screen" />
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript">
+	function do_confirm_consignment(cid)
+	{
+		if(confirm("您确认已经收到货物了吗?"))
+		{
+			$.growlUI('正在执行，请稍候...');
+			$.post("consignment.php",
+				{m:"confirm", cid: cid},
+				function(data){
+					if(data == "ok"){
+						$.growlUI('操作成功！');	
+						$("#show_status_"+cid).html('&nbsp;状态：确认到货');
+						$("#button_line_"+cid).animate({opacity: 'hide'}, 'slow');	
+					}else{
+						$.growlUI(data);
+					}
+				}			
+			);
+		}
+	}
+</script>
+</head>
+
+<body>
+{template header}
+
+<div id="contentbody">
+	<div id="contentleft">
+        <div class="line margin_top" >
+<b class="b1"></b><b class="b2 d1"></b><b class="b3 d1"></b><b class="b4 d1"></b>
+<div class="b d1" style="height:68px;">
+
+<div class="line">
+	<div class="cartimg" onclick="javascript:window.location.href='cart.php'"><div id="cartnumber" ><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></div></div>
+	<div class="carttext">
+		<div><a href="cart.php"><img src="template/default/img/view_order.jpg" border="0" title="查看我的当前订单" /></a></div>
+		<div align="right" class="white">您已预订 <span id="cartnumber_2"><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></span> 件商品！</div>
+	</div>
+</div>
+
+</div>
+<b class="b4b d1"></b><b class="b3b d1"></b><b class="b2b d1"></b><b class="b1b"></b>
+		</div>
+
+
+		<div class="line margin_top">
+        	<div class="sort_title">发货单管理</div>
+         	<div class="sort_line">
+                <dt><a href="consignment.php" > &#8250;&#8250; 发货单查询</a></dt>
+				<!--{loop $incept_arr $skey $svar}-->
+					<dd><a href="consignment.php?status={$skey}" > &#8250;&#8250; {$svar} - 发货单</a></dd>
+				<!--{/loop}-->
+				<dt><a href="consignment.php?m=address" > &#8250;&#8250; 收货地址管理</a></dt>
+					<dd><a href="consignment.php?m=address#editname" > &#8250;&#8250; 新增地址</a></dd>
+            </div>
+        	<div class="line"><img src="template/default/img/sort_bottom.jpg" /></div>        
+        </div>
+
+		<div style="margin:24px; clear:both;"><a href="kuaidi_search.php" target="_blank"  title="快递查询"><img src="template/img/c1.png" alt="快递查询" /></a></div>
+		<div style="margin:24px; clear:both;"><a href="wuliu_search.php" target="_blank"  title="物流查询"><img src="template/img/c2.png" alt="物流查询" /></a></div>
+	</div>   
+    
+    
+    <div id="contentright">
+    	<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="consignment.php">我的发货单</a> 
+		</div>    	
+       
+		<div class="line margin_top">
+        	<div class="list_title">
+            	<div class="leftdiv line-height">我的发货单:</div>
+          </div>
+         	<div class="list_line">
+
+                	<table width="96%" border="0" cellspacing="0" cellpadding="0" align="center" class="ordertd">
+                    <thead>
+  <tr>
+    <td width="18%" height="28">运单</td>
+    <td>物流公司</td>
+    <td width="24%">发货信息</td>
+    <td width="32%">收货人信息</td> 
+  </tr>
+   </thead>
+   <tbody>
+<!--{loop $conlist['list'] $gkey $gvar}-->
+  <tr  onmouseover="inStyle(this)"  onmouseout="outStyle(this)" >
+    <td height="108">
+		<span class="numberbg" style="cursor: pointer;" onclick="javascript:window.location.href='consignment.php?m=showcontent&id={$gvar[ConsignmentID]}'" >{$gvar['ConsignmentID']}</span><br />
+		<span class="font12h" title="状态" id="show_status_{$gvar['ConsignmentID']}">&nbsp;状态：{$incept_arr[$gvar[ConsignmentFlag]]}</span><br />	
+		<span title="查看详细"><a href="consignment.php?m=showcontent&id={$gvar['ConsignmentID']}" >&#8250; 查看详细</a></span><br />
+		<!--{if empty($gvar[ConsignmentFlag])}-->
+		<span id="button_line_{$gvar['ConsignmentID']}"><a href="javascript:void(0)" onclick="do_confirm_consignment('{$gvar['ConsignmentID']}')" title="收到货后，请在此确认" >&#8250; 确认收货</a></span><br />
+		<!--{/if}-->
+	</td>
+    <td>
+		<!--{if !empty($gvar[LogisticsName])}-->
+		<span title="物流公司">{$gvar[LogisticsName]}</span><br />
+		<span title="联系电话">{$gvar[LogisticsPhone]}</span><br />
+		<!--{else}-->
+		<span title="上门自提">上门自提</span><br />
+		<!--{/if}-->
+		<span title="运单号">运单号： {$gvar['ConsignmentNO']}</span><br />
+	</td>
+    <td>
+		<span  title="经办人">经办人：{$gvar[ConsignmentMan]}</span><br />
+		<span title="发货时间">时间：{$gvar[ConsignmentDate]}</span><br />
+		<span class="font12" title="运费">运费: ¥ {$gvar[ConsignmentMoney]} / {$pay_send_arr[$gvar[ConsignmentMoneyType]]}</span><br />
+	</td>
+
+    <td>
+		<span title="收货人">{$gvar[InceptCompany]} / {$gvar[InceptMan]}  </span><br />
+		<span title="电话">电话：{$gvar[InceptPhone]}</span><br />
+		<span title="地址">地址：{$gvar[InceptAddress]}</span><br />	
+	</td>
+  </tr>
+   <!--{/loop}--> 
+   </tbody>
+</table>
+
+			<div class="list_showpage">{$conlist[showpage]}</div><br />&nbsp;
+            </div>
+        	<div class="line"><img src="template/default/img/list_bottom_1.jpg" /></div>        
+        </div> 
+              
+    </div> 
+</div>
+
+{template bottom}
+</body>
+</html>

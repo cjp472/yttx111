@@ -1,0 +1,38 @@
+<!-- 热销商品-->
+<div ng-controller="goodsHotController" class="goods-hot goods-list common-style" style="background-color: white;top: 0;">
+    <header>
+        <span data-back class="icon">&#x34;</span>
+        <h4>热销商品</h4>
+    </header>
+    <section class="set-date">
+        <span ng-click="goodsHot.preMonth();" class="icon">&#x38;</span>
+        <p><span>{{goodsHot.beginDate}}</span>~<span>{{goodsHot.endDate}}</span></p>
+        <span ng-click="goodsHot.nextMonth();" class="icon">&#x39;</span>
+    </section>
+    <div data-load-more="goodsHot.loadMore();" class="list" style="top: 10rem;">
+        <ul>
+            <li ng-repeat="goods in goodsHot.list">
+                <div class="list-body">
+                    <p>
+                        <!-- <img src="../img/order01.jpg" alt="" /> -->
+                        <span ng-class="{'one':$index===0,'two':$index===1,'three':$index===2,'other':$index>3}"><em>{{$index + 1}}</em></span>
+                    </p>
+                    <p>
+                        <span class="ellipsis">{{goods.ContentName}}</span>
+                        <span>
+                            <em class="color-grey">销售额：</em><em class="color-red">¥ {{goods.OrderTotal | number:2}} </em>&nbsp;
+                            <em class="color-grey f_right" style="width: 35%;">销量：{{goods.OrderNumber}}</em>
+                        </span>
+                    </p>
+                </div>
+            </li>
+        </ul>
+        <!-- 无数据提示框 -->
+        <div class="no-data" ng-show="goodsHot.noData">
+            <div>
+                <p class="search-result"></p>
+                <p>对不起，没有数据显示</p>
+            </div>
+        </div>
+    </div>
+</div>

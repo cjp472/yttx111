@@ -1,0 +1,94 @@
+<!--{if $in['t'] == "imglist"}-->
+            	<ul>
+				<!--{loop $goodslist['list'] $gkey $gvar}-->
+            		<li id="linegoods_{$gvar[ID]}">
+                    	<div class="list_img">
+						<!--{if !empty($gvar['Picture'])}-->
+						<a href="{RESOURCE_PATH}<!--{echo str_replace('thumb_','img_',$gvar['Picture'])}-->" class="jqzoom" title="{$gvar['Name']}" >
+						<img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" />
+						</a>
+						<!--{else}-->
+						<img src="template/default/img/default.jpg" title="{$gvar['Name']}" border="0" />
+						<!--{/if}-->
+						</div>
+                        <div class="list_content">
+                        	<dt><a href="content.php?id={$gvar['ID']}" title="{$gvar['Name']}" target="_blank" >{$gvar['Name']}</a>&nbsp;&nbsp;<span class="red">{$producttypearr[$gvar['CommendID']]}</span></dt>
+                            <dd><strong>编号/货号：</strong>{$gvar['Coding']}</dd>
+							<dd><strong>包装：</strong>{$gvar['Casing']}</dd> 
+							<!--{if !empty($gvar['ShowField'])}-->
+								<!--{loop $gvar['ShowField'] $skey $svar}-->
+									<dd><strong>{$svar['name']}：</strong>{$svar['value']}</dd>
+								<!--{/loop}-->
+							<!--{else}-->
+							<dd><strong>条码：</strong>{$gvar['Barcode']}</dd> 
+							<!--{/if}-->
+                        </div>
+                        
+                        <div class="list_button">                        	
+							<dd><span class="font14">¥ {$gvar['Price']}</span><span class="gray">&nbsp;&nbsp;元/{$gvar['Units']}&nbsp;&nbsp;</span></dd>
+							<!--{if $pns=="on"}-->
+								<!--{if empty($goodslist['number'][$gvar['ID']])}-->
+									<dd >&nbsp;&nbsp;库存：&nbsp;&nbsp;0&nbsp;{$gvar['Units']}</dd>
+								<!--{else}-->
+									<dd><strong>库存：</strong>&nbsp;&nbsp;{$goodslist['number'][$gvar['ID']]}&nbsp;{$gvar['Units']}</dd>
+								<!--{/if}-->
+							<!--{/if}-->	
+	                        <dd>
+							<!--{if $gvar['CommendID']=="9"}-->
+							<a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="template/default/img/cart_email.gif" border="0" class="img" /></a>
+							<!--{else}-->
+								<!--{if $pn=="on" && $png=="off" && $goodslist['number'][$gvar['ID']] <= 0}-->
+								<a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="template/default/img/cart_email.gif" border="0" class="img" /></a>
+								<!--{else}-->
+								<a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" ><img src="template/default/img/cart.gif" border="0" class="img" /></a>
+								<!--{/if}-->
+							<!--{/if}-->
+							</dd>
+							<dd>
+							<!--{if $iswish}-->
+								<a onclick="javascript:removewishlist('{$gvar[ID]}');" href="javascript:void(0);" title="从我的收藏中移除掉。">&#8250; 移除</a>
+							<!--{else}-->
+							<a onclick="javascript:addtowishlist('{$gvar[ID]}');" href="javascript:void(0);" title="将常订的商品加入我的收藏夹，方便日后订购。">&#8250; 添加到收藏夹</a>
+							<!--{/if}-->
+							</dd>
+                        </div>
+                    </li>
+                 <!--{/loop}-->
+                </ul>
+                
+		<!--{else}-->
+                	<br class="clear" />
+					<table width="96%" border="0" cellspacing="0" cellpadding="0" align="center">
+                    <thead>
+  <tr>
+    <td width="22%" height="28">&nbsp;编号/货号</td>
+    <td>&nbsp;名称</td>
+    <td width="16%">&nbsp;价格&nbsp;(元)</td>
+    <td width="14%">&nbsp;<!--{if $iswish}-->移除<!--{else}-->包装<!--{/if}--></td>
+    <td width="10%">&nbsp;订购</td>
+  </tr>
+   </thead>
+   <tbody>
+<!--{loop $goodslist['list'] $gkey $gvar}-->
+  <tr id="linegoods_{$gvar[ID]}" onmouseover="inStyle(this);control('altimg_{$gvar[ID]}', 'show');"  onmouseout="outStyle(this);control('altimg_{$gvar[ID]}', 'hide');" >
+    <td height="42" ><div id="altimg_{$gvar[ID]}" class="altimg"><!--{if !empty($gvar['Picture'])}--><img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" /><!--{/if}--></div>&nbsp;{$gvar['Coding']}</td>
+    <td  ><a href="content.php?id={$gvar['ID']}" target="_blank" >{$gvar['Name']}</a></td>
+    <td><span class="font12">¥ {$gvar['Price']}</span><span class="gray">&nbsp;/{$gvar['Units']}</span></td>
+    <td>&nbsp;<label><!--{if $iswish}--><a onclick="javascript:removewishlist('{$gvar[ID]}');" href="javascript:void(0);" title="从我的收藏中移除掉。">&#8250; 移除</a><!--{else}-->{$gvar['Casing']}<!--{/if}--></label></td>
+
+    <td <!--{if $pns=="on"}--><!--{if empty($goodslist['number'][$gvar['ID']])}-->title="库存:&nbsp;0 {$gvar['Units']}"<!--{else}-->title="库存:&nbsp;{$goodslist['number'][$gvar['ID']]} {$gvar['Units']}"<!--{/if}--><!--{/if}--> >
+	<!--{if $gvar['CommendID']=="9"}-->
+	<a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="template/default/img/cart_email_s.gif" border="0" class="img" /></a>	
+	<!--{else}-->
+		<!--{if $pn=="on" && $png=="off" && $goodslist['number'][$gvar['ID']] <= 0}-->
+		<a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="template/default/img/cart_email_s.gif" border="0" class="img" title="缺货" /></a>
+		<!--{else}-->
+		<a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" ><img src="template/default/img/cart_s.gif" border="0" class="img" /></a>
+		<!--{/if}-->	
+	<!--{/if}-->
+	</td>
+  </tr>
+   <!--{/loop}--> 
+   </tbody>
+</table>
+<!--{/if}-->

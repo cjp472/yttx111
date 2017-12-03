@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$_SESSION['ucc']['CompanyName']?> - <?=SITE_NAME?></title>
+<meta name='robots' content='noindex,nofollow' />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="<?=CONF_PATH_IMG?>css/base.css?v=<?=VERID?>" type="text/css" rel="stylesheet" />
+<link href="<?=CONF_PATH_IMG?>css/showpage.css" rel="stylesheet" type="text/css">
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js?v=<?=VERID?>" type="text/javascript"></script>
+<script src="template/js/cart.js?v=<?=VERID?>" type="text/javascript"></script>
+<style>
+.page_bar{float:right;}
+.page_bar a{height:24px !important;}
+</style>
+
+</head>
+
+<body>
+<? include template('header'); ?>
+<div id="main">
+<div id="location">当前位置：<a href="home.php">首页</a> / <a href="myorder.php?m=product">我订过的商品</a></div>
+<div class="main_left">
+
+<div class="fenlei_bg_tit"><span class="iconfont icon-wenjian" style="font-size: 15px;color: white;margin-left: 10px"></span>   订单管理</div>
+  <div class="news_info">
+  <ul>
+                <li><a href="myorder.php" ><span class="ali-small-circle iconfont icon-next-s"></span>订单查询</a>
+<? if(is_array($order_arr)) { foreach($order_arr as $skey => $svar) { if($skey==$in['status'] && isset($in['status'])) { ?>
+<dd><a href="myorder.php?status=<?=$skey?>" ><strong><span class="ali-small-sanjiao iconfont icon-icon-copy-copy1"></span><?=$svar?></strong></a></dd>
+<? } else { ?>
+<dd><a href="myorder.php?status=<?=$skey?>" >  <?=$svar?></a></dd>
+<? } } } ?>
+</li>
+                <li><a href="myorder.php" ><span class="ali-small-circle iconfont icon-next-s"></span>付款状态</a>
+<? if(is_array($pay_arr)) { foreach($pay_arr as $pkey => $pvar) { if($pkey==$in['pid'] && isset($in['pid'])) { ?>
+<dd><a href="myorder.php?pid=<?=$pkey?>" ><strong><span class="ali-small-sanjiao iconfont icon-icon-copy-copy1"></span><?=$pvar?></strong></a></dd>
+<? } else { ?>
+<dd><a href="myorder.php?pid=<?=$pkey?>" > <?=$pvar?></a></dd>
+<? } } } ?>
+</li>
+                <li><a href="myorder.php" ><span class="ali-small-circle iconfont icon-next-s"></span>发货状态</a>
+<? if(is_array($send_arr)) { foreach($send_arr as $dkey => $dvar) { if($dkey==$in['fid'] && isset($in['fid'])) { ?>
+<dd><a href="myorder.php?pid=<?=$dkey?>" ><strong><span class="ali-small-sanjiao iconfont icon-icon-copy-copy1"></span><?=$dvar?></strong></a></dd>
+<? } else { ?>
+<dd><a href="myorder.php?fid=<?=$dkey?>" >  <?=$dvar?></a></dd>
+<? } } } ?>
+</li>
+<li><a href="myorder.php?m=product" ><span class="ali-small-circle iconfont icon-next-s"></span>我订过的商品</a></li>
+                <li><a href="myorder.php?collect=1" ><span class="ali-small-circle iconfont icon-next-s"></span>我收藏的订单</a>
+  </ul>
+
+  </div>
+<div class="fenlei_bottom" style="width: 223px;height: 9px;border-left: 1px solid #D6D6D6;border-right: 1px solid #D6D6D6;border-bottom: 1px solid #D6D6D6"></div>
+
+</div>
+
+<div class="main_right">
+
+<div class="right_product_tit">
+<form name="changetypeform" id="changetypeform" action="myorder.php" method="get">
+<div class="xs_0"><span class="iconfont icon-changfangxing" style="color: #FFB135;font-size:16px;margin-left: -10px;"></span>   商品列表</div>
+<div class="xs_1">
+显示方式：
+<? if($in['t'] == "textlist") { ?>
+<a href="javascript:change_show_type('imglist')" ><img src="<?=CONF_PATH_IMG?>images/list_type_0.jpg" class="img" title="图文形式" id="imglist_imgid" onmouseover="change_img_over('1')" onmouseout="change_img_out('1')" /></a>&nbsp;&nbsp;&nbsp;<img src="<?=CONF_PATH_IMG?>images/list_type_3.jpg" class="img" title="列表形式" />
+<? } else { ?>
+<img src="<?=CONF_PATH_IMG?>images/list_type_1.jpg" class="img" title="图文形式" />&nbsp;&nbsp;&nbsp;<a href="javascript:change_show_type('textlist')" ><img src="<?=CONF_PATH_IMG?>images/list_type_2.jpg" id="textlist_imgid" onmouseover="change_img_over('2')" onmouseout="change_img_out('2')" class="img" title="列表形式" /></a>
+<? } ?>
+&nbsp;&nbsp;
+<select id="o" name="o" onchange="javascript:submit()" style="border:1px solid #dbdbdb;">
+                <optgroup label="- 排序条件 -">
+<option value="0" 
+<? if($in['o'] == "0") { ?>
+selected="selected"
+<? } ?>
+ >默认排序</option>
+                    <option value="4" 
+<? if($in['o'] == "4") { ?>
+selected="selected"
+<? } ?>
+ >商品人气</option>
+                    <option value="1" 
+<? if($in['o'] == "1") { ?>
+selected="selected"
+<? } ?>
+ >价格降序</option>
+                    <option value="2" 
+<? if($in['o'] == "2") { ?>
+selected="selected"
+<? } ?>
+ >价格升序</option>
+                    <option value="3" 
+<? if($in['o'] == "3") { ?>
+selected="selected"
+<? } ?>
+ >上架时间</option>
+                </optgroup>
+</select>
+&nbsp;&nbsp;
+<select name="ps" id="ps" onchange="javascript:submit()" style="border:1px solid #dbdbdb;">
+                <optgroup label="- 每页显示 -">
+                    <option value="18" 
+<? if($in['ps'] == "18") { ?>
+selected="selected"
+<? } ?>
+ >18条</option>
+                    <option value="30" 
+<? if($in['ps'] == "30") { ?>
+selected="selected"
+<? } ?>
+ >30条</option>
+                    <option value="50" 
+<? if($in['ps'] == "50") { ?>
+selected="selected"
+<? } ?>
+ >50条</option>
+                </optgroup>
+</select>
+
+            <input type="submit" value="GO" class="hide" />
+    <input type="hidden" name="m" id="m" value="product" />
+<input type="hidden" name="t" id="t" value="<?=$in['t']?>" />
+</div>
+</form>
+</div>
+
+
+<div class="right_product_main">
+
+         	<div class="list_line">
+
+
+<div class="list_showpage" style="display:none;"><?=$goodslist['showpage']?></div>
+<? if($in['t'] == "imglist") { ?>
+            	<ul>
+<? if(is_array($goodslist['list'])) { foreach($goodslist['list'] as $gkey => $gvar) { ?>
+            		<li  id="linegoods_<?=$gvar['ID']?>">
+                    	<div class="list_img"  style="border:1px solid #dbdbdb;">
+<? if(!empty($gvar['Picture'])) { ?>
+<a href="<?=RESOURCE_PATH?><? echo str_replace('thumb_','img_',$gvar['Picture']); ?>" class="jqzoom" title="<?=$gvar['Name']?>" >
+<img src="<?=RESOURCE_PATH?><?=$gvar['Picture']?>" title="<?=$gvar['Name']?>" border="0" />
+</a>
+<? } else { ?>
+<img src="<?=CONF_PATH_IMG?>images/default.jpg" title="<?=$gvar['Name']?>" border="0" style="width:160px;height:120px;" />
+<? } ?>
+</div>
+                        <div class="list_content">
+                        	<dt><a href="content.php?id=<?=$gvar['ID']?>" title="<?=$gvar['Name']?>" target="_blank" ><?=$gvar['Name']?></a>&nbsp;&nbsp;<span class="red"><?=$producttypearr[$gvar['CommendID']]?></span></dt>
+                            <dd  class="brand-line"><strong>品牌：</strong><?=$gvar['BrandName']?></dd>
+                            <dd><strong>编号：</strong><?=$gvar['Coding']?></dd>
+<dd><strong>型号：</strong><?=$gvar['Model']?></dd>
+<? if($pns=="on") { if(empty($goodslist['number'][$gvar['ID']])) { ?>
+<dd class="font12h">[缺货]</dd>
+<? } else { ?>
+<dd><strong>库存：</strong>&nbsp;&nbsp;<?=$goodslist['number'][$gvar['ID']]?>&nbsp;<?=$gvar['Units']?></dd>
+<? } } ?>
+                       
+                        </div>
+                        
+                        <div class="list_button">
+                        	
+<dd><span class="font14">¥ <?=$gvar['Price']?></span><span class="gray">&nbsp;&nbsp;元/<?=$gvar['Units']?>&nbsp;&nbsp;</span></dd>
+                        <dd>
+<? if($gvar['CommendID']=="9") { ?>
+<a href="javascript:void(0);" onclick="noticegoods('<?=$gvar['ID']?>');"><img src="<?=CONF_PATH_IMG?>images/notic_a.jpg" border="0" class="img" /></a>
+<? } else { if($pn=="on" && empty($goodslist['number'][$gvar['ID']])) { ?>
+<a href="javascript:void(0);" onclick="noticegoods('<?=$gvar['ID']?>');"><img src="<?=CONF_PATH_IMG?>images/notic_a.jpg" border="0" class="img" /></a>
+<? } else { ?>
+<a href="javascript:void(0);" onclick="addtocart('<?=$gvar['ID']?>','<?=$gvar['cs']?>');" id="shareit_<?=$gvar['ID']?>" ><img src="<?=CONF_PATH_IMG?>images/mypay.jpg" border="0" class="img" /></a>
+<? } } ?>
+</dd>
+<dd><a onclick="javascript:addtowishlist('<?=$gvar['ID']?>');" href="javascript:void(0);" title="将常订的商品加入我的收藏夹，方便日后订购。">&#8250; 添加到收藏夹</a></dd>
+                        </div>
+                    </li>
+                 
+<? } } ?>
+   
+
+                </ul>
+                
+<? } else { ?>
+                	<table width="99%" border="0" cellspacing="0" cellpadding="0" align="center">
+                    <thead>
+  <tr>
+    <td width="12%" height="28">&nbsp;编号</td>
+    <td>&nbsp;名称</td>
+    <td width="22%">&nbsp;品牌</td>
+      
+<? if($setarr['product_price']['price1_show'] == 'on') { ?>
+      <td width="12%" align="right">&nbsp;<?=$setarr['product_price']['price1_name']?>&nbsp;(元)</td>
+      
+<? } ?>
+      
+<? if($setarr['product_price']['price2_show'] == 'on') { ?>
+      <td width="12%" align="right">&nbsp;<?=$setarr['product_price']['price2_name']?>&nbsp;(元)</td>
+      
+<? } ?>
+    <td width="14%" align="center">&nbsp;型号</td>
+    <td width="10%">&nbsp;订购</td>
+  </tr>
+   </thead>
+   <tbody>
+<? if(is_array($goodslist['list'])) { foreach($goodslist['list'] as $gkey => $gvar) { ?>
+  <tr  onmouseover="inStyle(this)"  onmouseout="outStyle(this)" id="linegoods_<?=$gvar['ID']?>">
+    <td height="42">&nbsp;<?=$gvar['Coding']?></td>
+    <td><a href="content.php?id=<?=$gvar['ID']?>"><?=$gvar['Name']?></a></td>
+    <td><span class="font12"><?=$gvar['BrandName']?></span></td>
+      
+<? if($setarr['product_price']['price1_show'] == 'on') { ?>
+      <td align="right"><span class="test_1">¥ <?=$gvar['Price1']?></span><span class="gray">&nbsp;/<?=$gvar['Units']?></span></td>
+      
+<? } ?>
+      
+<? if($setarr['product_price']['price2_show'] == 'on') { ?>
+      <td align="right"><span class="test_1">¥ <?=$gvar['Price2']?></span><span class="gray">&nbsp;/<?=$gvar['Units']?></span></td>
+      
+<? } ?>
+    <td align="center">&nbsp;<label><?=$gvar['Model']?></label></td>
+    <td>
+<? if($gvar['CommendID']=="9") { ?>
+<a href="javascript:void(0);" onclick="noticegoods('<?=$gvar['ID']?>');"><img src="<?=CONF_PATH_IMG?>images/notic.jpg" border="0" class="img" /></a>
+<? } else { if($pn=="on" && empty($goodslist['number'][$gvar['ID']])) { ?>
+<a href="javascript:void(0);" onclick="noticegoods('<?=$gvar['ID']?>');"><img src="<?=CONF_PATH_IMG?>images/notic.jpg" border="0" class="img" /></a>
+<? } else { ?>
+<a href="javascript:void(0);" onclick="addtocart('<?=$gvar['ID']?>','<?=$gvar['cs']?>');" class="btn-1 f-l" id="shareit_<?=$gvar['ID']?>" style="margin-left: 10px;">
+<span class="icon ">&#xe07a;</span> 订购								
+</a>
+<? } } ?>
+</td>
+  </tr>
+   
+<? } } ?>
+ 
+   </tbody>
+</table>
+<? } ?>
+<div class="list_showpage"><?=$goodslist['showpage']?></div><br />&nbsp;
+
+            </div>
+</div>
+</div>
+</div>
+<? include template('bottom'); ?>
+<div id="windowForm">
+<div id="windowContent">  </div>
+</div>
+
+<div id="shareit-box">
+<div id="shareit-header"></div>
+<div id="shareit-body">
+<div id="shareit-blank"></div>
+<div id="shareit-url">数量：<input type="text" value="1" onfocus="this.select();"  name="shareit-field" id="shareit-field" class="field" onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" />
+<input type="hidden" value="" name="togoodsid" id="togoodsid"  /></div>
+<div id="shareit-icon">
+<a href="javascript:void(0);" title="关闭" onclick="hideshow('shareit-box');">X</a> <input type="button" name="addtocart" id="addtocart" value="订 购" class="button_7" onclick="saveonetocart();"  />   
+
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!-- 退货单  -->
+<div class="page-order-list" ng-controller="returnsController">
+    <!-- 标题 -->
+    <header class="common">
+        <em data-back><a href="javascript:;" class="arrow-left"></a></em>
+        <p>退货单</p>
+        <span ng-show="showScanner" data-start-scanner class="scanner"></span>
+    </header>
+    <div class="order-list" data-load-more="returnsOrders.loadMore();">
+        <ul>
+            <li ng-click="returnsOrders.getOrderInfo($index,order.ReturnID);" data-ng-repeat="order in returnsOrders.orderList">
+                <div><span class="caret-list">{{$index + 1}}</span>退单号：{{order.ReturnSN}}<span class="r bgcolor-sllide">{{order.ReturnStatus}}</span></div>
+                <div>
+                    <!-- <img src="../img/order01.jpg" width="100" height="100" alt="" /> -->
+                    <div>
+                        <span>金额：<span class="red" style="display: inline;">¥ {{order.ReturnTotal}}</span></span>
+                        <!-- <span>订单号：{{order.FinanceOrder}}</span> -->
+                        <span>时间：{{order.ReturnDate * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                    </div>
+                </div>
+                <div class="divider"></div>
+            </li>
+        </ul>
+        <!-- 无数据提示框 -->
+        <div class="no-data" ng-show="returnsOrders.noData">
+            <div>
+                <p class="search-result"></p>
+                <p>对不起，没有数据显示</p>
+            </div>
+        </div>
+    </div>
+    <div class="layer info-layer animated default-apk">
+        <div data-iscroll class="iscroll iscroll-top">
+            <!-- 订单信息 -->
+            <div class="order-info">
+                <div class="address">
+                    <p><span class="icon icon-arrow-back-outline">退货信息</span></p>
+                    <address>
+                        <span class="ellipsis">备注：{{returnsOrders.selectOrder.ReturnAbout}}</span>
+                        <p class="ellipsis">原因：{{returnsOrders.selectOrder.ReturnSendAbout}}</p>
+                        <p>退单状态：<em class="status">{{returnsOrders.selectOrder.ReturnStatus}}</em></p>
+                    </address>
+                </div>
+                <div class="divider"></div>
+                
+                <div data-toggle-goods class="goods-num">
+                    <span class="r">共<em>{{returnsOrders.selectOrder.goodses.length}}</em>种<span class="arrow-right"></span></span>
+                    <span>商品清单</span>
+                </div>
+                <!-- 商品清单 -->
+                <div class="order-goods animated">
+                    <ul>
+                        <li data-ng-repeat="goods in returnsOrders.selectOrder.goodses">
+                            <span class="ellipsis-one">{{goods.Name}} {{goods.Coding}}</span>
+                            <span>
+                                <span ng-show="goods.ContentSpecification">规格：<em trans-html html-text="goods.ContentSpecification"></em></span> 
+                                <span ng-show="goods.ContentColor">颜色：<em trans-html html-text="goods.ContentColor"></em></span> 
+                            </span>
+                            <span>¥ {{goods.ContentPrice}} * {{goods.ContentNumber + ' ' + goods.Units + ' ='}}
+                                {{goods.ContentPrice*goods.ContentNumber | currency: '¥ '}}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="divider"></div>
+                <div data-toggle-log class="goods-num">
+                    <span class="r">共<em>{{returnsOrders.selectOrder.log.length}}</em>条<span class="arrow-right"></span></span>
+                    <span>操作日志 </span>
+                </div>
+                <!-- 操作日志 -->
+                <div class="order-goods order-log animated">
+                    <ul>
+                        <li data-ng-repeat="log in returnsOrders.selectOrder.log">
+                            <span>{{log.Name}} <span>{{log.Date * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</span></span>
+                            <span>{{log.Status}}</span>
+                            <span>{{log.Content}}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="divider"></div>
+                <div class="other">
+                    <ul>
+                        <li>金额<span class="r"><em class="bgcolor-sllide">¥ {{returnsOrders.selectOrder.ReturnTotal}}</em><span></span></span></li>
+                        <li>外观<span class="r"><em>{{returnsOrders.selectOrder.ReturnProductW}}</em><span></span></span></li>
+                        <li>包装<span class="r"><em>{{returnsOrders.selectOrder.ReturnProductB}}</em><span></span></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 关闭按钮 -->
+        <div class="layer-footer">
+            <p ng-click="returnsOrders.closeLayer();"><span class="arrow-left"></span></p>
+        </div>
+        
+    </div>
+</div>
+

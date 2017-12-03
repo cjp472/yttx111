@@ -1,0 +1,77 @@
+<script type="text/javascript">
+function AddToFavorite()   
+{   
+	  title = document.title; 
+	  url = document.location; 
+	  try { 
+	    // Intyrnet Explorer
+	    window.external.AddFavorite( url, title ); 
+	  } 
+	  catch (e) { 
+	    try { 
+	      // Mozilla 
+	      window.sidebar.addPanel( title, url, "" ); 
+	    } 
+	    catch (e) { 
+	      // Opera 
+	      if( typeof( opera ) == "object" ) { 
+	        a.rel = "sidebar"; 
+	        a.title = title; 
+	        a.url = url; 
+	        return true; 
+	      } 
+	      else { 
+	        // Unknown 
+	        alert( '您的浏览器不支持,请按 Ctrl+D 手动收藏!' ); 
+	      } 
+	    } 
+	  } 
+	  return false;  
+} 
+</script>
+
+	<div class="top">
+   		<div class="top-info">
+       		Hi， <b>{$_SESSION['cc']['ccompanyname']}</b> ,欢迎光临 <b>{$_SESSION['ucc']['CompanySigned']}</b> 网上订货系统!
+            <a class="a-btn" href="login.php?m=logout"> [退出] </a> 
+            <a  class="a-btn1" target="_blank"  href="http://help.dhb.net.cn/client.php?skey=<!--{echo think_encrypt(HELP_URL,ENCODE_KEY)}-->"> <span class="icon icon1">&#x74;</span> 帮助 </a>
+            <div class="f-r"><span class="icon icon1">&#xe0ed;</span> 当前余额:<b class="a-btn"><!--{echo commondata::get_amount()}--></b>元 <a class="a-btn" href="finance.php?m=new&id=&ty=O&t=y" > [充值] </a> </div>
+       </div>
+    </div>
+	<div class="header">
+    	<div class="logo f-l m-t"><a href="home.php"><!--{if empty($_SESSION['ucc']['CompanyLogo'])}--><img src="{CONF_PATH_IMG}/images/logo.jpg" width="253" height="57" alt="{$_SESSION['ucc']['CompanyName']} - 医统天下BMB系统" /><!--{else}--><img src="{RESOURCE_PATH}{$_SESSION['ucc']['CompanyLogo']}" alt="{$_SESSION['ucc']['CompanyName']} - 医统天下BMB系统" border="0" /><!--{/if}--></a></div>        
+    	<div class="search f-l">
+    	<form name="searchform" id="searchform" action="search.php" method="get">
+        	<input type="text" size="50" name="kw" id="kw"  class="search-title f-l" value="" maxlength="30" placeholder="输入商品名称|商品编号|药企名称">
+        	<button name="searchbutton" class="search-btn f-l" type="submit" style="cursor:pointer;"><span class=" icon icon1" style="margin-top: 10px">&#x55;</span> 搜索</button>
+       	</form>
+        </div>
+        <div class="shop-chat " id="topcart">
+        	<span class=" icon shop-chat-icon f-l m-l ">&#xe07a;</span>
+        	<span class=" icon icon2 f-r m-r">&#x35;</span>
+			<i id="shopping-amount" class="ci-count"></i>
+			<a href="cart.php" target="_blank">购物车</a>
+             <div class="shop_nom"><span id="cartnumber_2"><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></span></div>
+             <!--{if !$isnotshowloadcart}-->
+             <div class="Shopping_Cart_info" id="Shopping_Cart_info" style="display:none;">
+            	<p align="center">正在载入数据......</p>
+            </div>
+            <!--{/if}-->
+        </div>
+        <div class="menu f-l">
+        	<ul>
+            	<li><a href="home.php">首页</a></li>
+                <li><a href="list.php">商品中心</a></li>
+                <li><a href="myorder.php">我的订单</a></li>
+                <li><a href="consignment.php">发货单</a></li>
+                <li><a href="return.php">退货单</a></li>
+                <li><a href="finance.php">付款单</a></li>
+                <li><a href="statistics.php">数据统计</a></li>
+                <li><a href="forum.php">在线客服</a></li>
+                <li><a href="infomation.php">信息公告</a></li>
+                <li><a href="my.php?m=profile">我的</a></li>
+            </ul>           
+        </div>      
+    </div>
+    <br style=" clear:both">
+<a href="template/tpl/unicom/customerFirst.html"><img  src="../../red/images/helpLight.png" style="position: fixed;right:8px;bottom: 150px;cursor: pointer;" alt=""/></a>

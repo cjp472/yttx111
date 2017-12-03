@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - {SITE_NAME}</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="{CONF_PATH_IMG}css/base.css?v={VERID}" type="text/css" rel="stylesheet" />
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js?v={VERID}" type="text/javascript"></script>
+<script src="template/js/cart.js?v={VERID}" type="text/javascript"></script>
+
+<script type="text/javascript" language="javascript" > 
+
+function accountadd(){
+	var ftotal = parseFloat($('#data_FinanceTotal').val());
+	var ytotal = parseFloat($('#ytotal').val());
+	
+	var reg	= new RegExp(/^\d*\.?\d{0,2}$/);
+	if (! reg.test($('#data_FinanceTotal').val()))
+	{
+        $.growlUI('请正确输入付款金额!');	
+		$('#data_FinanceTotal').focus();
+		return false;
+	}
+
+	$('#subfinance').attr("disabled","disabled");
+	if($("#data_FinanceTotal").val()=="")
+	{
+		$.growlUI('转帐金额不能为空!');	
+		$('#subfinance').attr("disabled","");
+	}else if( ftotal > ytotal){
+		$.growlUI('付款金额不能大于可支付余额!');
+		$('#subfinance').attr("disabled","");
+	}else if( ftotal <= 0){
+		$.growlUI('付款金额不能小于0!');
+		$('#subfinance').attr("disabled","");
+	}else{ 
+		$.post("finance.php?m=guestadd",$("#formorder").serialize(),
+			function(data){		
+					if(data == "ok"){						
+						$.growlUI('提交成功，正在载入页面...');		
+						var jumpurl = 'finance.php';
+						document.location = jumpurl;
+					}else{
+						$.growlUI(data);
+						$('#subfinance').attr("disabled","");
+					}
+				}			
+		);
+	}
+}
+</script>
+	<style>
+		#main{
+			margin-bottom: 50px;
+		}
+		.main_car{
+			padding-bottom: 141px;
+		}
+		.promptImg{
+			margin-bottom: 100px;
+		}
+		.font14{
+			font-size: 16px ;
+			color: #000000;
+		}
+		.font15{
+			font-size: 14px ;
+			color: #333333;
+		}
+		.font16{
+			font-size: 14px ;
+			color: #ff2828;
+		}
+		.linkTo{
+			font-size: 14px;
+			color: #124f78;
+		}
+		.font17{
+			font-size: 20px;
+			color: #ff2828;
+		}
+		.font18{
+			font-size: 14px ;
+			color: #999999;
+		}
+		.font19{
+			font-size: 12px ;
+			color: #a14e16;
+		}
+		.font20{
+			font-size: 14px ;
+			color: #ff2828;
+		}
+		.changeWay li img{
+			float: left;
+		}
+		.ok{
+			display: block;
+			width: 180px;
+			height: 40px;
+			background: #FE6600;
+			text-align: center;
+			line-height: 40px;
+			font-size: 18px;
+			text-decoration: none;
+			color: white !important;
+			margin-bottom: 25px;	margin-top: 15px;
+			margin-left: 78px;
+		}
+		.promptP{
+			display: block !important;
+			height: 34px !important;
+			line-height: 34px !important;
+		}
+		.payInfo{
+			margin-top: 20px;
+			margin-bottom: 100px
+		}
+		.payInfo tr td{
+			border: none !important;
+		}
+		.payMoney{
+			width: 150px;
+			height: 25px;
+			margin-left: 20px;
+			margin-right: 10px;
+		}
+	</style>
+</head>
+
+<body>
+{template header}
+
+<div id="main">
+<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="cart.php">我的购物车 </a>&#8250;&#8250; <a href="#">提交订单</a></div>
+
+<div class="car_tit">您的订单</div>
+
+<div class="main_car">
+			
+         	<div class="line96">
+				<br class="clear" style="margin-top:50px;" />
+				<table width="92%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" align="center">
+                 <tr>
+                   <td height="80" width="60" align="center" ><img src="template/img/check48.jpg" class="promptImg" /></td>
+				   <td class="font14">感谢您，订单提交成功，请您尽快付款，以便库房及时发货！
+					   <br/><br/><span class="font15">您的订单号是：<span class="font16"><font color=red>{$in[id]}</font></span></span>&nbsp;&nbsp;
+					   <span style="font-size: 12px ;color: #666666">点此</span> &#8250;&#8250; <a href="myorder.php?m=showorder&sn={$in[id]}" class="linkTo">查看订单状态</a>
+					   <span style="font-size: 12px ;color: #666666">或者</span> <a href="home.php" class="linkTo">返回首页</a>
+
+					<!--支付金额-->
+					   <br/><span class="font15" style="margin-top: 15px ;display: block">应付金额：<span class="font17">￥{$oinfo[OrderTotal]}</span></span>
+					   <!--支付方式-->
+					   <br/><span class="font15" style="margin-top: -10px ;display: block">支付方式：<span style="font-size: 12px ;color: #666666">您已选择</span ><span class="font16"> 预付款（先付）</span>
+					   </span>
+				   <br /><br />
+
+				   </td>
+                 </tr>
+               </table>
+	
+				<br class="clear" style="margin-top:30px;" />
+				<table width="92%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" align="center" class="payInfo">
+				<form id="formorder" name="formorder" method="post" action="" >
+				<input type="hidden" name="set_filename" id="set_filename" value="" />	
+				<input type="hidden" name="finance_type" id="finance_type" value="Y" />
+				<input type="hidden" name="data_FinanceOrderID" id="data_FinanceOrderID" value="{$oinfo['OrderID']}" />
+					<tr>
+							<td height="80" width="60" align="center" ><img src="template/img/check48.jpg" class="promptImg" style="display: none" /></td>
+							<td>
+								<p  class="promptP" style="display: inline-block;height: 34px ;line-height: 34px"><span class="font14">预付款（先付）</span><span class="font18 goFullData" style="margin-left: 50px">余额不够？试一试 &nbsp;<a href="finance.php?m=new&id={$oinfo[OrderID]}" class="linkTo" >其他支付方式</a>，或直接联系你的供应商，充值余额</span></p>
+								<!--支付金额显示-->
+								<p class="font15">可支付金额：</span><span class="font17">￥{$ytotal}</span><span class="font19" style="margin-left: 20px">（您选择的订单金额为：<span class="font20">￥{$oinfo[OrderTotal]}</span>)</span></p>
+								<p  class="font15">支付金额:<input type="text" value="{$oinfo[OrderTotal]}" name="data_FinanceTotal" id="data_FinanceTotal"  class="payMoney" onKeypress="if ((event.keyCode < 48 || event.keyCode > 57) && event.keyCode!=46) event.returnValue = false;"/>元</p>
+								<div class="font15" style="display:block;margin-top: 10px">说明:</div><textarea rows="5" name="data_FinanceAbout" id="data_FinanceAbout" cols="50" placeholder="可注入支付原因、支付人等信息" style="color: #999999;font-size: 14px;margin-left: 48px;margin-top: -18px"></textarea>
+								<input name="ytotal" id="ytotal" value="{$ytotal}" type="hidden"  />
+								<input type="hidden" name="data_FinanceOrder[]" id="data_FinanceOrder" value="{$oinfo['OrderSN']}" />
+								<input name="data_FinanceAccounts" id="data_FinanceAccounts" value="0" type="hidden"  />
+								<input type="hidden" name="data_FinanceToDate" id="data_FinanceToDate" value="<!--{echo date('Y-m-d')}-->" />
+								<!--在线支付按钮 链接跳转-->
+								<a onclick="accountadd();" name="subfinance" id="subfinance" style="cursor:pointer;" class="ok">立即支付</a>
+								
+						</td>
+					</tr>
+				</form>	
+				</table>
+
+				</div>
+			</div>
+</div>
+</div>
+{template bottom}
+
+<!-- 遮罩层 -->
+{template mask_layer}
+
+
+</body>
+</html>

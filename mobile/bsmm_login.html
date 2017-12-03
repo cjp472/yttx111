@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection"content="telephone=no, email=no" />
+    <!-- UC强制全屏 
+    <meta name="full-screen" content="yes">-->
+    <!-- QQ强制全屏 -->
+    <meta name="x5-fullscreen" content="true">
+    <title></title>
+    <script>
+        !function(){function e(){var e=document.documentElement.clientWidth,t=document.querySelector("html");t.style.fontSize=e/20+"px"}e(),window.addEventListener("resize",e)}();
+    </script>
+    <link rel="stylesheet" href="css/login_e.css?20170110">
+</head>
+<body>
+    <div class="login_box">
+		<div class="bg"style="width: 100%;height:13rem;background: url(img/9.jpg) no-repeat;background-size: cover;">
+			<a href="" style="color:#767676;font-size:0.85rem;text-decoration:none;text-align: right;position: absolute;left: 16.5rem;top: 1rem">管理端</a>
+
+        </div>
+        <div class="login_content" style="padding: 0 1.5rem;">
+            <div class="login_form">
+                <div class="from_input user_name">
+                    <div class="line top"></div>
+                    <input type="text" placeholder="请输入账号" name="userName" />
+                    <div class="line bottom"></div>
+                </div>
+                <div class="from_input pass_word">
+                    <div class="line top"></div>
+                    <input name="password" type="password" placeholder="请输入密码">
+                    <div class="line bottom"></div>
+                </div>
+                <button class="login_in" id="user-login">登&nbsp;录</button>
+            </div>
+			<div class="bottom" style="margin-top: -0.3rem">
+            <div class="title">
+                <img src="./img/line-left.png" alt="">
+                <span>管 理 端</span>
+                <img src="./img/line-right.png" alt="">
+            </div>
+            <div class="re_me">
+                <div class="checkBox checked"></div>
+                <span>记住我</span>
+            </div>
+			<img src="img/line7.jpg" style="height: 1.5rem;margin-left: 4.4rem;margin-top: 2rem" alt=""/>
+			<div class="to-re">
+                <a href="login.html">
+                    <span>切换到订货端</span>
+                    <img src="img/to_register.png" alt=""/>
+                </a>
+            </div>
+			</div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="js/common/zepto.min.js"></script>
+<script>
+    document.querySelector(".re_me").addEventListener("click",function () {
+        var checkBox =  document.querySelector(".checkBox")
+        if(checkBox.classList.contains("checked")) {
+            checkBox.classList.remove("checked");
+        } else {
+            checkBox.classList.add("checked");
+        };
+    });
+
+</script>
+<script type="text/javascript">
+	var ETONG = ETONG || {};
+	var ROOT_URL = window.location.href.replace(window.location.pathname,'');
+	var zhengShiUrl = ROOT_URL+'/mobileApi/api.php';
+	ETONG.userType = true;
+	// 访问类型 微信 或者 app
+	ETONG.device = {
+		loginFrom: 'WeiXin',
+		weixin: true,
+		app: false
+	};
+	
+	function is_weixin(){
+		var ua = navigator.userAgent.toLowerCase();
+		if(ua.match(/MicroMessenger/i) == "micromessenger") {
+			//return true;
+			return false;
+		} else {
+			return false;
+		}
+	}
+	
+	if(ETONG.device.weixin && !is_weixin()){
+		ETONG.device.loginFrom = 'Mobile';
+	}
+
+   
+	if(ETONG.CompanySigned || window.sessionStorage['signed']){
+		if(!ETONG.CompanySigned){
+			ETONG.CompanySigned = window.sessionStorage['signed'];
+		}else{
+			window.sessionStorage['signed'] = ETONG.CompanySigned;
+		}
+		$('div.logo').css('background','none').addClass('replace-img').html('<span>' + ETONG.CompanySigned + '</span>');
+	}
+	$('div.logo').css('visibility','visible');
+	document.title = ETONG.CompanySigned || '医统天下集采平台';
+	if(window.localStorage['m_userName']){
+		$('input[name=userName]').val(window.localStorage['m_userName']);
+	}
+	if(window.localStorage['m_password']){
+		$('input[name=password]').val(window.localStorage['m_password']);
+	}
+
+	//用户登录
+	$('#user-login').click(function(){
+		$(this).text('登 录 中...');
+		userLogin();
+	});
+	
+	//登录反馈
+	function login_text(msg){
+		var  user_login = $('#user-login');
+		user_login.text(msg).attr('disabled', 'true');
+		setTimeout(function(){
+		 user_login.text('登 录').attr('disabled', null);
+		}, 2000);
+	}
+	
+	// 登录操作
+	function userLogin(){
+		var userName = $('input[name=userName]').val(),
+		password = $('input[name=password]').val();
+		
+		 var checkBox =  document.querySelector(".checkBox");
+			 re_me = checkBox.classList.contains("checked");
+
+		
+		ETONG.url = zhengShiUrl;
+		
+		window.localStorage['url'] = ETONG.url;
+		if(userName == '' || password == ''){
+			login_text('用户名密码不能为空');
+			return;
+		}
+		var param = {
+			f: 'managerTokenValue',
+			v: {
+				loginFrom: ETONG.device.loginFrom,
+				Username: userName,
+				Password: password
+			}
+		};
+		
+		// 微信客户端 并且存在openId
+		if(ETONG.device.weixin && is_weixin() && ETONG.openId){
+			param.f = 'managerWeixinBindAccount';
+			param.v.openId = ETONG.openId;  
+			param.v.wid = ETONG.wid || window.localStorage['wid']; 
+		}
+		param.v = JSON.stringify(param.v);
+		$.ajax({
+			url: ETONG.url,
+			type: 'post',
+			dataType: 'json',
+			data: $.param(param),
+			success: function(data){
+				if(data && data.rStatus == '101'){
+					login_text(data.error);
+					return;
+				}
+				if(data.sKey){
+					delete window.sessionStorage['tradeId'];
+					delete window.localStorage['cart'];
+					if(re_me){
+						window.localStorage['m_userName'] = userName;
+						window.localStorage['m_password'] = password;
+					}
+					window.localStorage['openId'] = ETONG.openId;
+					window.localStorage['m_sKey'] = data.sKey;
+					window.location.href = 'bsmm/index.html';
+				}else{
+					login_text(data.error);
+				}
+				
+			},
+			error: function(data){
+				login_text('请求发生错误!');
+			}
+		});
+   }
+   
+   $('input').focusin(function(){
+	   $('footer').hide();
+	   $('div.login-page').css('-webkit-transform','translateY(-100px)');
+   }).focusout(function(){
+	   $('div.login-page').css('-webkit-transform','translateY(0)');
+	   $('footer').show();
+   });
+		
+</script>
+</html>

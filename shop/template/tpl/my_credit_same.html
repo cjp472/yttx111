@@ -1,0 +1,117 @@
+<script type="text/javascript">
+	/*设置密码与重置密码相同js代码*/
+	/*眼睛*/
+	$('.close1').click(function(){
+		check('close1','open1','pay_password1','pay_text1');
+	});
+	$('.open1').click(function(){
+		check('open1','close1','pay_text1','pay_password1');
+	});
+	$('.close2').click(function(){
+		check('close2','open2','pay_password2','pay_text2');
+	});
+	$('.open2').click(function(){
+		check('open2','close2','pay_text2','pay_password2');
+	});
+	function check(nodeBtn1,nodeBtn2,node1,node2){
+		$("."+nodeBtn1).hide();
+		$("."+nodeBtn2).show();
+		$('.'+node1).addClass('hide');
+		
+		$('.'+node2).removeClass('hide').val($('.'+node1).val());
+		console.log($('.'+node2).val());
+		console.log($('.'+node1).val());
+	}
+	
+	/*判断是否有缓存*/
+	if($.cookie("tel")){
+		$('#credit_mobile').val($.cookie("tel")).attr("disabled", true).addClass('global-gray');
+	}
+	if($.cookie("seconds")){  
+            var seconds = $.cookie("seconds");  
+            var btn = $('#getBtn');  
+            btn.val(seconds+'秒后可重新获取').attr('disabled',true).addClass('global-gray');  
+            var resend = setInterval(function(){  
+                seconds--;  
+                if (seconds > 0){  
+                    btn.val(seconds+'秒后可重新获取').attr('disabled',true);  
+                    $.cookie("seconds", seconds, {path: '/', expires: (1/86400)*seconds});  
+                }else {  
+                    clearInterval(resend);  
+                    btn.val("获取验证码").removeClass('global-gray').removeAttr('disabled');  
+                }  
+            }, 1000);  
+        }
+	//获取验证码
+	$("#getBtn").click(function(){
+		getSecurityCode('credit_mobile', 'getBtn', 'set_notice');
+	});
+
+	$('.reset_sure').click(function(){
+			 var noticeBox	= $('#set_notice'),
+			 	 eleMobile 	= $("#credit_mobile"),
+			 	 eleValiCode = $("#valicode"),
+			 	 elePayPwd	= $("#pay_pwd"),
+			 	 elePayPwd1 = $("#pay_pwd1");
+		
+		     var mobile		= eleMobile.val(),
+		     	 valicode	= eleValiCode.val(),
+		     	 pay_pwd	= elePayPwd.val(),
+		     	 pay_pwd1	= elePayPwd1.val();
+		     
+		     noticeBox.html('');
+		     if(!mobile){
+		    	 noticeBox.html('为保障您的资金安全，请验证安全手机号码');
+		    	 return;
+		     }else if(!valicode){
+		    	 noticeBox.html('请填写您收到的短信验证码');
+		    	 return;
+		     }else if(!pay_pwd || pay_pwd.length != 6 || isNaN(pay_pwd)){
+		    	 noticeBox.html('请设置6位数字支付密码');
+		    	 return;
+		     }else 
+		    	 if(pay_pwd != pay_pwd1){
+		    	 noticeBox.html('两次输入密码不一致');
+		    	 return;
+		     }else if(pay_pwd == '123456' || pay_pwd == '654321' || pay_pwd == '111111'){//todo
+		    	 noticeBox.html('不能使用连续数字，如：123456或654321或111111');
+		    	 return;
+		     }
+		     
+		     $(this).attr("disabled", true).addClass('dianji');
+		     $.post('my.php', {m:'PaypwdAdd', mobile : mobile, valicode: valicode, pay_pwd:pay_pwd, pay_pwd1:pay_pwd1}, function(response){
+
+		    	 if(response['status'] == 'success'){//成功
+		    		noticeBox.html(response['message']);
+		    		setTimeout(function(){ window.location.href = 'my.php?m=credit' }, 1000);
+		    	}else{
+		    		noticeBox.html(response['message']);
+		    		eleMobile.removeAttr("disabled").removeClass('global-gray');
+			    	$(this).removeAttr("disabled").removeClass('dianji');
+		    	}
+		     }, 'json');
+	});
+	
+	/*验证验证码*/
+	$('#valicode').blur(function(){
+		var _this = $(this);
+		var code = _this.val();
+		
+			$('#set_notice').html('');
+			if(code.length == 4 && !isNaN(code)){//4位数字才验证
+				$.get('my.php', {m: 'validatePayCode', code: code}, function(response){
+					
+					if(response['status'] == 'success'){
+						//_this.attr("disabled", true).addClass('global-gray');
+						//$("#valid-status").html('正确');
+						$(".icon-duigou").show();
+					}else{
+						$('#set_notice').html(response['message']);
+					}
+				}, 'json')
+			}else if(code != ''){
+				$('#set_notice').html('请输入正确的短信验证码');
+			}
+	})
+    
+</script>

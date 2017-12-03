@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - {SITE_NAME}</title>
+<meta name='robots' content='noindex,nofollow' />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="{CONF_PATH_IMG}css/base.css?v={VERID}" type="text/css" rel="stylesheet" />
+<link href="{CONF_PATH_IMG}css/showpage.css" rel="stylesheet" type="text/css">
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js?v={VERID}" type="text/javascript"></script>
+<script src="template/js/my.js?v={VERID}" type="text/javascript"></script>
+<script src="template/js/jquery.execute.hidden.js?v={VERID}" type="text/javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		backendAction();
+	});
+</script>
+
+</head>
+
+<body>
+{template header}
+
+<div id="main">
+<div class="main_left">
+<div class="fenlei_bg_tit"><span>我的医药账户</span></div> 
+  <div class="news_info">
+  <ul>
+		<li><a href="my.php?m=profile" > &#8250;&#8250; 我的资料</a></li>
+		<li><a href="my.php?m=point" > &#8250;&#8250; 我的积分</a></li>
+		<li><a href="my.php?m=password" > &#8250;&#8250; 修改密码</a></li>
+		<li><a href="wishlist.php" > &#8250;&#8250; 我的收藏的商品</a></li>
+        <li><a href="myorder.php?collect=1" > &#8250;&#8250; 我的收藏的订单</a></li>
+        
+		<li>我的易极付</li>
+		<li style="border:none;line-height:20px;margin-top:5px;">
+			<a href="openpay.php?type=setAccount" target="_blank"> &nbsp;&nbsp;&nbsp;&nbsp;&#8250;&#8250; 我要开户</a>
+		</li>
+		<li style="border:none;line-height:20px;margin-top:5px;">
+			<a href="openpay.php?type=setFication" target="_blank"> &nbsp;&nbsp;&nbsp;&nbsp;&#8250;&#8250; 实名认证</a>
+		</li>
+		<li style="border:none;line-height:20px;margin-top:5px;">
+			<a href="openpay.php?type=changePWD" target="blank"> &nbsp;&nbsp;&nbsp;&nbsp;&#8250;&#8250; 密码修改</a>
+		</li>
+		<li style="border:none;line-height:20px;margin-top:5px;">
+			<a href="openpay.php?type=getPWD" target="blank"> &nbsp;&nbsp;&nbsp;&nbsp;&#8250;&#8250; 密码找回</a>
+		</li>
+		<li style="border:none;line-height:20px;margin-top:5px;">
+			<a href="openpay.php?type=changeAccount" target="blank"> &nbsp;&nbsp;&nbsp;&nbsp;&#8250;&#8250; 账户修改</a>
+		</li>
+		<li style="border:none;line-height:20px;margin-top:5px;">
+			<a href="openpay.php?type=getMoney" target="blank"> &nbsp;&nbsp;&nbsp;&nbsp;&#8250;&#8250; 我要提现</a>
+		</li>
+		<li style="border:none;line-height:20px;margin-top:5px;">
+			<a href="my.php?m=getSear" target="blank"> &nbsp;&nbsp;&nbsp;&nbsp;&#8250;&#8250; 提现记录查询</a>
+		</li>
+		<li style="border:none;line-height:20px;margin-top:5px;">
+			<a href="openpay.php?type=carGid" target="blank"> &nbsp;&nbsp;&nbsp;&nbsp;&#8250;&#8250; 银行卡解绑</a>
+		</li>
+  </ul>
+
+  </div>
+<div class="fenlei_bottom" style="width: 223px;height: 9px;border-left: 1px solid #D6D6D6;border-right: 1px solid #D6D6D6;border-bottom: 1px solid #D6D6D6"></div>
+
+
+</div>
+
+<div class="main_right">
+<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="my.php?m=profile">我的医药账户</a> 
+</div>
+<div class="right_product_tit">
+	<div class="xs_0">我要开户:</div>
+</div>
+
+<div class="right_product_main">
+<div class="list_line">
+
+	<iframe src="openpay.php?type={$in['type']}" id="" name="" class="Yopen-api-iframe"></iframe>
+	
+</div>		
+		<br />&nbsp;
+       </div>
+	</div>
+</div>
+</div>
+
+{template bottom}
+</body>
+</html>

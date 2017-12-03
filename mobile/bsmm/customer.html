@@ -1,0 +1,37 @@
+<!-- 客户列表 -->
+<div ng-style="toggleHead" class="customer common-style" ng-controller="customerController">
+    <div data-load-more="customers.loadMore();" class="list">
+        <ul>
+            <li ng-click="customers.getCustomerInfo($index,customer.ClientID);" ng-repeat="customer in customers.list">
+                <div class="list-head">
+                    <strong>{{customer.ClientCompanyName}}</strong>
+                    <span ng-click="customers.operatorCustomer($index)" data-stop-bubble ng-show="customer.ClientFlag==='9'&&(myInfo.module.product.pope_audit==='Y'||myInfo.UserFlag==='9'&&myInfo.UserType==='M')" class="state f_right"><em class="icon">&#x6c;</em>&nbsp;<em>审核</em></span>
+                	<span ng-click="customers.insteadSubmitOrder($index);" data-stop-bubble ng-show="customer.ClientFlag==='0'" class="state state-grey f_right"><em class="icon">&#x68;</em>&nbsp;<em>代下订单</em></span>
+                </div>
+                <div class="list-body">
+                    <span>姓名：{{customer.ClientTrueName}} &emsp;<span class="state state-green">{{customer.flagText}}</span></span>
+                    <span>电话：<em class="icon icon-phone">&#xe090;</em> {{customer.ClientMobile}}<span class="icon f_right arrow-right">&#x35;</span></span>
+                    <span>地址：{{customer.ClientAdd}}</span>
+                </div>
+                <div class="divider"></div>
+            </li>
+        </ul>
+        <!-- 无数据提示框 -->
+        <div class="no-data" ng-show="customers.noData">
+            <div>
+                <p class="search-result"></p>
+                <p>对不起，没有数据显示</p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div ng-click="customers.getListByFlag(9)">
+            <span>未审核客户</span>
+            <span class="color-red">({{customers.countAudit}})</span>
+        </div>
+        <div ng-click="customerManager.gotoAdd();">
+            <span>＋ 新增客户</span>
+        </div>
+    </footer>
+    <div ui-view class="animated fadeIn"></div>
+</div>

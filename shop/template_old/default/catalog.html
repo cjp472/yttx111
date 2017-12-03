@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - 订货宝 网上订货系统</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="template/default/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/list.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+
+<body>
+{template header}
+
+<div id="contentbody">
+<!--{loop $catalog[0] $lkey $lvar}-->
+        <div class="line" style="display:; margin-top:18px;">
+<b class="e1"></b><b class="e2 f1"></b><b class="e3 f1"></b><b class="e4 f1"></b>
+<div class="e f1" >
+
+<div class="line">
+<div class="line96">
+	<div class="font14" ><a href="list.php?s={$lvar[SiteID]}" title="{$lvar[Content]}">{$lvar[ID]} - {$lvar[SiteName]}</a></div>
+	
+	<!--{loop $catalog[$lvar[SiteID]] $skey $svar}-->
+	<div class="catalog" ><a href="list.php?s={$svar[SiteID]}" title="{$svar[Content]}" class="font12"> - {$svar[SiteName]}</a>
+	<ul>
+		<!--{loop $catalog[$svar[SiteID]] $sskey $ssvar}-->
+			<li><a href="list.php?s={$ssvar[SiteID]}" title="{$ssvar[Content]}"> - {$ssvar[SiteName]}</a></li>
+		<!--{/loop}-->
+	</ul>
+	</div>
+	<!--{/loop}-->
+
+</div>
+</div>
+
+</div>
+<b class="e4e f1"></b><b class="e3e f1"></b><b class="e2e f1"></b><b class="e1e"></b>
+		</div>
+<!--{/loop}-->
+
+</div>
+
+{template bottom}
+</body>
+</html>

@@ -1,0 +1,53 @@
+/**
+ * showpage.css: ҳ CSS.
+ * Copyright (C) 2006 Rsung.com.cn
+ *
+ * Authors:
+ * seekfor@gmail.com
+*/
+	.page_bar {
+		padding:0 0 5px 0;
+		margin:0px;
+		font-family: Tahoma;
+		font-size:12px;
+		float:right;
+	}
+	.page_bar a {
+		display:block;
+		float:left;
+		padding:0 5px 0 5px;
+		height:20px;
+		margin-left:3px;
+		background-color:#fff;
+		color:#0d7b13;
+		text-decoration: none;
+		border:#0d7b13 solid 1px;  
+		font-weight:500
+	}
+
+	.page_bar span {
+		display:block;
+		float:left;
+		height:20px;
+		color:#fff;
+		background:#ccc;
+		padding:0 5px 0 5px;
+		margin-left:3px;
+		border:#0d7b13 solid 1px;  
+
+	}
+	.page_bar a:hover { border:#2E6AB1 solid 1px;
+		color:#000033;
+	}
+	/*.page_bar a:visited {
+		background:#9A9A9A;
+		color:#fff;
+	}*/
+	.page_bar_current {
+		background:#0d7b13 !important;
+		color: #fff !important;
+	}
+
+	.page_bar input{
+	border: 1px solid #9AAFE5; width:20px; height:18px; margin-left:3px; margin-top:-1px;
+	}

@@ -1,0 +1,722 @@
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { 
+	color: #c3c3c3; 
+	font-size: 14px;
+} 
+input:-moz-placeholder, textarea:-moz-placeholder { 
+	color: #c3c3c3; 
+	font-size: 14px;
+} 
+input:-ms-input-placeholder, textarea:-ms-input-placeholder { 
+	color: #c3c3c3; 
+	font-size: 14px;
+}
+/*账期申请*/
+	i,em{
+		font-style: normal;
+	}
+	ul.credit_apply{
+		width: 605px;
+		margin-left: 12px;
+	}
+	ul.credit_apply li{
+		padding-left: 100px;
+		
+		border-bottom: #CCCCCC dotted 1px;
+		position: relative;
+	}
+	ul.credit_apply li:first-child{
+		height: 155px !important;
+	}
+	ul.credit_apply li.same_li{
+		height: 85px;
+		line-height: 85px;
+	}
+	ul.credit_apply li>span{
+		float: left;
+		color: #666;
+	}
+	ul.credit_apply li input{
+		width: 223px;
+		height: 32px;
+		line-height: 32px;
+		
+		border: 1px solid #d0d0d0;
+		border-radius: 4px;
+		text-indent: 10px;
+	}
+	li.same_li span{
+		margin-right: 50px;
+		width: 98px;
+	}
+	ul.credit_apply li:first-child>span{
+		margin-top: 10px;
+		margin-right: 30px;
+	}
+	.credit_apply>li:first-child{
+		height: 155px;
+	}
+	.credit_apply>li:first-child span{
+		line-height: 50px;
+	}
+	.credit_apply>li:first-child input{
+		margin-right: 0;
+	}
+	.credit_apply>li:last-of-type{
+		border: none;
+	}
+	#PurchaseAmount,#Amount{
+		margin-top: 30px;
+		float: left;
+		
+		background: #fff;
+	}
+	.credit_apply>li:first-child input{
+		margin-top: 0;
+	}
+	/*频率选择*/
+	.credit_rate{
+		width: 400px;
+		float: left;
+		margin-top: 10px;
+	}
+	.credit_rate>div{
+		color: #666;
+		float: left;
+	}
+	.credit_rate>div:first-child{
+		margin-top: 15px;
+	}
+	.times{
+		float: left;
+		margin-bottom: 20px;
+		margin-right: 87px;
+		cursor: pointer;
+	}
+	.times>span{
+		float: left;
+		width: 14px;
+		height: 14px;
+		border: 1px solid #d0d0d0;
+		border-radius: 100%;
+		
+		vertical-align: top;
+		margin-top: 4px;
+		margin-right: 5px;
+	}
+	.times>span>i{
+		display: inline-block;
+		width: 8px;
+		height: 8px;
+		
+		border-radius: 100%;
+		
+		margin: 3px 3px;
+	}
+	.times>em{
+		color: #666;
+	}
+	.active{
+		background: #01A157;
+	}
+	.credit_rate>div+div{
+		height: 40px;
+	}
+
+	.clear>span{
+		float: left;
+		height: 30px;
+		line-height: 30px !important;
+	}
+	.clear>input{
+		height: 32px;
+		line-height: 32px;
+		
+		border: 1px solid #d0d0d0;
+		border-radius: 4px;
+		
+		text-indent: 10px;
+		
+		float: left;
+	}
+	/*下拉按钮*/
+	.right_product_main{
+		position: relative;
+	}
+	.icon-xiala,.icon-xiala-copy{
+		height: 34px;
+		width: 34px;
+		line-height: 34px;
+		text-align: center;
+		
+		cursor: pointer;
+		position: absolute;
+		right: 232px;
+		top: 30px;
+	}
+	.amountChoose{
+		width: 223px;
+		height: 137px;
+		z-index: 1000;
+		position: absolute;
+		left: 260px;
+		bottom: 14px;
+		
+		border: 1px solid #d0d0d0;
+		border-top: 0;
+		
+		border-radius: 0 0 4px 4px;
+	}
+	div.amountChoose>input{
+		color: #C3C3C3;
+		width: 223px;
+		height: 34px;
+		line-height: 34px;
+		text-indent: 10px;
+		
+		cursor: pointer;
+		border: 0;
+		border-radius: 0;
+	}
+	/*div.amountChoose>input:hover{
+		background: #f6f6f6;
+	}*/
+	/*确定按钮*/
+	.credit_sure{
+		width: 225px;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		
+		color: #fff;
+		font-size: 20px;
+		
+		background: #e9941b;
+		
+		margin: 0 auto;
+        margin-left: 260px;
+        clear: both;
+        cursor: pointer;
+        margin-top: 40px;
+	}
+/*账期概览样式*/
+.list_line{
+	overflow: hidden;
+}
+
+	ul.credit-detail{
+		width: 685px;
+
+		margin: 30px 30px;
+		padding-bottom: 30px;
+		
+		border-bottom: 1px dashed #cdcdcd;
+	}
+	ul.credit-detail>li{
+		width: 130px;
+		height: 165px;
+		border: none;
+		
+		
+		font-size: 16px;
+		color: #333;
+		position: relative;
+		
+		display: inline-block;
+	}
+	ul.credit-detail>li.total{
+		margin-left: 50px;
+	}
+	ul.credit-detail>li.used{
+		margin-left: 100px;
+		margin-right: 100px;
+	}
+	ul.credit-detail>li div{
+		width: 120px;
+		height: 120px;
+		line-height: 120px;
+		text-align: center;
+		font-weight: bold;
+		
+		border-radius: 100%;
+		
+		margin-bottom: 16px;
+	}
+	ul.credit-detail>li>i{
+		display: inline-block;
+		width: 7px;
+		height: 7px;
+		
+		background: #fff;
+		border-radius: 100%;
+		
+		position: absolute;
+		top: 0;
+		left: 44%;
+		z-index: 1000;
+	}
+	ul.credit-detail>li span{
+		display: inline-block;
+		height: 24px;
+		width: 100%;
+		text-align: center;
+	}
+/*温馨提示*/
+	
+	p.credit_notice{
+		clear: both;
+		
+	}
+	.credit_notice{
+	/*	font-size: 16px;*/
+		color: #333;
+		
+		width: 100%;
+		line-height: 40px;
+		text-align: center;
+	}
+	.credit_notice>span.notice{
+		display: block;
+		color: #666;
+		font-size: 14px;
+		
+		margin: 0 auto;
+		margin-top: 35px;
+		width: 685px;
+		
+		height: 30px;
+		padding-top: 30px;
+		line-height: 30px;
+		
+		border-top: 1px dashed #cdcdcd ;
+	}
+	div.credit_notice{
+		font-size: 14px;
+		margin-top: 30px;
+		color: #666;
+	}
+	.credit_notice>span{
+		font-size: 20px;
+		color: #f49400;
+	}
+	/*未开通已开通按钮共同样式*/
+	.same_button{
+		font-style: normal;
+		display: inline-block;
+		line-height: 40px;
+		
+		
+		text-align: center;
+		
+		background: #f49400;
+		cursor: pointer;
+	}
+	.same_button:hover{
+		color: #fff;
+	}
+	/*已开通*/
+	.credit_notice>i{
+		width: 110px;
+		line-height: 35px;
+	
+		margin-left: 34px;
+	}
+        .credit_notice a{
+            display: block;
+            width: 100%;
+            line-height: 35px;
+            color: #fff;
+        }
+        .credit_notice a:hover{
+        	color: #fff;
+        }
+	/*未开通*/
+	.credit_notice>p{
+		font-style: normal;
+		font-size: 14px;
+		color: #666;
+	}
+	
+	p.apply{
+		width: 245px;
+		height: 40px;
+		line-height: 40px;
+	
+		margin: 0 auto;
+		
+		background: #f49400;		
+		clear: both;
+	}
+	p.apply i,p.apply a{
+		display: inline-block;
+		width: 100%;
+		height: 40px;
+		line-height: 40px;
+		
+		color: #fff;
+		font-size: 18px;
+	}
+/*账期详情*/
+	/*交易详情*/
+	
+	.right_product_main{
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+	}
+	.list_line{
+		margin-left: 0 !important;
+	}
+	/*搜索栏*/
+	.credit_search{
+		width: 707px;
+		height: 30px;
+		line-height: 40px;
+		padding: 0 20px;
+
+		font-size: 14px;
+		
+		padding-top: 10px;
+	}
+	.time_choose{
+		float: left;
+	}
+	.time_choose>p{
+		float: left;
+	}
+	.time_choose>p:first-child{
+		margin-right: 26px;
+	}
+	.time_choose input{
+		width: 78px;
+		height: 20px;
+		line-height: 20px;
+		
+		border: 1px solid #cdcdcd;
+		
+		padding-left: 10px;
+		vertical-align: top;
+	}
+	/*筛选条件*/
+	.credit_choose{
+		color: #666 !important;
+                
+        position: relative;
+        float: right;
+	}
+	.credit_choose>span{
+		float: left;
+		width: 48px;
+		height: 22px;
+		line-height: 22px;
+		text-align: center;
+		
+		border: 1px solid #cdcdcd;
+		color: #666 !important;
+		margin-right: 16px;
+	}
+	.credit_choose>span a,.credit_money>span{
+		color: #666;
+	}
+	.credit_choose>span a:hover{
+		color: #01A157;
+	}
+	.credit_choose>select{
+		float: left;
+		width: 80px;
+		height: 24px;
+		color: #615f5f;
+		border: 1px solid #cdcdcd;
+		margin-right: 16px;
+		cursor: pointer;
+	}
+	.credit_choose>div>p{
+			color: #666 !important;
+	}
+	.credit_choose img{
+		width: 12px;
+		height: 7px;
+		margin-left: 5px;
+	}
+	.position{
+		background: #f1f1f1;
+		position: absolute;
+		top: 30px;
+		right: 60px;
+	}
+	.position>p{
+		width: 84px;
+		height: 36px;
+		line-height: 36px;
+		text-align: center;
+	}
+	.position>p:first-of-type{
+		border-bottom: 1px solid #f8f8f8;
+	}
+	.position>p:hover{
+		color: #01A157 !important;
+	}
+	
+	/*还款详情*/
+	.credit_money{
+		width: 100%;
+		height: 40px;
+		line-height: 40px;
+		border-top: 1px solid #f3f3f3;
+	}
+	.monry_time{
+		width: 283px;
+		float: left;
+		
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		font-size: 14px;
+		color: #e9931b;
+	}
+	.monry_time>input{
+		width: 90px;
+		height: 22px;
+		line-height: 22px;
+		
+		text-indent: 5px;
+		
+		border: none;
+		background: #fff;
+	}
+	.credit_money>span{
+		float: left;
+		width: 33%;
+		border-left: 1px solid #eee;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+			
+		font-size: 14px;
+		color: #e9931b;
+	}
+	/*利息滞纳金说明*/
+	.icon-wenhao{
+		color: #C5C5C5;
+		font-size: 14px;
+		margin-left: 5px;
+		cursor: pointer;
+	}
+	.hover{
+		color: #adadad;
+	}
+	.bankIn,.lateFee,.accouts{
+		position: relative;
+	}
+	/*利息滞纳金说明弹窗*/
+	.sameFee{
+		border: 1px solid #faa70d;
+		border-radius: 4px;
+		
+		padding: 10px;
+		
+		background: #f3f3f3;
+		
+		position: absolute;
+		top: 113px;
+		right: 50px;
+	}
+	.sameFee b{
+		color: #faa70d;
+	}
+	.popBank{
+		right: 5%;
+	}
+	/*表格详情*/
+	.trade_detail,.trade_detail>tbody{
+		width: 747px;
+	}
+	.trade_detail tbody tr{
+		width: 707px;
+		height: 20px !important;
+		line-height: 20px !important;
+	}
+	.trade_detail tbody td{
+		border-bottom: none;
+		text-align: center;
+		
+		border-bottom: 1px dashed #f1f1f1 !important;
+	}
+	/*奇数行添加背景色*/
+	.trade_detail tr:nth-of-type(odd){
+		background: #f8f8f8;
+	}
+	.trade_detail tr:first-child{
+		height: 50px;
+		line-height: 50px;
+		background: #f3f3f3;
+	}
+	.trade_detail td{
+		color: #999;
+	}
+	.pay_number>a{
+		color: #999;
+	}
+
+	/*分页*/
+	.list_showpage{
+		width: 40%;
+		float: right !important;
+		
+	}
+
+/*设置，重置密码页面样式*/
+.list_line{
+	margin: 0 !important;
+}
+.reset{
+	width: 705px;
+    padding: 0 20px;
+    color: #666;
+    
+    overflow: hidden !important;
+}
+p.reset_title{
+	width: 100%;
+    height: 68px;
+    line-height: 68px;
+    text-align: center;
+    
+    font-size: 22px;
+    border-bottom: 1px dashed #ccc;
+}
+ul.reset_con{
+	width: 625px;
+    padding: 30px 0 0 80px;
+}
+ul.reset_con>li{
+	height: 40px;
+    line-height: 40px;
+
+    border: none;
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 16px;
+}
+
+ul.reset_con p{
+    color: #666;
+	font-size: 16px;
+    line-height: 40px;
+    
+    min-width: 140px;
+	text-align: right;
+	
+	margin-right: 10px;
+	float: left;
+}
+ul.reset_con input{
+	width: 308px;
+    height: 37px;
+    line-height: 37px;
+    border: 1px solid #dedee0;
+    text-indent: 20px;
+    
+    float: left;
+}
+
+/*输入验证码*/
+.textPass{
+	width: 190px !important;
+}
+/*获取验证码按钮*/
+#getBtn{
+	width: 112px;
+	height: 40px;
+	border: none;
+    outline: none;
+    
+	text-indent: 0;
+	color: #fff;
+	background: #ffb236;
+	margin-left: 6px;
+	
+	cursor: pointer;
+}
+/*点击获取验证码点击后样式*/
+.dianji{
+	background: #cdcdcd !important;
+	color: #000 !important;
+}
+/*设置密码的错误提示*/
+.set_notice{
+	height: 30px;
+	line-height: 30px;
+	padding-left: 8%;
+	width: 92%;
+
+	text-align: center;
+	color: #ee2222;
+	font-size: 14px;
+}
+/*确认按钮*/
+.reset_sure{
+	width: 310px !important;
+    height: 40px !important;
+   
+    text-indent: 0;
+    border: none;
+    outline: none;
+    
+    cursor: pointer;
+    
+    font-size: 18px;
+    color: #fff;
+    
+    margin-left: 230px;
+    margin-top: 15px;
+   
+    background: #ffb236;
+}
+
+/*灰色*/
+.global-gray{
+	color:#999 !important;
+	background: #dedee0 !important;
+}
+
+/*设置密码重置密码眼睛*/
+.icon-wodezhangdan{
+		width: 40px;
+		height: 39px;
+		text-align: center;
+		font-size: 18px;
+		color: #cdcdcd;
+		position: absolute;
+		right: 167px;
+		/*top: 5px;*/
+	
+		cursor: pointer;
+		/*display: none;*/
+	}
+	.reset_pass,.reset_new,.reset_text{
+		position: relative;
+		
+	}
+	.icon-yanjing{
+		display: none;
+		width: 40px;
+		height: 39px;
+		text-align: center;
+		font-size: 20px;
+		color: #cdcdcd;
+		position: absolute;
+		right: 165px;
+	
+		cursor: pointer;
+	}
+	/*.hide{
+		display: none;
+	}*/
+	/*对勾*/
+	.icon-duigou{
+		position: absolute;
+		right: 285px;
+		font-size: 26px;
+		color: #01a157;
+		
+		display: none;
+	}

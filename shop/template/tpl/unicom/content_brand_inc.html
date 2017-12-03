@@ -1,0 +1,18 @@
+
+<div id="leibei_id" style="height:66px;overflow:hidden;line-height:30px">
+	<b class=" m-l" style="margin-left:0px;">品牌：</b>
+	<a href="list.php?m={$in['m']}&s={$SiteID}&ty={$in['ty']}" class="m-r <!--{if empty($in['b'])}-->a_hover<!--{/if}-->" >不限</a>
+	<!--{if $brandlist}-->	
+		<!--{loop $brandlist $bkey $bvar}-->
+			<a href="list.php?m={$in['m']}&s={$SiteID}&ty={$in['ty']}&b={$bvar['BrandID']}" style="display:inline-block;" class="m-r <!--{if $in['b']==$bvar['BrandID']}-->a_hover<!--{/if}-->" >{$bvar['BrandName']}</a>
+		<!--{/loop}-->
+	<!--{/if}-->	
+</div>
+
+<!--{if count($brandlist) > 11}-->
+	<div style="position: absolute; z-index:99; ">
+		<div id="allbutton" style="position: absolute; z-index:99; top:-10px; background:url(./template/img/20130415i.png) -125px 0 no-repeat; text-align:center; left:680px; width:55px; height:26px; line-height:25px; cursor: pointer;" >
+			<span onclick="show_all('ALL');">展开 ∨ </span>
+		</div>
+	</div>
+<!--{/if}-->

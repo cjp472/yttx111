@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - 订货宝 网上订货系统</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="template/default/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/list.css" rel="stylesheet" type="text/css" media="screen" />
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js" type="text/javascript"></script>
+<script src="template/js/my.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+{template header}
+
+<div id="contentbody">
+	<div id="contentleft">
+        <div class="line margin_top" >
+<b class="b1"></b><b class="b2 d1"></b><b class="b3 d1"></b><b class="b4 d1"></b>
+<div class="b d1" style="height:68px;">
+
+<div class="line">
+	<div class="cartimg" onclick="javascript:window.location.href='cart.php'"><div id="cartnumber" ><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></div></div>
+	<div class="carttext">
+		<div><a href="cart.php"><img src="template/default/img/view_order.jpg" border="0" title="查看我的当前订单" /></a></div>
+		<div align="right" class="white">您已预订 <span id="cartnumber_2"><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></span> 件商品！</div>
+	</div>
+</div>
+
+</div>
+<b class="b4b d1"></b><b class="b3b d1"></b><b class="b2b d1"></b><b class="b1b"></b>
+		</div>
+
+		<div class="line margin_top">
+        	<div class="sort_title">我的订货宝<a name="editadd"></a></div>
+         	<div class="sort_line">
+
+                <dt><a href="my.php?m=profile" > &#8250;&#8250; 我的资料</a></dt>
+					<dd><a href="my.php?m=password" > &#8250;&#8250; 修改密码</a></dd>
+                <dt><a href="my.php?m=address" > &#8250;&#8250; 收货地址管理</a></dt>
+            </div>
+        	<div class="line"><img src="template/default/img/sort_bottom.jpg" /></div>        
+        </div>
+
+		<div class="line margin_top" id="line_add_add">
+        	<div class="sort_title">新增收货地址</div>
+         	<div class="sort_line">
+			<!--{if count($addlist) < 10}-->
+				<form id="NewPostForm" name="NewPostForm" method="post" action="" >
+                <dt class="bold">&nbsp;&nbsp;收货单位/公司</dt>
+					<dd>&nbsp;<input name="AddressCompany" id="AddressCompany" type="text" size="30" style="width:220px;" /></dd>
+                <dt class="bold">&nbsp;&nbsp;联系人</dt>
+					<dd>&nbsp;<input name="AddressContact" id="AddressContact" type="text" size="30" style="width:220px;" /><font color=red>*</font></dd>
+                <dt class="bold">&nbsp;&nbsp;联系电话</dt>
+					<dd>&nbsp;<input name="AddressPhone" id="AddressPhone" type="text" size="30" style="width:220px;" /><font color=red>*</font></dd>
+                <dt class="bold">&nbsp;&nbsp;收货地址</dt>
+					<dd>&nbsp;<input name="AddressAddress" id="AddressAddress" type="text" size="30" style="width:220px;" /><font color=red>*</font></dd>
+					<dd>&nbsp;<input type="checkbox" name="defaultadddress" id="defaultadddress" value="1" />设为默认地址&nbsp;&nbsp;<input name="subaddress" id="subaddress" type="button" value="保存地址" class="bluebtn" onclick="subaddaddress();" /></dd>
+				</form>
+				<!--{else}-->
+				&nbsp;&nbsp;最多只能有10个常用收货地址!
+				<!--{/if}-->
+            </div>
+
+        	<div class="line"><img src="template/default/img/sort_bottom.jpg" /></div>        
+        </div>
+
+		<div class="line margin_top" id="line_edit_add" style="display:none;">
+        	<div class="sort_title">修改收货地址</div>
+         	<div class="sort_line">
+				<form id="editPostForm" name="editPostForm" method="post" action="" >
+				<input name="editAddressID" id="editAddressID" type="hidden"  />
+                <dt class="bold">&nbsp;&nbsp;收货单位/公司</dt>
+					<dd>&nbsp;<input name="editAddressCompany" id="editAddressCompany" type="text" size="30" style="width:220px;" /></dd>
+                <dt class="bold">&nbsp;&nbsp;联系人</dt>
+					<dd>&nbsp;<input name="editAddressContact" id="editAddressContact" type="text" size="30" style="width:220px;" /><font color=red>*</font></dd>
+                <dt class="bold">&nbsp;&nbsp;联系电话</dt>
+					<dd>&nbsp;<input name="editAddressPhone" id="editAddressPhone" type="text" size="30" style="width:220px;" /><font color=red>*</font></dd>
+                <dt class="bold">&nbsp;&nbsp;收货地址</dt>
+					<dd>&nbsp;<input name="editAddressAddress" id="editAddressAddress" type="text" size="30" style="width:220px;" /><font color=red>*</font></dd>
+					<dd>&nbsp;<input type="checkbox" name="defaulteditaddress" id="defaulteditaddress" value="1" />设为默认地址&nbsp;&nbsp;<input name="subaddress2" id="subaddress2" type="button" value="保存地址" class="bluebtn" onclick="subeditaddress();" /></dd>
+				</form>
+            </div>
+
+        	<div class="line"><img src="template/default/img/sort_bottom.jpg" /></div>        
+        </div>
+
+	</div>    
+    
+    <div id="contentright">
+    	<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="my.php">我的订货宝</a> &#8250;&#8250; <a href="my.php?m=myaddress">收货地址管理</a>
+		</div>
+     	
+       
+		<div class="line margin_top">
+        	<div class="list_title">
+            	<div class="leftdiv line-height"><a name="locationname"></a>收货地址:</div>
+          </div>
+         	<div class="list_line">
+				
+<table width="96%" border="0" cellspacing="0" cellpadding="0" align="center" class="ordertd">
+  <thead>
+  <tr>
+    <td width="10%" height="28">ID</td>
+    <td width="22%">收货单位</td>
+    <td width="14%">联系人</td>
+    <td width="20%">联系电话</td>
+    <td >收货地址</td>
+    <td width="6%">操作</td>   
+  </tr>
+   </thead>
+   <tbody>
+<!--{loop $addlist $gkey $gvar}-->
+  <tr  onmouseover="inStyle(this)"  onmouseout="outStyle(this)" id="line_{$gvar[AddressID]}" <!--{if $gvar[AddressFlag]=="1"}-->title="默认收货地址"<!--{/if}--> >
+    <td height="48"><!--{echo $gkey+1}--><!--{if $gvar[AddressFlag]=="1"}--><br /><span class="title_green_w" >√</span><!--{/if}--></td>
+    <td>{$gvar[AddressCompany]}</td>
+    <td>{$gvar[AddressContact]}	</td>
+    <td>{$gvar[AddressPhone]}</td>
+    <td>{$gvar[AddressAddress]}</td>
+    <td>
+		<span><a href="#editadd" onclick="do_set_edit('{$gvar[AddressID]}','{$gvar[AddressCompany]}','{$gvar[AddressContact]}','{$gvar[AddressPhone]}','{$gvar[AddressAddress]}','{$gvar[AddressFlag]}');">&#8250; 修改</a></span><br />
+		<span><a href="#" onclick="do_delete('{$gvar[AddressID]}');">&#8250; 删除</a></span>	
+	</td>
+  </tr>
+   <!--{/loop}--> 
+   </tbody>
+</table>
+
+		<br />&nbsp;
+            </div>
+        	<div class="line"><img src="template/default/img/list_bottom_1.jpg" /></div>        
+        </div> 
+              
+    </div> 
+</div>
+
+{template bottom}
+</body>
+</html>

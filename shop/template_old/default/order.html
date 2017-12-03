@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - 订货宝 网上订货系统</title>
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="template/default/css/style.css?v={VERID}" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/list.css?v={VERID}" rel="stylesheet" type="text/css" media="screen" />
+
+<script src="template/js/jquery.min.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js?v={VERID}" type="text/javascript"></script>
+<script src="template/js/cart.js?v={VERID}" type="text/javascript"></script>
+
+<script type="text/javascript" language="javascript" > 
+
+function setinputval(companymsg,contactmsg,phonemsg,addressmsg)
+{
+	$("#AddressCompany").val(companymsg);
+	$("#AddressContact").val(contactmsg);
+	$("#AddressPhone").val(phonemsg);
+	$("#AddressAddress").val(addressmsg);
+}
+
+function addressadd()
+{	
+	//$("#tip").animate({opacity: 'show'}, 'slow');
+	if($("#AddressContact").val()=="" || $("#AddressPhone").val()=="" || $("#AddressAddress").val()=="")
+	{
+		$.growlUI('联系人 / 联系电话 / 详细地址 不能为空!');
+	}else{
+		$.post("consignment.php",
+			{m:"saveaddress", data_AddressCompany:$("#AddressCompany").val(), data_AddressContact: $("#AddressContact").val(), data_AddressPhone: $("#AddressPhone").val(), data_AddressAddress: $("#AddressAddress").val()},
+			function(data){		
+					if(data == "ok"){						
+						$.growlUI('提交成功...');
+						$('#saveaddinfoadd').attr("disabled","disabled");
+					}else{
+						$.growlUI(data);
+						$('#saveaddinfoadd').attr("disabled","");
+					}
+				}			
+			);
+	}
+	//window.setTimeout("hideshow('tip')",20000);
+}
+</script>
+
+</head>
+
+<body>
+{template header}
+
+<div id="contentbody">
+
+    	<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="cart.php">我的当前订单</a>
+ &#8250;&#8250; <a href="#">提交订单</a>
+		</div>
+     	
+       
+		<div class="line margin_top">
+        	<div class="list_title2">
+            	<div class="leftdiv"><img src="template/default/img/coner_top_left.jpg" border="0" /></div>
+            	<div class="leftdiv line-height">填写核对订单信息</div>
+                <div class="rightdiv"><img src="template/default/img/coner_top_right.jpg" border="0" /></div>
+          </div>
+         	<div class="list_line2">
+			<br class="clear" />
+			<!--{if empty($cartproduct)}-->
+					<div class="line font12" ><p align="center">您的还没有预订任何商品！<a href="list.php">返回订购</a></p></div>
+			<!--{else}-->
+			<form id="formorder" name="formorder" method="post" action="">
+			<div class="line96">
+				<div class="leftdiv"><img src="template/default/img/icon_arrow_down.gif" border="0" class="img" /></div>
+				<div class="leftdiv font14">收货人信息</div>			
+			</div>
+
+			<div class="line96">
+				<ul>
+				 <li><strong>常用地址：</strong></li>
+				<!--{loop $addressdata $akey $avar}-->
+					<li><input name="sendaddress" type="radio" id="sendaddress_{$avar[AddressID]}" value="{$avar[AddressID]}" onclick="setinputval('{$avar[AddressCompany]}','{$avar[AddressContact]}','{$avar[AddressPhone]}','{$avar[AddressAddress]}');" <!--{if $avar[AddressFlag]=="1"}--> checked="checked"<!--{/if}-->  />
+		      <span class="bold">{$avar[AddressContact]}</span><span>&nbsp;&nbsp;({$avar[AddressCompany]})</span><span>&nbsp;{$avar[AddressAddress]}</span></li>
+				<!--{/loop}-->
+				</ul>
+			</div>
+			
+
+			<div class="line96">				
+				<ul class="labelwidth">
+					 <li><label>收货人/公司：</label><input name="AddressCompany" id="AddressCompany" type="text" class="input1"  value="{$defaultaddress[AddressCompany]}" /></li>
+					 <li><label>联 系 人：</label><input name="AddressContact" id="AddressContact" type="text" class="input1"  value="{$defaultaddress[AddressContact]}" /></li>
+					 <li><label>联系电话：</label><input name="AddressPhone" id="AddressPhone" type="text" class="input1" value="{$defaultaddress[AddressPhone]}" /></li>
+					 <li><label>收货地址：</label><input name="AddressAddress" id="AddressAddress" type="text" class="input1"  value="{$defaultaddress[AddressAddress]}" /></li>
+					 <li><label>&nbsp;</label><input name="saveaddinfoadd" id="saveaddinfoadd" value="保存收货信息,到我的常用地址" type="button" class="redbtn" onclick="addressadd();" /></li>
+				</ul>				
+			</div>
+
+			<br class="clear" />
+			<div class="line96">
+				<div class="leftdiv"><img src="template/default/img/icon_arrow_down.gif" border="0" class="img" /></div>
+				<div class="leftdiv font14">请选择配送方式</div>			
+			</div>
+			<div class="line96">
+				<ul>
+				<!--{loop $sendtypedata $skey $svar}-->
+					<li><input name="sendtype" type="radio" id="sendtype_{$svar[TypeID]}" value="{$svar[TypeID]}" <!--{if $svar[TypeFlag]=="1"}--> checked="checked"<!--{/if}-->  /> &nbsp;&nbsp;<span class="bold">{$svar[TypeName]}</span><span>&nbsp;&nbsp;({$svar[TypeAbout]})</span></li>
+				<!--{/loop}-->
+				</ul>
+			</div>
+
+
+			<br class="clear" />
+			<div class="line96">
+				<div class="leftdiv"><img src="template/default/img/icon_arrow_down.gif" border="0" class="img" /></div>
+				<div class="leftdiv font14">请选择支付方式</div>			
+			</div>
+			<div class="line96">
+				<ul>
+				<!--{loop $paytypedata $skey $svar}-->
+					<li><input name="paytype" type="radio" id="paytype_{$svar[TypeID]}" value="{$svar[TypeID]}" <!--{if $svar[TypeFlag]=="1"}--> checked="checked"<!--{/if}-->  /> &nbsp;&nbsp;<span class="bold">{$svar[TypeName]}</span><span>&nbsp; -- &nbsp;{$svar[TypeAbout]}</span></li>
+				<!--{/loop}-->
+				</ul>
+			</div>
+
+			<br class="clear" />
+			<div class="line96">
+				<div class="leftdiv"><img src="template/default/img/icon_arrow_down.gif" border="0" class="img" /></div>
+				<div class="leftdiv font14">订单结算信息：</div>
+			</div>
+			
+			<div class="line96">
+  <table width="99%" border="0" cellspacing="0" cellpadding="0" align="center">
+  <thead>
+  <tr>
+    <td width="6%" height="28">&nbsp;序号</td>
+    <td>&nbsp;商品名称</td>
+    <td width="12%">&nbsp;颜色 / 规格</td>
+	<!--{if $pns=="on"}-->
+	<td width="8%" align="right">可用库存</td>
+	<!--{/if}-->
+    <td width="10%" align="right">数量/单位</td>
+
+    <td width="10%" align="right">单价</td>  
+	<td width="5%" align="right">折扣</td>
+    <td width="10%" align="right">折后价</td>    
+    <td width="12%" align="right">小计(元)</td> 
+  </tr>
+   </thead>
+   <tbody>
+	<!--{loop $carttempproduct $cartkey $cartvar}-->
+	<!--{if $cartvar[No] <= $pagesize}-->
+	<!--{if $cartvar[library]=="empty"}-->
+		<tr id="linegoods_{$cartvar[kid]}" style="background-color:#FFFF99;"  >
+	<!--{else}-->
+	    <tr id="linegoods_{$cartvar[kid]}" <!--{if fmod($cartkey,2)==0}--> style="background-color:#f9f9f9;"<!--{else}-->style="background-color:#ffffff;" <!--{/if}-->  >
+	<!--{/if}-->
+    <td height="35">&nbsp;<input name="kid[]" type="hidden" value="{$cartvar[kid]}" />{$cartvar[No]}</td>
+    <td><a href="content.php?id={$cartvar[id]}" target="_blank">{$cartvar[Name]}</a></td>
+    <td>&nbsp;<!--{if !empty($cartvar[color])}-->{$cartvar[color]}<!--{/if}--> / <!--{if !empty($cartvar[spec])}-->{$cartvar[spec]}<!--{/if}--></td>
+	<!--{if $pns=="on"}-->
+	<td align="right" class="font12h"><!--{if $cartvar[onumber]==9999999999}-->充足<!--{else}-->{$cartvar[onumber]}&nbsp;<!--{/if}--></td>
+	<!--{/if}-->
+    <td align="right">{$cartvar[number]}&nbsp;/&nbsp;{$cartvar[Units]}&nbsp;</td>
+
+	<td align="right">¥ {$cartvar[price]} </td> 
+	<td align="right">{$cartvar[pencent]}</td>
+    <td align="right">¥ {$cartvar[price_end]}</td>
+    <td class="font12" align="right">¥ {$cartvar[notetotal]}&nbsp;</td>
+  </tr>
+  <!--{/if}-->
+   <!--{/loop}--> 
+
+  <!--{if count($carttempproduct) > $pagesize}-->
+  <tr>
+	<td colspan="2" align="left" class="font14">......</td>
+	<!--{if $pns=="on"}-->
+	<td>&nbsp;</td>
+	<!--{/if}-->
+    <td class="font14" align="right" colspan="7" align="right"><a href="cart.php">返返回购物车，查看全部明细 &#8250;&#8250;</a>&nbsp;</td>
+  </tr>
+	<!--{/if}-->
+  <tr>
+    <td>&nbsp;</td>
+    <td height="28" class="font14">合计：</td>
+	<!--{if $pns=="on"}-->
+	<td>&nbsp;</td>
+	<!--{/if}-->
+    <td class="font14" colspan="2" align="right">{$productnum} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	<td >&nbsp;</td>
+	<td >&nbsp;</td>
+    <td class="font14" align="right" colspan="2">¥ {$producttotal}&nbsp;</td>
+	<td>&nbsp;</td>
+
+  </tr>
+   </tbody>
+</table>
+	 </div>
+
+	 <div class="line96" >
+	 <div class="line96" ><label><strong>如果你有特殊要求请在这说明：</strong></label><br /><textarea name="OrderRemark" id="OrderRemark" cols="45" rows="4" style="width:80%;"></textarea> </div>
+
+	  <div class="list_showpage" >
+<!--{if $isempty}-->
+<font color="red">注：黄色部份为：订货量超出可用库存数，请调整该商品的订购数量，再提交订单!</font>&nbsp;&nbsp;&nbsp;&nbsp;<input name="addorder" id="addorder" value="返回购物车，调整商品数量?" type="button" class="bluebtn" onclick="javascript:window.location.href='cart.php'" />&nbsp;&nbsp;&nbsp;&nbsp;
+<!--{else}-->
+<input name="addorder" id="addorder" value="好了，提交订单" type="button" class="bluebtn" onclick="guestorderadd();" />&nbsp;&nbsp;&nbsp;&nbsp;<a href="cart.php">返回购物车，继续选购其它商品? </a>&nbsp;&nbsp;&nbsp;&nbsp;
+<!--{/if}-->	
+</div>
+	 </div>
+</form>
+<!--{/if}-->
+			<br />&nbsp;
+            </div>
+        	<div class="line" style="background-image:url(template/default/img/coner_bottom_bg.jpg); height:8px;">
+            	<div class="spanleft"><img src="template/default/img/coner_bottom_left.jpg" /></div>
+                <div class="spanright"><img src="template/default/img/coner_bottom_right.jpg" /></div>
+            </div>        
+        </div> 
+
+</div>
+
+{template bottom}
+</body>
+</html>

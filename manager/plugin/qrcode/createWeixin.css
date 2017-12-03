@@ -1,0 +1,31 @@
+.dhbBox {
+    display: none;
+    z-index: 100000001;
+    font-size: 12px;
+    background: url(http://static.bshare.cn/frame/images//background-opaque-dark.gif) !important;
+    padding: 6px !important;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+.dhbClose {
+    _overflow: hidden;
+    cursor: pointer;
+    position: absolute;
+    z-index: 10000000;
+    color: #666;
+    font-weight: bold;
+    font-family: Helvetica,Arial;
+    font-size: 14px;
+    line-height: 20px;
+}
+.dhbFrameDiv {
+    border: none;
+    background: #fff;
+}
+.dhbCreateWeixin img{
+    width: 178px;
+    height: 178px;
+    margin: 21px;
+    display: inline-block;
+}

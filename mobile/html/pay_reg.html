@@ -1,0 +1,35 @@
+<!-- 移动支付开户 -->
+<div data-ng-controller="payRegController" class="page-order-confirm" style="background-color:#f9f9f9;">
+    <!-- 标题 -->
+    <header id="payreg-h" class="common" style="border-bottom: 1px solid #DBDADA;">
+        <em data-back><a href="javascript:;" class="arrow-left"></a></em>
+        <p>开通支付</p>
+        <!-- <span class="icon icon-expand"></span> -->
+    </header>
+    <!-- 添加付款单 -->
+    <div id="payreg-input" data-iscroll class="iscroll" style="top: 5rem;">
+        <div style="padding: 1rem 3% 0;margin-bottom: 14rem;">
+            <form action="" ng-submit="payReg.submitReg();">
+                <div class="pay-reg">
+                    <span>* 用户姓名：</span>
+                    <input type="text" ng-model="payReg.regObj.realName" />
+                </div>
+                <div class="pay-reg">
+                    <span>* 手机号：</span>
+                    <input type="number" ng-model="payReg.regObj.mobile" />
+                </div>
+                <div class="pay-reg">
+                    <span>* 身份证号：</span>
+                    <input type="text" ng-model="payReg.regObj.certNo" />
+                </div>
+                <div class="pay-reg">
+                    <span>邮箱：</span>
+                    <input type="email" ng-model="payReg.regObj.email" />
+                </div>
+                <div class="pay-reg">
+                    <input type="submit" value="提 交" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

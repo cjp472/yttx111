@@ -1,0 +1,85 @@
+<link href="{CONF_PATH_IMG}css/unicom-main.css?v={VERID}" type="text/css" rel="stylesheet" />
+<link href="{CONF_PATH_IMG}css/unicom-css.css?v={VERID}" rel="stylesheet" type="text/css">
+<script src="template/js/lrtk.js" type="text/javascript" charset="UTF-8"></script>
+<script type="text/javascript">
+
+function AddToFavorite()   
+{   
+	  title = document.title; 
+	  url = document.location; 
+	  try { 
+	    // Internet Explorer 
+	    window.external.AddFavorite( url, title ); 
+	  } 
+	  catch (e) { 
+	    try { 
+	      // Mozilla 
+	      window.sidebar.addPanel( title, url, "" ); 
+	    } 
+	    catch (e) { 
+	      // Opera 
+	      if( typeof( opera ) == "object" ) { 
+	        a.rel = "sidebar"; 
+	        a.title = title; 
+	        a.url = url; 
+	        return true; 
+	      } 
+	      else { 
+	        // Unknown 
+	        alert( '您的浏览器不支持,请按 Ctrl+D 手动收藏!' ); 
+	      } 
+	    } 
+	  } 
+	  return false;  
+} 
+</script>
+
+	<div class="top">
+   		<div class="top-info">
+   			<div class="fl" style="line-height:35px">
+       		<span class="green">Hi, <b>{$_SESSION['cc']['ctruename']}</b> 欢迎登陆医统BMB平台&nbsp;&nbsp;</span>
+            <a class="a-btn" href="login.php?m=logout"> [退出] </a>
+            <a  style="margin-left: 0px;" class="a-btn1" rel="sidebar" onclick="return AddToFavorite();"> <img src="./template/red/images/shoucang.png" style="width: 15px; height: 15px; margin-left: 15px; margin-right: 0px;" /> 收藏医统 </a>
+            <a  class="a-btn1"style="margin-left: 12px" target="_blank"  href="http://help.dhb.net.cn/client.php?skey=<!--{echo think_encrypt(HELP_URL,ENCODE_KEY)}-->"><img src="./template/red/images/xin.png" style="width: 15px;height: 15px;" /> 关注我们</a>
+            </div>
+            <!--{if commondata::get_is_show()}-->
+			<div class="f-r">
+				<img src="./template/red/images/che.png" style="width: 18px;height: 17px;margin-top: 11px" alt=""/>
+				<span>6</span>
+				<a href="" class="icperson"><img src="./template/red/images/geren.png" class="person" alt=""/> 个人中心 </a>
+			<span class="icon icon1">&#xe0ed;</span> 
+			当前余额：<b class="a-btn"><!--{echo commondata::get_amount()}--></b>元 <a class="a-btn" href="finance.php?m=new&t=y" > [立即支付] </a>
+       		<!--{/if}-->
+       		</div>
+       </div>
+    </div>
+	<div class="header">
+    	<div class="logo f-l m-t"><a href="home.php"><!--{if empty($_SESSION['ucc']['CompanyLogo'])}--><img src="{CONF_PATH_IMG}/images/logo.png" width="180" height="58" alt="{$_SESSION['ucc']['CompanyName']} - 医统天下BMB系统" /><!--{else}--><img src="{RESOURCE_PATH}{$_SESSION['ucc']['CompanyLogo']}" alt="{$_SESSION['ucc']['CompanyName']} - 医统天下BMB系统" border="0" /><!--{/if}--></a></div>
+    	<div class="search f-l">
+    	<form name="searchform" id="searchform" action="search.php" method="get">
+        	<input type="text" size="50" name="kw" id="kw"  class="search-title f-l" value="" maxlength="30" placeholder="输入商品名称或编号">
+        	<button name="searchbutton" class="search-btn f-l" type="submit" style="cursor:pointer;"><span class=" icon icon1" >&#x55;</span> 搜索</button>
+       	</form>
+        </div>
+        <div class="shop-chat " id="topcart">
+			<img src="./template/red/images/zhenga.png" alt=""/>
+        </div>
+        <div class="menu f-l nav-box">
+        	<ul>
+            	<li><a href="home.php">首页</a></li>
+				<li <!--{if strpos($_SERVER['PHP_SELF'], 'list.php')}-->class="cur"<!--{/if}-->><a href="list.php">商品中心</a></li>
+				<li <!--{if strpos($_SERVER['PHP_SELF'], 'myorder.php')}-->class="cur"<!--{/if}-->><a href="myorder.php">我的订单</a></li>
+				<li <!--{if strpos($_SERVER['PHP_SELF'], 'consignment.php')}-->class="cur"<!--{/if}-->><a href="consignment.php">发货单</a></li>
+				<li <!--{if strpos($_SERVER['PHP_SELF'], 'return.php')}-->class="cur"<!--{/if}-->><a href="return.php">退货单</a></li>
+				<li <!--{if strpos($_SERVER['PHP_SELF'], 'finance.php')}-->class="cur"<!--{/if}-->><a href="finance.php">付款单</a></li>
+				<li <!--{if strpos($_SERVER['PHP_SELF'], 'statistics.php')}-->class="cur"<!--{/if}-->><a href="statistics.php">数据统计</a></li>
+				<li <!--{if strpos($_SERVER['PHP_SELF'], 'forum.php')}-->class="cur"<!--{/if}-->><a href="forum.php">在线客服</a></li>
+				<li <!--{if strpos($_SERVER['PHP_SELF'], 'infomation.php')}-->class="cur"<!--{/if}-->><a href="infomation.php">信息公告</a></li>
+				<li <!--{if strpos($_SERVER['PHP_SELF'], 'my.php')}-->class="cur"<!--{/if}-->><a href="my.php?m=profile">我的</a></li>
+            </ul>
+            <div class="nav-trigon"></div>
+            <div class="nav-line"></div>
+			<!-- <img src="./template/red/images/xian.png" style="margin-top:0px;width: 1000px;" alt=""/>  -->
+        </div>
+    </div>
+    <!--<br style=" clear:both">-->

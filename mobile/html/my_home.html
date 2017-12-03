@@ -1,0 +1,250 @@
+<style >
+    @font-face {font-family: "iconfont";
+        src: url('../css/fonts/iconfont.eot?t=1483601650058'); /* IE9*/
+        src: url('../css/fonts/iconfont.eot?t=1483601650058#iefix') format('embedded-opentype'), /* IE6-IE8 */
+        url('../css/fonts/iconfont.woff?t=1483601650058') format('woff'), /* chrome, firefox */
+        url('../css/fonts/iconfont.ttf?t=1483601650058') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+        url('../css/fonts/iconfont.svg?t=1483601650058#iconfont') format('svg'); /* iOS 4.1- */
+    }
+
+    .iconfont {
+        font-family:"iconfont" !important;
+        font-size:16px;
+        font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    .icon-yue:before { content: "\e6cb"; }
+    .icon-jifen:before { content: "\e64f"; }
+    .icon-shouhuodizhi:before { content: "\e619"; }
+    .icon-myorder:before { content: "\e611"; }
+    .icon-suggest:before { content: "\e62d"; }
+    .icon-wodeziliao:before { content: "\e63f"; }
+    .icon-fukuandan:before { content: "\e624"; }
+    .icon-fahuo-copy:before { content: "\e606"; }
+    .icon-payment:before { content: "\e65f"; }
+    .icon-tuihuo:before { content: "\e662"; }
+    .icon-guanji:before { content: "\e678"; }
+</style>
+<!-- 我的页面 -->
+<div class="page-my-home page-order-confirm" ng-controller="myhomeController">
+    <!-- 头部 -->
+    <header>
+        <span data-toggle data-selector="div.edit-pwd" class="icon icon-cog"></span>
+
+        <div>
+            <p ng-bind="myInfo.ClientName"></p>
+            <p ng-bind="myInfo.ClientCompanyName"></p>
+        </div>
+        <div class="point">
+            <ul>
+                <li><span class="iconfont icon-yue" style="font-size: 2rem;color: white"></span>&nbsp;余额<span class="r" ng-bind="amount"></span></li>
+                <li><span class="iconfont icon-jifen" style="font-size: 2rem;color: white"></span>&nbsp;积分<span class="r" ng-bind="point"></span></li>
+            </ul>
+        </div>
+    </header>
+    <div data-iscroll class="iscroll" style="top:19.1rem;">
+        <div class="my-menu">
+            <ul style="font-size: 1.4rem">
+                <li>
+                    <a href="javascript:;" data-ng-click="changePath('/order-list/0',$event)">
+                        <span class="iconfont icon-myorder" style="font-size: 1.8rem;float: left;"></span>
+                        <span style="float: left;margin-top: .15rem">&nbsp;&nbsp;&nbsp;全部订单</span>
+                        <span class="arrow-right"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-ng-click="changePath('/order-returns')">
+                        <span class="iconfont icon-tuihuo" style="font-size: 1.8rem;float: left;"></span>
+                        <span style="float: left;margin-top: .15rem">&nbsp;&nbsp;&nbsp;退货单</span>
+                        <span class="arrow-right"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-ng-click="changePath('/order-transport/0')">
+                        <span class="iconfont icon-fahuo-copy" style="font-size: 1.8rem;float: left;"></span>
+                        <span style="float: left;margin-top: .15rem">&nbsp;&nbsp;&nbsp;发货单</span>
+                        <span class="arrow-right"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-ng-click="changePath('/order-payment/0')">
+                        <span class="iconfont icon-fukuandan" style="font-size: 1.8rem;float: left;"></span>
+                        <span style="float: left;margin-top: .15rem">&nbsp;&nbsp;&nbsp;付款单</span>
+                        <span class="arrow-right"></span>
+                    </a>
+                </li>
+                <div class="divider"></div>
+                <li>
+                    <a ng-click="getAddress();" href="javascript:;">
+                        <span class="iconfont icon-shouhuodizhi" style="font-size: 1.8rem;float: left;"></span>
+                        <span style="float: left;margin-top: .15rem">&nbsp;&nbsp;&nbsp;收货地址</span>
+                        <span class="arrow-right"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-toggle data-selector="div.my-info">
+                        <span class="iconfont icon-wodeziliao" style="font-size: 1.8rem;color:#f3d05c;float: left;"></span>
+                        <span style="float: left;margin-top: .15rem">&nbsp;&nbsp;&nbsp;个人资料</span>
+                        <span class="arrow-right"></span>
+                    </a>
+                </li>
+                <li ng-show="myInfo.YapiuserName">
+                    <a href="javascript:;"  ng-click="updatePay();">
+                        <span class="iconfont icon-payment" style="font-size: 1.8rem;color:#f9320e;float: left;"></span>
+                        <span style="float: left;margin-top: .15rem">&nbsp;&nbsp;&nbsp;管理快捷支付</span>
+                        <span class="arrow-right"></span>
+                    </a>
+                </li>
+                <div class="divider"></div>
+                <li ng-show="false">
+                    <a href="javascript:;">
+                        <span class="icon icon-cloud"></span>
+                        <span>&nbsp;&nbsp;非WiFi不加载图片</span>
+                        <span onclick="DHB.setLoadImg(this);" ng-class="{'yes': !DHB.isLoadImg}" data-toggle-switch class="r switch">
+                            <em ng-style="{float:!DHB.isLoadImg ? 'right' : ''}"></em>
+                        </span>
+                    </a>
+                </li>
+                <li ng-show="false">
+                    <a href="javascript:;" data-ng-click="changePath('/feed-back')">
+                        <span class="iconfont icon-suggest" style="font-size: 1.8rem;float: left;"></span>
+                        <span style="float: left;margin-top: .15rem">&nbsp;&nbsp;&nbsp;意见反馈</span>
+                        <span class="arrow-right"></span>
+                    </a>
+                </li>
+                <div class="divider" ng-show="false"></div>
+                <li>
+                    <a href="javascript:;" ng-click="setLoginOut();">
+                        <span class="iconfont icon-guanji" style="font-size: 1.8rem;float: left;"></span>
+                        <span style="float: left;margin-top: .15rem">&nbsp;&nbsp;&nbsp;重新登录</span>
+                        <span class="arrow-right"></span>
+                    </a>
+                </li>
+                <!--
+                <li ng-show="!isWeiXin">
+                    <a href="javascript:;" ng-click="setLoginOut();">
+                        <span class="icon icon-power"></span>
+                        <span>&nbsp;&nbsp;重新登录</span>
+                        <span class="arrow-right"></span>
+                    </a>
+                </li>
+                <li  ng-show="isWeiXin">
+                    <a href="javascript:;" ng-click="setRemoveWerxin();">
+                        <span class="icon icon-link"></span>
+                        <span>&nbsp;&nbsp;解除绑定微信</span>
+                        <span class="arrow-right"></span>
+                    </a>
+                </li>
+                -->
+                <li style="height:3rem;border-bottom:none;"></li>
+            </ul>
+        </div>
+    </div>
+    <div class="edit-pwd send-type animated fadeIn">
+        <div>
+            <h4>密码修改</h4>
+            <ul class="order-date">
+                <li>
+                    <span>旧&nbsp;密&nbsp;码: </span>
+                    <input style="width: 65%;text-indent: .8rem;" ng-model="updatePwd.oldPwd" type="password" placeholder="旧密码" />
+                </li>
+                <li>
+                    <span>新&nbsp;密&nbsp;码:</span>
+                    <input style="width: 65%;text-indent: .8rem;" ng-model="updatePwd.newPwd" type="password" placeholder="新密码" />
+                </li>
+                <li>
+                    <span>确认密码:</span>
+                    <input style="width: 65%;text-indent: .8rem;" ng-model="updatePwd.repeatPwd" type="password" placeholder="确认密码" />
+                </li>
+            </ul>
+            <div class="btn-group">
+                <a href="javascript:;" ng-click="updatePwd.setPassword();">确定</a>
+                <a href="javascript:;" data-toggle data-selector="div.edit-pwd">取消</a>
+            </div>
+        </div>
+    </div>
+    <div class="my-info pay-type animated fadeIn">
+        <div>
+            <h4>我的资料</h4>
+            <ul>
+                <li>名称：<span class="r">{{myInfo.ClientCompanyName}}</span></li>
+                <li>账号：<span class="r">{{myInfo.ClientName}}</span></li>
+                <li>邮箱：<span class="r">{{myInfo.ClientEmail}}</span></li>
+                <li>电话：<span class="r">{{myInfo.ClientPhone}}</span></li>
+                <li>传真：<span class="r">{{myInfo.ClientFax}}</span></li>
+                <li>快捷支付账号：<span class="r">{{myInfo.YapiuserName}}</span></li>
+            </ul>
+            <button class="btn" data-toggle data-selector="div.my-info">关闭</button>
+        </div>
+    </div>
+    
+    <div class="layer info-layer animated default-apk">
+        <h4>收货地址</h4>
+        <div data-iscroll class="iscroll" style="background:#ececec;bottom:5rem;">
+            <div class="order-info" style="top:0;bottom:auto;background: #FFFFFF;">
+                <ul>
+                    <li style="padding-left:1em;border-bottom: .8rem solid #ECECEC;" ng-repeat="addr in address">
+                        <span>{{addr.AddressContact}} &emsp;&emsp;&emsp;&emsp;{{addr.AddressPhone}}</span>
+                        <p>{{addr.AddressCompany}}</p>
+                        <p>{{addr.AddressAddress}}</p>
+                        <div style="border-top:1px solid #efefef;height:3.5rem;line-height: 3.5rem;" class="addr-menu">
+                            <span ng-click="addrs.setDefault($index,$event);" ng-class="{'selected':addr.AddressFlag=='1'}"><em></em><span> {{addr.defaultText}}</span></span>
+                            <div style="float: right;margin-right: 2rem;">
+                                <span style="display:inline-block;vertical-align:middle;" data-toggle data-selector="div.add-addr" ng-click="addrs.setActionType(1,$index);">
+                                    <small class="icon icon-pencil"></small>&nbsp;编辑  
+                                </span>&nbsp;
+                                <span style="display:inline-block;vertical-align:middle;" data-toggle data-selector="div.add-addr" ng-click="addrs.setActionType(2,$index);">
+                                    <small class="icon icon-trashcan"></small>&nbsp;删除
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <!-- 无数据提示框 -->
+                <div class="no-data" ng-show="noData">
+                    <div>
+                        <p class="search-result"></p>
+                        <p> 您还没有收货地址哦。</p>
+                        <button ng-click="addrs.setActionType(0);" data-toggle data-selector="div.add-addr">立即新增</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 关闭按钮 -->
+        <div class="layer-footer">
+            <p ng-click="addrs.closeLayer();"><span class="arrow-left"></span></p>
+            <!-- <button ng-click="orderes.selectOrder.setOrder();">取消订单</button> -->
+            <div>
+                <button ng-click="addrs.setActionType(0);" style="padding:0 3%;border-radius:1.2rem;float:right;" data-toggle data-selector="div.add-addr">新建地址</button>
+            </div>
+        </div>
+        <!-- 收货地址管理 -->
+        <form action="" name="addrManagerForm">
+            <div class="animated fadeIn add-addr addr-manager">
+                <div>
+                    <h4>{{addrs.addrTitle}}</h4>
+                    <ul ng-show="addrs.actionType!==2" class="order-date">
+                        <li>
+                            <input required ng-model="addrs.selectAddr.AddressCompany" type="text" placeholder="收货单位" />
+                        </li>
+                        <li>
+                            <input required ng-model="addrs.selectAddr.AddressContact" type="text" placeholder="联系人" />
+                        </li>
+                        <li>
+                            <input required ng-model="addrs.selectAddr.AddressPhone" type="text" placeholder="联系方式" />
+                        </li>
+                        <li>
+                            <input required ng-model="addrs.selectAddr.AddressAddress" type="text" placeholder="详细地址" />
+                        </li>
+                    </ul>
+                    <div class="btn-group">
+                        <a href="javascript:;" ng-click="addrs.setAddress(addrManagerForm.$valid);">确定</a>
+                        <a href="javascript:;" data-toggle data-selector="div.add-addr">取消</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{$_SESSION['ucc']['CompanyName']} - {SITE_NAME}</title>
+    <meta name='robots' content='noindex,nofollow' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    <link href="{CONF_PATH_IMG}css/base.css?v={VERID}" type="text/css" rel="stylesheet" />
+    <link href="{CONF_PATH_IMG}css/showpage.css?v={VERID}" type="text/css" rel="stylesheet" />
+    <link href="plugin/jquery-ui/development-bundle/themes/base/ui.all.css" type="text/css" rel="stylesheet" />
+    <script src="template/js/jquery.js" type="text/javascript"></script>
+    <script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+    <script src="template/js/function.js?v={VERID}" type="text/javascript"></script>
+    <script src="template/js/cart.js?v={VERID}" type="text/javascript"></script>
+    <script src="plugin/jquery-ui/development-bundle/ui/ui.datepicker.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var price = {$price};
+        $(function(){
+            $("td>input:checkbox").live('click',function(){
+                $(this).prev("input:hidden").val($(this).attr('checked') ? 1 : 0);
+            });
+
+            $("input[data-act='addLine']").click(function(){
+                var num = parseInt($(this).attr('data-num'),10);
+                var clone = null;
+                for(var i=0;i<num;i++){
+                    clone = $("tr.clone").clone(true).removeClass('clone').show();
+                    clone.find("input[name='isClone[]']").val(0);
+                    $("table").append(clone);
+                }
+                //$('.picker').datepicker();
+            }).trigger('click');
+
+            $(".picker").live("focusin",function(){
+               $(this).datepicker();
+            });
+        });
+
+        function calcAll(){
+            //计算价格
+            var cnt = 0;
+            $("#contentTable tr:gt(0):not(.clone)").each(function(){
+                var isClone = $(this).find("input[name='isClone[]']").val();
+                if(isClone==1){
+                    return;
+                }
+                var cz = $(this).find("select[name='cz[]']").val();
+                var lb = $(this).find("select[name='lb[]']").val();
+                var long = $(this).find("input[name='long[]']").val();
+                var width = $(this).find("input[name='width[]']").val();
+                var crimping = $(this).find("input[name='crimping[]']").val();
+                var num = $(this).find("input[name='num[]']").val();
+                var crimpingType = $(this).find("select[name='crimpingType[]']").val();
+                var trimming = $(this).find("input[name='trimming[]']").val();//修边
+                var bundle = $(this).find("input[name='bundle[]']").val();//捆
+                var date = $(this).find("input[name='date[]']").val();//交期
+
+                var p = price[cz+'-'+lb];
+                p += trimming == 1 ? 0.05 : 0;
+                p += bundle == 1 ? 0.05 : 0;
+                p += crimping == 1 ? 0.05 : 0;
+
+                var total = p * long * width * num;
+                cnt += isNaN(total) ? 0 : total;
+
+            });
+
+            console.log('总价格为:'+parseFloat(cnt).toFixed(4));
+        }
+    </script>
+</head>
+
+<body>
+{template header}
+
+<div id="main">
+    <div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="carttest.php">测试订购商品 </a></div>
+
+    <div class="car_tit">订购商品列表</div>
+
+    <div class="main_car">
+
+        <form id="formcart" name="formcart" method="post" action="carttest.php?m=updatecart">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" id="contentTable">
+                <thead>
+                <tr>
+                    <td height="28">材质</td>
+                    <td>楞别</td>
+                    <td>订购长</td>
+                    <td>订购宽</td>
+                    <td>压线</td>
+                    <td>订购</td>
+                    <td>压线类型</td>
+                    <td>是否修边</td>
+                    <td>是否捆</td>
+                    <td>交期</td>
+                    <td>生产备注</td>
+                    <td>出货备注</td>
+                    <td>订单备注</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="clone" style="display:none;">
+                    <td height="30">
+                        <input name="isClone[]" value="1" type="hidden"/>
+                        <select name="cz[]">
+                            <!--{loop $cz $item}-->
+                            <option value="{$item}">{$item}</option>
+                            <!--{/loop}-->
+                        </select>
+                    </td>
+                    <td>
+                        <select name="lb[]">
+                            <!--{loop $lb $item}-->
+                            <option value="{$item}">{$item}</option>
+                            <!--{/loop}-->
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" name="long[]" style="width:45px;"/>
+                    </td>
+                    <td>
+                        <input type="text" name="width[]" style="width:45px;"/>
+                    </td>
+                    <td>
+                        <input name="crimping[]" type="hidden" value="0"/>
+                        <input type="checkbox" value="1" />
+                    </td>
+                    <td>
+                        <input type="text" name="num[]" style="width:45px;"/>
+                    </td>
+                    <td>
+                        <select name="crimpingType[]">
+                            <option value="">==请选择==</option>
+                            <!--{loop $yx $item}-->
+                            <option value="{$item}">{$item}</option>
+                            <!--{/loop}-->
+                        </select>
+                    </td>
+                    <td>
+                        <input type="hidden" name="trimming[]" value="0"/>
+                        <input type="checkbox" value="1" />
+                    </td>
+                    <td>
+                        <input name="bundle[]" type="hidden" value="0"/>
+                        <input type="checkbox" value="1" />
+                    </td>
+                    <td>
+                        <input type="text" name="date[]" value="" style="width:75px;" class="picker"/>
+                    </td>
+                    <td>
+                        <input type="text" name="produceNote[]" style="width:45px;"/>
+                    </td>
+                    <td>
+                        <input type="text" name="shippingNote[]" style="width:45px;"/>
+                    </td>
+                    <td>
+                        <input type="text" name="orderNote[]" style="width:45px;"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="line" style="margin-top:6px;text-align:right;">
+                <span class="notice_e">
+                    <input class="button_5" type="button" data-act="addLine" data-num="5" value="添加 5 行" />
+                </span>
+                <span class="notice_e">
+                    <input class="button_5" type="submit" value="提交订单" />
+                </span>
+            </div>
+        </form>
+        <br />
+        &nbsp;
+    </div>
+
+</div>
+
+{template bottom}
+
+<div id="windowForm6">
+    <div class="windowHeader">
+        <h3 id="windowtitle">请选择订购商品</h3>
+        <div class="windowClose"><div class="close-form" onclick="backtocart()" title="关闭" >x</div></div>
+    </div>
+    <div id="windowContent">
+        正在载入数据...
+    </div>
+</div>
+</body>
+</html>

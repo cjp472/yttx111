@@ -1,0 +1,175 @@
+.clear{
+	clear: both;
+}
+.hide{
+	display: none;
+}
+a:hover{
+	text-decoration: none;
+}
+.global-gray {
+    color: #999 !important;
+    background: #dedee0 !important;
+}
+/*查看账期一级二级审核情况页面*/
+.credit ul.credit-detail{width: 760px;padding: 60px 200px 20px 200px;margin: 0 auto;margin-bottom: 10px;border-bottom: 1px dashed #999;overflow: hidden;}
+.credit ul.credit-detail>li{float: left;width: 130px;border: none;font-size: 16px;color: #333;position: relative;}
+.credit ul.credit-detail>li div{width: 120px;height: 120px;border-radius: 100%;margin-bottom: 16px;}
+.credit ul.credit-detail>li>i{display: inline-block;width: 7px;height: 7px;background: #fff;border-radius: 100%;position: absolute;top: 0;left: 44%;z-index: 1000;}
+.credit li.used{margin-left: 180px;margin-right: 180px;}
+.credit ul.credit-detail>li span{display: inline-block;width: 100%;font-size: 16px;text-align: center;}
+	/*一二级审核*/
+.credit .credit_open_left{float: left;width: 478px;padding: 0 60px;border-right: 1px dashed #999;font-size: 16px !important;}
+.credit .credit_open_right{float: left;width: 478px;padding: 0 60px;}
+.credit .credit_honor>span{font-size: 16px;}
+.credit .credit_honor>i{font-style: normal;display: inline-block;width: 80px;height: 30px;line-height: 30px;text-align: center;border: 1px solid #999;margin-right: 10px;font-size: 16px;}
+	/*开通日期*/
+.credit .credit_date{overflow: hidden;}
+.credit .credit_date>span{float: left;font-size: 16px;}
+.credit span.data_use{float: right;}
+	/*审核*/
+.credit .check_number{float: left;	}
+.credit .check_number>p,.check_number>p>span{font-size: 16px;}
+	/*开通关闭*/
+.credit .check_button{float: right;height: 186px;margin-top: 15px;padding-left: 15px;}
+	/*一节审核*/
+.credit .credit_sure{margin: 0 !important;}
+.credit .credit_sure,.credit_open_right>div{background: #f1f1f1;width: 460px;border-radius: 6px;overflow: hidden;padding: 10px;}
+	/*两个授信额度输入框*/
+.credit .check_number input{width: 200px;height: 25px;border: none;outline: none;border-bottom: 1px solid #000;background: #f1f1f1 !important;font-size: 16px;}
+.credit .check_button>p{width: 100px;height: 30px;color: #fff;font-size: 14px;line-height: 30px;text-align: center;border-radius: 4px;cursor: pointer;}
+	/*二级审核*/
+.credit .credit_open_right>p{width: 420px;height: 96px;line-height: 96px;text-align: center;margin: 0 !important;font-size: 16px;}
+.credit .credit_open_right>p a{float: right;margin-right: 20px;}
+	/*审核描述*/
+.credit .check_text{overflow: hidden;margin-bottom: 10px;}
+.credit .check_text>span{float: left;font-size: 16px;}
+.credit input#OneContent,input#TwoContent{width: 195px;height: 34px;line-height: 34px;border: none;outline: none;padding: 0;margin-top: 5px;border: 1px solid #C3C3C3;background: #fff !important;font-size: 14px;padding-left: 5px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+/*审核后文本框样式*/
+.credit .checked_text{border: 1px solid #c3c3c3;height: 112px;resize: none;text-indent: 5px;}
+	/*下拉按钮*/
+.credit .icon-xiala,.icon-xiala-copy{width: 34px;height: 34px;line-height: 34px;text-align: center;vertical-align: top;margin-top: 5px;font-size: 20px;background: #fff;cursor: pointer;float: right;border: 1px solid #C3C3C3;border-left: 0;}
+#bodycontent{position: relative;}
+	/*选择审核描述*/
+.credit .check_choose,.check_choose1{width: 235px;height: 180px;overflow-x: hidden;overflow-y: auto; border: 1px solid #C3C3C3;position: relative;}
+.credit .choose_title,.choose_title1{width: 237px;height: 34px;background: #fff;margin: 0;position: absolute;top: 0;}
+.credit .choose_title>span,.choose_title1>span{float: left;width: 50%;height: 34px;line-height: 34px;text-align: center;cursor: pointer;}
+.credit .pass_active{background: #dedede;}
+.credit .check_choose{position: absolute;bottom: 17px;left: 150px;}
+.credit .check_choose1{position: absolute;bottom: 18px;right: 212px;}
+.credit .check_choose>div,.check_choose1>div{padding-top: 34px;width: 260px;height: 146px;overflow-y: auto;}
+.credit .check_choose input,.check_choose1 input{width: 236px;height: 32px;line-height: 32px;text-indent: 10px;border: none;outline: none;background: #fff;cursor: pointer;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+.credit .check_choose input:hover,.check_choose1 input:hover{background: #f1f1f1;}
+	/*查看对账按钮*/
+.credit .credit_footer{width: 1200px;text-align: center;padding: 20px 0;margin: 0;}
+.credit .credit_footer>a{display: inline-block;margin-right: 20px;font-size: 16px;}
+/*开通关闭按钮*/
+.credit .open_button{background: #01A157;}
+.credit .not_button{background: #3398cc;}
+.close_button{background: #e9931b;}
+	/*公司名显示*/
+body{ position: relative;}
+ .company_name{font-size: 18px;position: absolute;top: 13.9%;left: 27%;color: #fff;font-weight: bold;}
+    /*信用*/
+.credit .check{background: #3398cc;color: #fff;}
+
+
+/*账期申请资料详情*/
+	/*采购频率*/
+em,i{font-style: normal;}
+	/*清楚p标签的上下margin*/
+.credit_data .data_rete p,.trade_detail p{margin: 0;}	
+.credit_data .data_rete{width: 1120px;padding: 10px 20px;border-bottom: 1px dashed   #ccc;overflow: hidden;}
+.credit_data .data_rete>p{float: left;}
+.credit_data .same_name{font-size: 18px;color: #666;}
+.credit_data .rate_choice{margin-left: 40px;margin-right: 80px;}
+.credit_data .rate_choice>div{width: 400px;}
+.credit_data .rate_choice,.rate_number{margin-top: 5px;float: left;}
+.credit_data p.odd{margin-right: 80px;}
+.credit_data .rates{float: left;}
+.credit_data .rates>span{display: inline-block;width: 14px;height: 14px;border: 1px solid #d0d0d0;border-radius: 100%;}
+.credit_data .rates>span>i{display: inline-block;width: 10px;height: 10px;border-radius: 100%;margin: 2px 2px;}
+.credit_data .rate_choice em{margin-left: 10px;}
+.credit_data .rate_choice input{border: none;outline: none;}
+.credit_data .active{background: #01A157;}
+.credit_data .rate_number>p:first-child{margin-bottom: 10px;}
+.credit_data .rate_number input{margin-left: 10px;text-indent: 10px !important;border: 0;outline: 0;border-bottom: 1px solid #333;}
+	/*法人资料*/
+.credit_data .person_data{width: 100%;padding: 20px 0;border-bottom: 1px dashed #ccc;}
+        /*身份证,营业执照，照片*/
+.credit_data .idcard{height: 150px;}
+.credit_data .idcard img{height: 150px;width: 150px;}
+.credit_data .person_data td{height: 22px;padding: 1px 2px;}
+.credit_data .person_data input{width: 100%;height: 20px;outline: none;border: 0;}
+	/*交易流水*/
+.credit_data .trade_detail{padding: 20px 0 20px 20px;overflow: hidden;}
+.credit_data .trade_detail>p{float: left;}
+.credit_data .details{float: left;width: 1040px;margin-top: 5px;margin-left: 10px;}
+.credit_data p.total{margin: 10px 0;padding-bottom: 10px;border-bottom: 1px solid #ccc;}
+.credit_data p.total{margin: 10px 0;padding-bottom: 10px;border-bottom: 1px solid #ccc;}
+.credit_data p.total>span{margin-right: 80px;}
+.credit_data p.total>span{margin-right: 80px;}
+	/*搜索栏*/
+.credit_data .search_line{overflow: hidden;}
+.credit_data .search_line>p{float: left;margin-right: 40px;}
+.credit_data .search_line input{padding-left: 10px;width: 121px;}
+.credit_data .search_line>a{float: left;width: 50px;height: 24px;line-height: 24px;text-align: center;cursor: pointer;color: #666;border: 1px solid #cbcbcd;margin-top: 6px;margin-left: 10%;}
+.credit_data a.serch_button{margin-left: 23%;background: #0774bc;color: #fff;border: 1px solid #0774bc;}
+	/*流水表格*/
+.credit_data .details>table{width: 1040px;margin-top: 10px;}
+.credit_data .details>table thead tr{background: #ccc;height: 40px;}
+.credit_data .details>table tbody tr{height: 35px;}
+.credit_data .details>table tbody tr:hover{background: #f0f0f0;}
+.credit_data .lasttd:hover{background: #fff !important;}
+.credit_data .details>table td{text-align: left;border-bottom: 1px dashed #ccc;}
+	
+	
+/*账期交易流水详情*/
+.credit_trade .data_search{width: 938px;height: 38px;line-height: 38px;margin: 0 auto;padding: 0 30px 0 30px;border: 1px solid #999;background: #f1f1f1;}
+.credit_trade .data_search_time>p,.data_search_con p{margin: 0 !important;line-height: 38px;}
+	/*时间查询*/
+.credit_trade .data_search_time{height: 38px;line-height: 38px;float: left;}
+.credit_trade .data_search input{height: 28px;line-height: 28px;text-indent: 10px; width: 100px;padding-left: 10px;background: #FFFFFF;padding: 0;margin: 0;vertical-align: top;outline: none;margin-top: 5px;}
+.credit_trade .data_search_time>p{float: left;}
+.credit_trade .data_search_time>p:first-child{margin-right: 20px !important;}
+	/*7天查询按钮*/
+.credit_trade .data_search_con{float: right;}
+.credit_trade .data_search_con>span{margin-left: 20px;float: left;height: 40px;line-height: 40px;cursor: pointer;}
+.credit_trade .data_search_con>div{float: left;margin-left: 20px;margin-top: 3px;}
+.credit_trade span.search{width: 50px;height: 22px;line-height: 22px;text-align: center; background: #0774bc;border: 1px solid #0774bc;margin-top: 7px;}
+.credit_trade span.search>a{color: #fff;}
+	/*表格*/
+.credit_trade .data_table{width: 1000px;border-collapse:collapse;margin: 0 auto;}
+.credit_trade .data_table tr{height: 35px;border: none;outline: none;border-bottom: 1px dashed #f1f1f1;}
+.credit_trade .data_table>thead tr{background: rgba(242, 242, 242, 1);height: 40px;line-height: 40px;border: none;}
+.credit_trade .data_table>tbody tr:hover{background: #edf3f9;}
+.credit_trade .data_table td{text-align: center;position: relative;}
+	/*利息滞纳金说明*/
+.credit_trade .icon-wenhao{color: #C5C5C5;font-size: 14px;margin-left: 5px;cursor: pointer;vertical-align: middle;}
+.credit_trade .hover{color: #ADADAD;}
+	/*利息滞纳金说明弹窗*/
+.credit_trade .sameFee{border: 1px solid #b7b7b7;border-radius: 4px;padding: 10px;background: #f3f3f3;position: absolute;top: 90px;right: 15%;}
+.credit_trade .sameFee b{color: #0774bc;}
+.credit_trade .popAccount{position: absolute;top: 90px;right: 18%;}
+.credit_trade .sameFee>p{margin: 0;}
+	
+	
+	
+/*账期详情页面*/
+	#bodycontent{padding: 0.1px;}
+	.credit_info{width: 94%;margin: 0 auto;margin-top: 20px;margin-bottom: 20px;padding: 0.5%;}
+	.credit_info>legend{font-weight: bold;}
+	.credit_info .money_detail{width: 90%;margin: 0 auto;padding: 20px;overflow: hidden;}
+	.credit_info .money_detail>li{float: left;position: relative;}
+	.credit_info .money_return{margin: 0 205px;}
+	.credit_info .money_detail>li i{display: inline-block;width: 12px;height: 12px;background: #fff;border-radius: 100%;position: absolute;top: 0;left: 48%;z-index: 1000;}
+	.credit_info .open{width: 200px;height: 200px;}
+	.credit_info .money_detail>li span{display: inline-block;width: 100%;font-size: 16px;text-align: center;margin-top: 20px;}
+	.credit_info .search_way{height: 34px;}
+	.credit_info .search_way>p{float: left;height: 34px;line-height: 34px;margin: 0;margin-right: 30px;}
+	.credit_info .search_way>p input{width: 120px;height: 24px;line-height: 24px;padding: 0;padding-left: 10px;}
+	.credit_info .search_way>input{width: 60px;height: 24px;line-height: 20px;float: left;margin-top: 8px;background: #0774bc;border: 1px solid #0774bc;color: #fff;font-size: 12px;cursor: pointer;font-weight: bold;}
+	.credit_info .client{width: 100%;height: 34px;line-height: 34px;border-bottom:  1px solid #cbcbcd;margin: 20px 0;}
+	.credit_info .client>span{float: left;width: 25%;height: 33px;line-height: 33px;text-align: center;}
+	.credit_info table{margin: 0 auto;margin-bottom: 20px;}
+	.credit_info .pass_active{color: #0774bc;border: 1px solid #cbcbcd;border-bottom: 1px solid #fff;}

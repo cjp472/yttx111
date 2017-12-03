@@ -1,0 +1,42 @@
+<!-- 应收款项 -->
+<div ng-controller="receController" class="rece-money common-style" style="background-color: white;top: 0;">
+    <header>
+        <span data-back class="icon">&#x34;</span>
+        <h4>应收款项</h4>
+    </header>
+    <!-- <section class="set-date">
+        <span class="icon">&#x38;</span>
+        <p>{{receMoney.beginDate}}~{{receMoney.endDate}}</p>
+        <span class="icon">&#x39;</span>
+    </section> -->
+    <!-- 名称查询 -->
+    <div style="height: 3.4rem;border: 1px solid #ccc;border-top: none;">
+        <input style="width:80%;float:left; border: none;text-indent: 2rem;height: 3.3rem;" ng-model="receMoney.kw" type="text" ng-keyup="receMoney.enterSearch($event);" placeholder="请输入名称或联系人" />
+        <span style="width:20%;float:right;font-size: 2rem;line-height: 3.4rem;text-align: center;" ng-click="receMoney.searchReceMoney();" class="icon">&#x55;</span>
+    </div>
+    <div data-load-more="receMoney.loadMore();" class="list bottom" style="top: 8.4rem;">
+        <ul>
+            <li ng-repeat="rece in receMoney.list">
+                <p class="ellipsis-one"><strong>{{rece.ClientCompanyName}}</strong><span> - {{rece.ClientTrueName}}</span></p>
+                <p>
+                    <span class="icon icon-phone">&#xe090;</span><em> {{rece.ClientMobile}}</em>
+                    <span class="f_right" style="width:60%;">期末应收：<em class="color-red">¥ {{rece.Total}}</em></span>
+                </p>
+                <div class="divider"></div>
+            </li>
+        </ul>
+        <!-- 无数据提示框 -->
+        <div class="no-data" ng-show="receMoney.noData">
+            <div>
+                <p class="search-result"></p>
+                <p>对不起，没有数据显示</p>
+            </div>
+        </div>
+    </div>
+    <!-- <footer>
+        <div>
+            <span>合计：</span>
+            <span class="color-red">¥ {{receMoney.allTotal | number:2}}</span>
+        </div>
+    </footer> -->
+</div>

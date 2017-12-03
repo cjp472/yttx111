@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$_SESSION['ucc']['CompanyName']?> - <?=SITE_NAME?></title>
+<meta name='robots' content='noindex,nofollow' />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="<?=CONF_PATH_IMG?>css/base.css?v=<?=VERID?>" type="text/css" rel="stylesheet" />
+<link href="<?=CONF_PATH_IMG?>css/showpage.css" rel="stylesheet" type="text/css">
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js?v=<?=VERID?>" type="text/javascript"></script>
+
+<script language="javascript" type="text/javascript">
+function do_confirm_consignment(cid)
+{
+if(confirm("您确认已经收到货物了吗?"))
+{
+$.growlUI('正在执行，请稍候...');
+$.post("consignment.php",
+{m:"confirm", cid: cid},
+function(data){
+if(data == "ok"){
+$.growlUI('操作成功！');	
+$("#show_status_"+cid).html('&nbsp;状态：确认到货');
+$("#button_line_"+cid).animate({opacity: 'hide'}, 'slow');	
+}else{
+$.growlUI(data);
+}
+}			
+);
+}
+}
+</script>
+</head>
+
+<body>
+<? include template('header'); ?>
+<div id="main">
+<div id="location">当前位置： <a href="home.php">首页</a> / <a href="consignment.php">我的发货单</a></div>
+<div class="main_left">
+<div class="fenlei_bg_tit"><span class="iconfont icon-wenjian" style="font-size: 15px;color: white;margin-left: 10px"></span>   发货单管理</span></div>
+  <div class="news_info">
+  <ul>
+                <li><a href="consignment.php" ><span class="ali-small-circle iconfont icon-next-s"></span>发货单查询</a>
+<? if(is_array($incept_arr)) { foreach($incept_arr as $skey => $svar) { if($skey==$in['status'] && isset($in['status'])) { ?>
+<dd><a href="consignment.php?status=<?=$skey?>" ><strong><span class="ali-small-sanjiao iconfont icon-icon-copy-copy1"></span><?=$svar?></strong></a></dd>
+<? } else { ?>
+<dd><a href="consignment.php?status=<?=$skey?>" >  <?=$svar?></a></dd>
+<? } } } ?>
+</li>
+
+                <li><a href="consignment.php?m=address" ><span class="ali-small-circle iconfont icon-next-s"></span>收货地址管理</a>	</li>
+<li><a href="consignment.php?m=address#editname" ><span class="ali-small-circle iconfont icon-next-s"></span>新增地址</a></li>
+
+  </ul>
+</div>
+<div class="fenlei_bottom" style="width: 223px;height: 9px;border-left: 1px solid #D6D6D6;border-right: 1px solid #D6D6D6;border-bottom: 1px solid #D6D6D6"></div>
+
+</div>
+
+<div class="main_right">
+
+<div class="right_product_tit1">
+<div class="xs_0"><span class="iconfont icon-changfangxing" style="color: #FFB135;font-size:16px;margin-left: -10px;"></span>   我的发货单</div>
+</div>
+
+<div class="right_product_main">
+<div class="list_line">
+
+
+<table width="99%" border="0" cellspacing="0" cellpadding="0" align="center" class="ordertd">
+ <thead>
+  <tr>
+    <td width="18%" height="28">运单</td>
+    <td>物流公司</td>
+    <td width="24%">发货信息</td>
+    <td width="32%">收货人信息</td> 
+  </tr>
+   </thead>
+   <tbody>
+   
+<? if(empty($conlist['list'])) { ?>
+   <tr>
+    <td colspan="4" style="border:none;text-align:center;height:40px;line-height:40px">
+暂无符合条件的数据!
+</td>
+  </tr>
+   
+<? } else { if(is_array($conlist['list'])) { foreach($conlist['list'] as $gkey => $gvar) { ?>
+  <tr  onmouseover="inStyle(this)"  onmouseout="outStyle(this)" >
+    
+<? if((!empty($gvar['ConsignmentRemark']))) { ?>
+    <td style="border-bottom: 0px;">
+    
+<? } else { ?>
+    <td height="108">
+    
+<? } ?>
+<span class="numberbg" style="cursor: pointer;" onclick="javascript:window.location.href='consignment.php?m=showcontent&id=<?=$gvar['ConsignmentID']?>'" ><?=$gvar['ConsignmentID']?></span><br />
+<span class="font12h" title="状态" id="show_status_<?=$gvar['ConsignmentID']?>">&nbsp;状态：<?=$incept_arr[$gvar['ConsignmentFlag']]?></span><br />	
+<span title="查看详细"><a href="consignment.php?m=showcontent&id=<?=$gvar['ConsignmentID']?>" >&#8250; 查看详细</a></span><br />
+<? if(empty($gvar['ConsignmentFlag'])) { ?>
+<span id="button_line_<?=$gvar['ConsignmentID']?>"><a style="background:#faa70d;border-radius: 2px;color: #fff;padding: 2px 4px 2px 4px " href="javascript:void(0)" onclick="do_confirm_consignment('<?=$gvar['ConsignmentID']?>')" title="收到货后，请在此确认" >&nbsp;确认收货&nbsp;</a></span><br />
+<? } ?>
+</td>
+    
+<? if((!empty($gvar['ConsignmentRemark']))) { ?>
+    <td style="border-bottom: 0px;">
+    
+<? } else { ?>
+    <td>
+    
+<? } if(!empty($gvar['LogisticsName'])) { ?>
+<span title="物流公司"><?=$gvar['LogisticsName']?></span><br />
+<span title="联系电话"><?=$gvar['LogisticsPhone']?></span><br />
+<? } else { ?>
+<span title="上门自提">上门自提</span><br />
+<? } ?>
+<span title="运单号">运单号： <?=$gvar['ConsignmentNO']?></span><br />
+</td>
+<? if((!empty($gvar['ConsignmentRemark']))) { ?>
+    <td style="border-bottom: 0px;">
+    
+<? } else { ?>
+    <td>
+    
+<? } ?>
+<span  title="经办人">经办人：<?=$gvar['ConsignmentMan']?></span><br />
+<span title="发货时间">时间：<?=$gvar['ConsignmentDate']?></span><br />
+<span class="font12" title="运费">运费: ¥ <?=$gvar['ConsignmentMoney']?> / <?=$pay_send_arr[$gvar['ConsignmentMoneyType']]?></span><br />
+</td>
+
+    
+<? if((!empty($gvar['ConsignmentRemark']))) { ?>
+    <td style="border-bottom: 0px;">
+    
+<? } else { ?>
+    <td>
+    
+<? } ?>
+<span title="收货人"><?=$gvar['InceptCompany']?> / <?=$gvar['InceptMan']?>  </span><br />
+<span title="电话">电话：<?=$gvar['InceptPhone']?></span><br />
+<span title="地址">地址：<?=$gvar['InceptAddress']?></span><br />	
+</td>
+  </tr>
+  
+<? if((!empty($gvar['ConsignmentRemark']))) { ?>
+  <tr>
+  <td ><span title="备注" >备注： </span></td>
+  <td colspan="3" ><span><?=$gvar['ConsignmentRemark']?></span></td> 
+  </tr>
+   
+<? } ?>
+   
+<? } } ?>
+ 
+   
+<? } ?>
+ 
+   </tbody>
+</table>
+
+<div class="list_showpage"><?=$conlist['showpage']?></div><br />&nbsp;
+
+
+</div>
+
+</div>
+</div>
+</div>
+<? include template('bottom'); ?>
+</body>
+</html>

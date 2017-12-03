@@ -1,0 +1,170 @@
+<link href="<?=CONF_PATH_IMG?>css/unicom-main.css?v=<?=VERID?>" type="text/css" rel="stylesheet" />
+<link href="<?=CONF_PATH_IMG?>css/unicom-css.css?v=<?=VERID?>" rel="stylesheet" type="text/css">
+<link href="<?=CONF_PATH_IMG?>css/bootstrap.css?v=<?=VERID?>" rel="stylesheet" type="text/css">
+<!--<link href="<?=CONF_PATH_IMG?>css/index.css?v=<?=VERID?>" rel="stylesheet" type="text/css">-->
+
+<script src="template/js/lrtk.js" type="text/javascript" charset="UTF-8"></script>
+<script type="text/javascript">
+function AddToFavorite(){title=document.title;url=document.location;try{window.external.AddFavorite(url,title)}catch(e){try{window.sidebar.addPanel(title,url,"")}catch(e){if(typeof(opera)=="object"){a.rel="sidebar";a.title=title;a.url=url;return true}else{alert('您的浏览器不支持,请按 Ctrl+D 手动收藏!')}}}return false}
+</script>
+
+
+
+<div class="top">
+   		<div class="top-info">
+   			<div class="fl" style="line-height:35px">
+       		<span class="green">Hi, <b><?=$_SESSION['cc']['ctruename']?><?=$c_level?></b> 欢迎登陆医统BMB平台&nbsp;&nbsp;</span>
+            <a class="a-btn" href="login.php?m=logout"> [退出] </a>&nbsp;&nbsp;
+            <a  style="margin-left: 0px;" class="a-btn1" rel="sidebar" onclick="return AddToFavorite();"><span class="ali-small-16 iconfont icon-wujiaoxing"></span>&nbsp;收藏医统
+            <a  class="a-btn1" style="margin-left: 12px" target="_blank"  href=""><span class="ali-small-16 iconfont icon-hert" style=""></span>&nbsp;关注我们
+<img src="./images/ylkj.png" class="erma"  alt="" style="width: 230px;height: 130px;"/></a>
+</a>
+            </div>
+            
+<? if(commondata::get_is_show()) { ?>
+            
+<div class="f-r cart-box">
+<div class="cart-num fl">
+
+                <img src="./template/red/images/che.png" onclick="javascript:window.location.href='cart.php'" />
+                <span class="num" onclick="javascript:window.location.href='cart.php'" id="cartnumber_2">
+<? if(empty($_SESSION['cartitems'])) { ?>
+0
+<? } else { echo count($_SESSION['cartitems']);; } ?>
+</span>
+                <div class="clear"></div>
+            	</div>
+            	&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="my.php?m=profile" class="icperson"><span class="iconfont icon-renwu"></span> 用户中心 </a>
+<span class="icon icon1">&#xe0ed;</span>
+当前余额：<b class="a-btn" style="font-size:18px;"><? echo commondata::get_amount(); ?></b>&nbsp;元 <a class="a-btn" href="finance.php?m=new&id=&ty=O&t=y" > [充值] </a>
+       		
+<? } ?>
+       		</div>
+       </div>
+    </div>
+<div class="header">
+    	<div class="logo f-l m-t"><a href="home.php">
+<? if(empty($_SESSION['ucc']['CompanyLogo'])) { ?>
+<img src="<?=CONF_PATH_IMG?>images/logo.png" width="180" height="55" alt="<?=$_SESSION['ucc']['CompanyName']?> - 医统天下BMB系统" />
+<? } else { ?>
+<img src="<?=RESOURCE_PATH?><?=$_SESSION['ucc']['CompanyLogo']?>" alt="<?=$_SESSION['ucc']['CompanyName']?> - 医统天下BMB系统" border="0" />
+<? } ?>
+</a></div>
+<div class="search f-l">
+<form name="searchform" id="searchform" action="search.php" method="get">
+        	<input type="text" size="50" name="kw" id="kw"   class="search-title f-l" value="" autocomplete="off" maxlength="30" style="font-family: Arial,微软雅黑,Helvetica,sans-serif;color:#A9A9A9;
+        	" placeholder="输入商品名称|商品编号|药企名称">
+        	<button name="searchbutton" class="search-btn f-l" type="submit" style="cursor:pointer;height:38px;font-size:14px;line-height:38px;text-align:center;float:right;"><img src="./template/red/images/sousuo.png" class="fdj" style="width: 16px;height: 16px;" alt=""/> 搜索</button>
+<div class="mohu" style="display:none;">
+<ul id="vague_data">
+</ul>
+</div>
+</div>
+       	</form>
+        <div class="shop-chat " id="topcart">
+<img src="./template/red/images/zhenga.png" alt=""/>
+        </div>
+        <div class="menu f-l nav-box">
+        	<ul>
+            	<li><a href="home.php">首页</a></li>
+<li 
+<? if(strpos($_SERVER['PHP_SELF'], 'list.php') || strpos($_SERVER['PHP_SELF'], 'content.php') || strpos($_SERVER['PHP_SELF'], 'cart.php')) { ?>
+class="cur"
+<? } ?>
+><a href="list.php">商品中心</a></li>
+<li 
+<? if(strpos($_SERVER['PHP_SELF'], 'brand.php')) { ?>
+class="cur"
+<? } ?>
+><a href="brand.php?m=brand">品牌街</a></li>
+<li 
+<? if(strpos($_SERVER['PHP_SELF'], 'myorder.php')) { ?>
+class="cur"
+<? } ?>
+><a href="myorder.php">我的订单</a></li>
+<li 
+<? if(strpos($_SERVER['PHP_SELF'], 'consignment.php')) { ?>
+class="cur"
+<? } ?>
+><a href="consignment.php">发货单</a></li>
+<li 
+<? if(strpos($_SERVER['PHP_SELF'], 'return.php')) { ?>
+class="cur"
+<? } ?>
+><a href="return.php">退货单</a></li>
+<li 
+<? if(strpos($_SERVER['PHP_SELF'], 'finance.php')) { ?>
+class="cur"
+<? } ?>
+><a href="finance.php">付款单</a></li>
+<li 
+<? if(strpos($_SERVER['PHP_SELF'], 'statistics.php') || strpos($_SERVER['PHP_SELF'], 'reconciliation.php') ) { ?>
+class="cur"
+<? } ?>
+><a href="statistics.php">数据统计</a></li>
+<li 
+<? if(strpos($_SERVER['PHP_SELF'], 'forum.php')) { ?>
+class="cur"
+<? } ?>
+><a href="forum.php">在线客服</a></li>
+<li 
+<? if(strpos($_SERVER['PHP_SELF'], 'infomation.php')) { ?>
+class="cur"
+<? } ?>
+><a href="infomation.php">信息公告</a></li>
+<!--<li &lt;!&ndash;
+<? if(strpos($_SERVER['PHP_SELF'], 'my.php')) { ?>
+&ndash;&gt;class="cur"&lt;!&ndash;
+<? } ?>
+&ndash;&gt;><a href="my.php?m=profile">我的</a></li>-->
+            </ul>
+            <div class="nav-trigon"></div>
+            <div class="nav-line"></div>
+        </div>
+    </div>
+<script>
+//去空隔函数 
+function Jtrim(str){ 
+return str.replace(/^\s*|\s*$/g,"");  
+} 	
+//模糊搜索
+$(document).ready(function(){
+$('#kw').bind('input propertychange', function() {
+
+var val=$(this).val();
+
+$.ajax({
+type: 'GET',
+url: "vague_search.php" ,
+data: {"kw":val} ,
+success: function(datas){
+
+if(datas!='' && datas.list.length >0){
+$(".mohu").css("display","block");
+var html="";
+$.each(datas.list, function(i, item){
+html+='<li class="select_li"><p style="float: left;">'+item.Name+'</p><p>约有<span>'+item.c_num+'</span>个结果</p></li>';
+$("#vague_data").html(html);
+});
+}
+
+$(document).click(function(){
+$(".mohu").css("display","none");
+});
+
+$(".select_li").click(function(){
+var select_vals=$(this).find("p:first-child").html();
+select_vals=Jtrim(select_vals);
+$(".mohu").css("display","none");
+//$('#search').val(select_vals);
+window.location.href="search.php?kw="+select_vals+"&action=vague";
+});
+
+
+} ,
+dataType: "json"
+});
+});
+});
+</script>

@@ -1,0 +1,34 @@
+<!-- 款项 -->
+<div ng-style="toggleHead" class="order-money common-style" ng-controller="orderMoneyController">
+    <div data-load-more="orderMoney.loadMore();" class="list">
+        <ul>
+            <li ng-click="orderMoney.getMoneyInfo($index,order.FinanceID);" ng-repeat="order in orderMoney.list">
+                <div class="list-head">
+                    <strong>编号：{{order.FinanceID}}</strong>
+                    <span class="state state-green">{{order.FinanceFlagName}}</span>
+                    <!-- <span class="state">待付款</span> -->
+                </div>
+                <div class="list-body">
+                    <span class="ellipsis-one">{{order.ClientCompanyName + ' - ' + order.ClientTrueName}}</span>
+                    <span ng-show="order.FinanceOrder">相关订单：{{order.FinanceOrder}}</span>
+                    <span>付款日期：{{order.FinanceToDate}}</span>
+                </div>
+                <div class="list-footer">
+                    <span>付款金额：<em class="color-red">¥ {{order.FinanceTotal}}</em></span>
+                </div>
+                <div class="divider"></div>
+            </li>
+        </ul>
+    </div>
+    <footer>
+        <div ng-click="orderMoney.getListByStatus(0)">
+            <span>未确认</span>
+            <span class="color-red">({{orderMoney.countAudit}})</span>
+        </div>
+        <div ng-click="orderMoney.getListByStatus(1)">
+            <span>今日</span>
+            <span class="color-red">({{orderMoney.countToday}})</span>
+        </div>
+    </footer>
+    <div ui-view class="animated fadeIn"></div>
+</div>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no,maximum-scale=1.0,minimum-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="format-detection"content="telephone=no, email=no" />
+        <!-- UC强制全屏 
+        <meta name="full-screen" content="yes">-->
+        <!-- QQ强制全屏 -->
+        <meta name="x5-fullscreen" content="true">
+        <title>医统天下 网上订货系统</title>
+        
+        <style type="text/css">
+            *{padding: 0;margin: 0;/*-webkit-box-sizing: border-box;box-sizing: border-box*/}
+            html{
+                height: 100%;font-size: 62.5%;
+            }
+            body{
+                height: 100%;
+                background: #FFFFFF; 
+                color:#525252;
+                font-size: 1.4rem;
+                font: 1.4rem/2.8rem Microsoft YaHei,SimSun,Arial;
+            }
+            .clearfix:after{content:'\0020';display:block;height:0;clear:both;visibility:hidden;}
+            #trade{
+                position: absolute;
+                width: 100%;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                background-color: #f6f6f6;
+            }
+            #trade > header{
+                width: 100%;
+                height: 5rem;
+                line-height: 5rem;
+                background-color: #f9f9f9;
+                display: table;
+                table-layout: fixed;
+                text-align: center;
+                box-shadow: 0 .2rem .2rem 0 #E2E2E2;
+            }
+            #trade > header > span{
+                display: table-cell;
+            }
+            #trade > header > span:first-child{
+                width: 15%;
+            }
+            #trade > header > span:first-child > em{
+                display: inline-block;
+                width: 1rem;
+                height: 1rem;
+                border-left: .2rem solid #c2c2c2;
+                border-bottom: .2rem solid #c2c2c2;
+                -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+            }
+            #trade > header > span:nth-child(2){
+                font-size: 2.0rem;
+                color: #2e2e2e;
+                text-indent: -15%;
+            }
+            #trade > section{
+                position: absolute;
+                padding: 4% 3%;
+                width: 94%;
+                top: 5rem;
+                left: 0;
+                bottom: 0;
+                overflow: auto;
+            }
+            #trade > section > ul{
+                width: 100%;
+                background-color: #FFFFFF;
+                text-align: center;
+                list-style: none;
+            }
+            #trade > section > ul > li{
+                float: left;
+                width: 50%;
+                height: 6rem;
+                line-height: 6rem;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+                border-bottom: 1px solid #ededed;
+                font-size: 1.6rem;
+            }
+            #trade > section > ul > li:nth-child(odd){
+                border-right: 1px solid #ededed;
+            }
+            #trade > section > ul > li > div{
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+                text-align: center;
+            }
+            #trade > section > ul > li > div > span{
+                display: table-cell;
+            }
+            #trade > section > ul > li > div > span:nth-child(1){
+                width: 4.8rem;
+                background: url(img/choice.png) no-repeat;
+                background-size: 8rem 32.8rem;
+                background-position: 1rem 1.4rem;
+            }
+            #trade > section > ul > li > div > span:nth-child(2){text-align: left;}
+            #trade > section > ul > li:nth-child(2) > div > span:nth-child(1){
+                background-position: -4rem 1.4rem;
+            }
+            #trade > section > ul > li:nth-child(3) > div > span:nth-child(1){
+                background-position: 1rem -4.6rem;
+            }
+            #trade > section > ul > li:nth-child(4) > div > span:nth-child(1){
+                background-position: -4rem -4.6rem;
+            }
+            #trade > section > ul > li:nth-child(5) > div > span:nth-child(1){
+                background-position: 1rem -10.6rem;
+            }
+            #trade > section > ul > li:nth-child(6) > div > span:nth-child(1){
+                background-position: -4rem -10.6rem;
+            }
+            #trade > section > ul > li:nth-child(7) > div > span:nth-child(1){
+                background-position: 1rem -16.6rem;
+            }
+            #trade > section > ul > li:nth-child(8) > div > span:nth-child(1){
+                background-position: -4rem -16.6rem;
+            }
+            #trade > section > ul > li:nth-child(9) > div > span:nth-child(1){
+                background-position: 1rem -22.6rem;
+            }
+            #trade > section > ul > li:nth-child(10) > div > span:nth-child(1){
+                background-position: -4rem -22.6rem;
+            }
+            #trade > section > ul > li:nth-child(11) > div > span:nth-child(1){
+                background-position: 1rem -28.6rem;
+            }
+            #trade > section > ul > li:nth-child(12) > div > span:nth-child(1){
+                background-position: -4rem -28.6rem;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <div id="trade">
+            <header>
+                <span onclick="javascript:window.location.href='login.html';"><em></em></span>
+                <span>选择行业</span>
+            </header>
+            <section>
+                <ul id="trade" class="clearfix">
+                    <!-- 解决inline-block 间距问题 不要改动li标签书写结构  -->
+                    <li data-id="7">
+                        <div>
+                            <span></span>
+                            <span>数码电器</span>
+                        </div>
+                    </li><li data-id="4">
+                        <div>
+                            <span></span>
+                            <span>鞋靴箱包配饰</span>
+                        </div>
+                    </li><li data-id="8">
+                        <div>
+                            <span></span>
+                            <span>服装服饰</span>
+                        </div>
+                    </li><li data-id="1">
+                        <div>
+                            <span></span>
+                            <span>个护化妆</span>
+                        </div>
+                    </li><li data-id="5">
+                        <div>
+                            <span></span>
+                            <span>汽车用品配件</span>
+                        </div>
+                    </li><li data-id="2">
+                        <div>
+                            <span></span>
+                            <span>婴童用品</span>
+                        </div>
+                    </li><li data-id="6">
+                        <div>
+                            <span></span>
+                            <span>食品饮料酒水</span>
+                        </div>
+                    </li><li data-id="13">
+                        <div>
+                            <span></span>
+                            <span>日用百货</span>
+                        </div>
+                    </li><li data-id="9">
+                        <div>
+                            <span></span>
+                            <span>餐饮连锁</span>
+                        </div>
+                    </li><li data-id="10">
+                        <div>
+                            <span></span>
+                            <span>家居家纺</span>
+                        </div>
+                    </li><li data-id="14">
+                        <div>
+                            <span></span>
+                            <span>医药保健</span>
+                        </div>
+                    </li><li data-id="12">
+                        <div>
+                            <span></span>
+                            <span>其他行业</span>
+                        </div>
+                    </li> 
+                </ul>
+            </section>
+        </div>
+        
+        <script src="js/common/zepto.min.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            $('#trade').on('click','li',function(){
+                if($(this).attr('data-id')){
+                    if(window.sessionStorage['preTrade'] && window.sessionStorage['preTrade'] != $(this).attr('data-id')){
+                        delete window.localStorage['m_sKey'];
+                        delete window.localStorage['sKey'];
+                    }
+                    window.sessionStorage['tradeId'] = $(this).attr('data-id');
+                    window.location.href = 'choice_type.html';
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,67 @@
+.hide{
+	display: none;
+}
+/*账期统计*/
+	/*所有药店设置*/
+	.select2-selection__rendered{
+		width: 200px;
+		text-align: left;
+	}
+	.bottomline:hover{
+		background: #edf3f9;
+	}
+	/*利息滞纳金说明弹窗*/
+	.icon-xiala-copy{
+		width: 15px;
+		height: 10px;
+		text-align: center;
+		line-height: 10px;
+		font-weight: 400;
+		font-size: 10px;
+		color: #33a676;
+		
+		position: absolute;
+		top: 25px;
+		left: 15%;
+		
+		background: #fff;
+		cursor: pointer;
+		
+		z-index: 1000;
+	}
+	.bankIn,.lateFee{
+		position: relative;
+	}
+	.icon-wenhao{
+		color: #C5C5C5;
+		font-size: 14px;
+		
+		vertical-align: middle;
+		margin-left: 5px;
+		cursor: pointer;
+	}
+	#credits{
+		position: relative;
+	}
+
+	.sameFee{
+		border: 1px solid #33a676;
+		border-radius: 4px;
+		padding: 10px;
+		
+		background: #fff;
+		
+		position: absolute;
+		top: 32px;
+		right: 0px;
+	}
+	.sameFee>p{
+		margin: 0;
+	}
+	.sameFee b{
+		color: #33a676;
+	}
+	/*鼠标滑过变色*/
+	.hover{
+		color: #adadad;
+	}

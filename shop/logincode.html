@@ -1,0 +1,12 @@
+	<form id="form_login" name="form_login" method="post" action="http://c.dhb.hk/home_login.php" >
+    <div class="left_body_login">帐&nbsp;号：</div>
+    <div class="left_body_login"><input name="cus" type="text" id="cus" class="input" style="width:160px;" /></div>    
+    <div class="left_body_login">密&nbsp;码：</div>
+    <div class="left_body_login"><input name="cps" type="password" id="cps" class="input" style="width:160px;" /></div>
+    <div class="left_body_login">验证码：</div>
+    <div class="left_body_login"><div class="left_body_login_div"><input name="vc" type="text" id="vc" class="input" style="width:60px;" maxlength="5" /></div><div class="left_body_login_div"><a tabindex="-1" style="border-style: none" href="#" title="点击 刷新验证码" onclick="document.getElementById('siimage').src = 'http://c.dhb.hk/plugin/securimage/checkcodeimg_home.php?sid=' + Math.random(); return false">
+		<img id="siimage" align="left" style="padding-right: 5px; border: 0" src="http://c.dhb.hk/plugin/securimage/checkcodeimg_home.php?sid=<script languange=javascript>Math.random();</script>" title="点击 刷新验证码" border="0" onclick="this.blur()"   /></a></div></div>    
+    <div class="height12"></div>
+  	<div class="left_body_login"><input name="LoginSubmit" id="LoginSubmit" type="submit" value="登录" ></div>
+
+	</form>

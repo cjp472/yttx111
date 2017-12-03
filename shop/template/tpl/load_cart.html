@@ -1,0 +1,30 @@
+<form id="formloadcart" name="formloadcart" method="post" action="cart.php?m=updatecart">
+<!--{if empty($_SESSION['cartitems'])}-->
+
+		<div class="font12" align="center"><br />您还没有预订任何商品！</div>
+
+<!--{else}-->
+
+	<!--{if !empty($carttempproduct)}-->
+		<ul>
+		<!--{loop $carttempproduct $cartkey $cartvar}-->
+		<!--{if $cartkey < 12}-->
+		<li title="{$cartvar[Coding]} - {$cartvar[Name]} ({$cartvar[color]}/{$cartvar[spec]}) - ¥ {$cartvar[price_end]}">
+			<b><a href="content.php?id={$cartvar[id]}" target="_blank">{$cartvar[Name]}</a></b>
+			<input name="kid[]" type="hidden" value="{$cartvar[kid]}" />
+			<input name="cart_num[]" id="cart_num_{$cartvar[kid]}" type="text" size="6" maxlength="6" value="{$cartvar[number]}" onkeyup="value=value.replace(/[^\d.]/g,'')" onfocus="this.select();"  class="TextOut" onBlur="checkcartnumber('cart_num_{$cartvar[kid]}','{$cartvar[package]}');"  />
+			<span onclick="remove_load_cart('{$cartvar[kid]}');"></span>
+		</li>
+		<!--{/if}-->
+		<!--{/loop}-->
+		<!--{if $cartkey >= 12}--><li><a href="cart.php">查看更多>></a></li><!--{/if}-->
+		</ul>
+		<div class="Shopping_Cart_info1">
+			<div class="text">共<i> {$productnum} </i>件商品 , &nbsp;&nbsp;&nbsp;&nbsp;  合计金额<i> ￥ {$producttotal} </i>元</div>
+			<div style="float:right; width:80px; height:38px;" class="Shopping_Cart_btn"><input type="button" name="nextordercart"  id="nextordercart" value="提交订单" onclick="update_load_cart('sub');"  /></div>
+			<div style="float:right; width:80px; height:38px;" class="Shopping_Cart_btn"><input type="button" name="updatecart"  id="updatecart" value="修改数量" onclick="update_load_cart('update');" /></div>
+		</div>
+	<!--{/if}-->
+
+<!--{/if}-->
+</form>

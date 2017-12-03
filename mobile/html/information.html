@@ -1,0 +1,48 @@
+<!-- 信息公告 -->
+<div data-ng-controller="informationController" class="page-information page-goods-list page-order-list">
+    <!-- 标题 -->
+    <header class="common">
+        <em data-back><a href="javascript:;" class="arrow-left"></a></em>
+        <p>信息中心</p>
+        <span data-toggle-layer data-class-name="fadeInRight">栏目<span class="arrow-right" style="margin-left: .6rem;-webkit-transform: rotate(315deg);"></span></span>
+        
+    </header>
+    <div data-iscroll class="iscroll" style="top:5rem;">
+        <div class="info-list my-menu" style="margin:0;">
+            <h4 class="title-h4" style="margin-top:0;">{{infos.sortName}}</h4>
+            <ul ng-click="infos.getInfoContent($event);">
+                <li data-infoid="{{info.ArticleID}}" ng-repeat="info in infos.infoList">
+                    <span>{{info.ArticleTitle}}</span>
+                    <span class="arrow-right"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 信息栏目框 -->
+    <div class="filter-layer animated default-apk layer">
+        <div class="filter">
+            <p>
+                <span data-toggle-layer data-class-name="fadeOutRight" class="l">取消</span>信息栏目
+            </p>
+            <div data-iscroll class="iscroll">
+                <ul data-toggle-layer data-class-name="fadeOutRight">
+                    <li ng-click="infos.refreshInfoList(sort.SortID,sort.SortName);" ng-repeat="sort in infos.infoSorts">{{sort.SortName}}<span class="r"><span></span></span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="layer info-layer animated default-apk">
+        <div data-iscroll class="iscroll iscroll-top">
+            <!-- 信息 -->
+            <div class="order-info" style="margin-bottom: 5.0rem;">
+                <div style="border-bottom: 1px solid #ccc;" class="title">{{infos.selectInfo.ArticleTitle}}</div>  
+                <article style="word-break: break-all;" data-trans-html data-html-text="infos.selectInfo.ArticleContent" class="article"></article>  
+            </div>
+         </div>
+        <!-- 关闭按钮 -->
+        <div class="layer-footer">
+            <p ng-click="infos.closeLayer();"><span class="arrow-left"></span></p>
+        </div>
+        
+    </div>
+</div>

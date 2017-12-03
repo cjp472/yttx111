@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" charset="utf-8" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <title>获取体验码</title>
+    <script>
+        !function(){function e(){var e=document.documentElement.clientWidth,t=document.querySelector("html");t.style.fontSize=e/20+"px"}e(),window.addEventListener("resize",e)}();
+    </script>
+    <link rel="stylesheet" href="css/page.css"/>
+</head>
+<body>
+    <div class="header">
+        <div class="logo"></div>
+    </div>
+    <div class="content">
+        <p class="user-title">亲爱的用户</p>
+        <p class="user-info">您的体验码为 <span id="auth_code"></span></p>
+        <p class="user-time">体验码有效期为<span id="time"></span>分钟</p>
+        <input type="button" class="again-get" value="重新获取"/>
+    </div>
+
+    <script type="text/javascript" src="../scripts/jquery.min.js"></script>
+    <script>
+        $(function(){
+            function getAuthCode(callback){
+                $.get("/experience/get_auth_code.php", function(data){
+                    callback(JSON.parse(data));
+                });
+            };
+
+            function render(data){
+                $('#auth_code').html(data.auth_code);
+                $('#time').html(data.time);
+            }
+            
+            getAuthCode(render);
+
+            $('.again-get').click('click', function(){
+                getAuthCode(render);
+            });
+        });
+    </script>
+</body>
+</html>

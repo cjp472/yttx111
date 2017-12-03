@@ -1,0 +1,39 @@
+<!-- 商品列表 -->
+<div ng-style="toggleHead" class="goods-list common-style" ng-controller="goodsController">
+    <div data-load-more="goodses.loadMore();" class="list">
+        <ul>
+            <li ng-click="goodses.getGoodsInfo($index,goods.ID);" ng-repeat="goods in goodses.list">
+                <div class="list-body">
+                    <p>
+                        <img src="" ng-src="{{goods.Picture}}" alt="" />
+                    </p>
+                    <p>
+                        <span class="ellipsis">{{goods.Name}}</span>
+                        <span class="ellipsis">{{goods.BrandName}}</span>
+                        <span><em>{{goodses.price1Name}}：</em><em>¥ {{goods.Price1}}</em></span>
+                        <span><em>{{goodses.price2Name}}：</em><em class="color-red">¥ {{goods.Price2}}</em></span>
+                        <a ng-class="{'state-grey':goods.FlagID==='0'}" data-stop-bubble ng-click="goodses.setGoodsFlag($index);" href="javascript:;">{{goods.FlagName}}<em ng-class="{'arrow-up':goods.FlagID==='1','arrow-down':goods.FlagID==='0'}" class="icon"></em></a>
+                    </p>
+                </div>
+            </li>
+        </ul>
+        <!-- 无数据提示框 -->
+        <div class="no-data" ng-show="goodses.noData">
+            <div>
+                <p class="search-result"></p>
+                <p>对不起，没有数据显示</p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div ng-click="goodses.toggleOnOff(0);">
+            <span>已上架</span>
+            <span class="color-red">({{goodses.countAudit}})</span>
+        </div>
+        <div ng-click="goodses.toggleOnOff(1);">
+            <span>未上架</span>
+            <span class="color-red">({{goodses.countUnAudit}})</span>
+        </div>
+    </footer>
+    <div ui-view class="animated fadeIn"></div>
+</div>

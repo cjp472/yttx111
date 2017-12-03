@@ -1,0 +1,29 @@
+<chart>
+	<chart_data>
+		<row>
+			<null/>
+			<string font="simsun">待审核</string>
+			<string font="simsun">备货中</string>
+			<string font="simsun">已出库</string>
+			<string font="simsun">收货并确认</string>
+			<string font="simsun">已收款</string>
+			<string font="simsun">已完成</string>
+			
+		</row>
+		<row>
+			<string></string>
+			<number>17</number>
+			<number>1</number>
+			<number>1</number>
+			<number>3</number>
+			<number>2</number>
+			<number>1</number>
+			
+		</row>
+	</chart_data>
+	<chart_label shadow="low" alpha="65" size="10" position="inside" as_percentage="true" />
+	<chart_pref select="true" drag="false" rotation_x="50" />
+	<chart_rect x="105" y="50" width="580" height="180" positive_alpha="0" />
+	<chart_type>3d pie</chart_type>
+ 
+</chart>

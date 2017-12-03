@@ -1,0 +1,386 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - {SITE_NAME}</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="{CONF_PATH_IMG}css/base.css?v={VERID}" type="text/css" rel="stylesheet" />
+<link href="{CONF_PATH_IMG}css/css.css?v={VERID}" rel="stylesheet" type="text/css">
+
+<script src="template/js/yu.js" type="text/javascript"></script>
+<script src="template/js/tb.js" type="text/javascript"></script>
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js?v={VERID}" type="text/javascript"></script>
+<script src="template/js/cart.js?v={VERID}" type="text/javascript"></script>
+</head>
+
+<body>
+<SCRIPT language="Javascript" type="text/javascript">
+function showtabs(m,n,count){
+    for(var i=1;i<=count;i++){
+        if (i==n){
+            getObject('menutab_'+m+'_'+i).style.display='block';
+            getObject('menu_'+m+'_'+i).className='menub1_1';}
+        else {
+            getObject('menutab_'+m+'_'+i).style.display='none';
+            getObject('menu_'+m+'_'+i).className='menub1_2';}
+        }
+    }
+function getObject(objectId) {
+    if(document.getElementById && document.getElementById(objectId)){
+        return document.getElementById(objectId);
+    } else if (document.all && document.all(objectId)) {
+        return document.all(objectId);
+    } else if (document.layers && document.layers[objectId]) {
+        return document.layers[objectId];
+    } else {return false;}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_showHideLayers() { //v6.0
+  var i,p,v,obj,args=MM_showHideLayers.arguments;
+  for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { v=args[i+2];
+    if (obj.style) { obj=obj.style; v=(v=='show')?'visible':(v=='hide')?'hidden':v; }
+    obj.visibility=v; }
+}
+</SCRIPT>
+{template header}
+
+
+<div id="main">
+<div class="main_left">
+<div class="gg">
+<div style="height:90px;width:200px; text-align:left; overflow:hidden;">
+<marquee  behavior="scroll" direction="up" onMouseOver="this.stop()" onMouseOut="this.start()" truespeed="20" scrollAmount="1" scrollDelay="25"  >
+<ul >
+<!--{loop $gg_info $ggkey $ggvar}-->
+<li><span class="test_1">[<!--{echo date("Y-m-d",$ggvar[ArticleDate])}-->]</span><br /><a href="infomation.php?sid=0&ID={$ggvar[ArticleID]}#locationname"><font color="{$ggvar[ArticleColor]}">{$ggvar[ArticleTitle]}</font></a></li>
+<!--{/loop}-->
+</ul>
+</marquee>
+  </div>
+  </div>
+
+ {template left}
+
+</div>
+
+<div class="main_right">
+<!--{if !empty($xd_info)}-->
+<div class="banner">
+
+<div id="MainPromotionBanner">
+<div id="SlidePlayer">
+  <ul class="Slides">
+        <!--{loop $xd_info $xkey $xvar}-->
+        <li><a href="{$xvar['ArticleLink']}" target="_blank"><IMG title="{$xvar['ArticleName']}" src="{RESOURCE_PATH}{$xvar['ArticlePicture']}" border="0" /></a></li>
+        <!--{/loop}-->
+</ul>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+            TB.widget.SimpleSlide.decoration('SlidePlayer', {eventType:'mouse', effect:'scroll'});
+</script>
+</div>
+
+<div class="clear"></div>
+</div>
+<!--{/if}-->
+<div class="buy_tit">
+ <DIV class="<!--{if !empty($goodslist1['list'])}-->menub1_2<!--{else}-->menub1_1<!--{/if}-->" id=menu_1_1 onmouseover=showtabs(1,1,2);>控销专区<!-- 最新商品 --></DIV>
+ <DIV class="<!--{if empty($goodslist1['list'])}-->menub1_2<!--{else}-->menub1_1<!--{/if}-->" id=menu_1_2 onmouseover=showtabs(1,2,2);>预售专区<!-- 推荐商品 --></DIV></div>
+<div class="buy_main">
+
+<DIV class=menugtab id=menutab_1_1 <!--{if !empty($goodslist1['list'])}-->style="DISPLAY: none"<!--{/if}-->>
+<!--{if $in['t'] == "imglist"}-->
+    <ul>
+      <!--{loop $goodslist3['list'] $gkey $gvar}-->
+      <li>
+      <dd><a href="content.php?id={$gvar['ID']}" target="_blank">
+                <!--{if !empty($gvar['Picture'])}-->
+                <img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" />
+                <!--{else}-->
+                <img src="{CONF_PATH_IMG}images/default.jpg" title="{$gvar['Name']}" border="0" />
+                <!--{/if}-->
+                </a></dd>
+      <dt><a href="content.php?id={$gvar['ID']}" target="_blank">{$gvar['Name']}</a> </dt>
+      <dd>
+      <span class="price_1" title="元/{$gvar['Units']}">¥ {$gvar['Price']}</span>
+      <span class="buy_1">
+                <!--{if $gvar['CommendID']!="9"}-->
+                <!--{if $pn=="on" && $png=="off" && $goodslist3['number'][$gvar['ID']] <= 0}-->
+                【缺货】
+                <!--{else}-->
+                <a href="javascript:void(0);" onclick="addtocart('n_{$gvar[ID]}','{$gvar['cs']}');" id="shareit_n_{$gvar[ID]}"><img src="{CONF_PATH_IMG}images/dg.jpg" /></a>
+                <!--{/if}-->
+                <!--{/if}-->
+      </span>
+      </dd>
+      </li>
+      <!--{/loop}-->
+  </ul>
+    <!--{else}-->
+
+<table width="96%" border="0" cellspacing="0" cellpadding="0" align="center">
+                    <thead>
+  <tr>
+    <td width="22%" height="28">&nbsp;编号/型号</td>
+    <td>&nbsp;名称</td>
+    <td width="16%">&nbsp;价格 (元)</td>
+    <td width="14%">&nbsp;包装</td>
+    <td width="10%">&nbsp;订购</td> 
+  </tr>
+   </thead>
+   <tbody>
+<!--{loop $goodslist3['list'] $gkey $gvar}-->
+  <tr onmouseover="inStyle(this);control('altimg_{$gvar[ID]}', 'show');"  onmouseout="outStyle(this);control('altimg_{$gvar[ID]}', 'hide');">
+    <td height="42"><div id="altimg_{$gvar[ID]}" class="altimg"><!--{if !empty($gvar['Picture'])}--><img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" /><!--{/if}--></div>&nbsp;{$gvar['Coding']}</td>
+    <td><a href="content.php?id={$gvar['ID']}" target="_blank" >{$gvar['Name']}</a></td>
+    <td><span class="test_2">¥ {$gvar['Price']}</span><span class="gray">&nbsp;/{$gvar['Units']}</span></td>
+    <td>&nbsp;<label>{$gvar['Casing']}</label></td>
+    <td>
+    <!--{if $gvar['CommendID']=="9"}-->
+    <a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="{CONF_PATH_IMG}images/notic.jpg" border="0" class="img" /></a>    
+    <!--{else}-->
+        <!--{if $pn=="on" && $png=="off" && $goodslist3['number'][$gvar['ID']] <= 0}-->
+        <a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="{CONF_PATH_IMG}images/notic.jpg" border="0" class="img" title="缺货" /></a>
+        <!--{else}-->
+        <a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" ><img src="{CONF_PATH_IMG}images/buy.jpg" border="0" class="img" /></a>
+        <!--{/if}-->    
+    <!--{/if}-->
+    </td>
+  </tr>
+   <!--{/loop}--> 
+   </tbody>
+</table>
+
+    <!--{/if}-->
+  <div align="right" style="float:left; width:95%;"><a href="list.php">更多 &#8250;&#8250;</a></div>
+  </DIV>
+
+ <DIV class=menugtab id=menutab_1_2 <!--{if empty($goodslist1['list'])}-->style="DISPLAY: none"<!--{/if}-->>
+    <!--{if $in['t'] == "imglist"}-->
+    <ul>
+      <!--{loop $goodslist1['list'] $gkey $gvar}-->
+      <li>
+      <dd><a href="content.php?id={$gvar['ID']}" target="_blank">
+                <!--{if !empty($gvar['Picture'])}-->
+                <img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" />
+                <!--{else}-->
+                <img src="{CONF_PATH_IMG}images/default.jpg" title="{$gvar['Name']}" border="0" />
+                <!--{/if}-->
+                </a></dd>
+      <dt><a href="content.php?id={$gvar['ID']}" target="_blank">{$gvar['Name']}</a> </dt>
+      <dd>
+      <span class="price_1" title="元/{$gvar['Units']}">¥ {$gvar['Price']}</span>
+      <span class="buy_1">
+                <!--{if $gvar['CommendID']!="9"}-->
+                <!--{if $pn=="on" && $png=="off" && $goodslist1['number'][$gvar['ID']] <= 0}-->
+                【缺货】
+                <!--{else}-->
+                <a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" ><img src="{CONF_PATH_IMG}images/dg.jpg" /></a>
+                <!--{/if}-->
+                <!--{/if}-->
+      </span>
+      </dd>
+      </li>
+      <!--{/loop}-->
+  </ul>
+    <!--{else}-->
+
+<table width="96%" border="0" cellspacing="0" cellpadding="0" align="center">
+  <thead>
+  <tr>
+    <td width="22%" height="28">&nbsp;编号/型号</td>
+    <td>&nbsp;名称</td>
+    <td width="16%">&nbsp;价格 (元)</td>
+    <td width="14%">&nbsp;包装</td>
+    <td width="10%">&nbsp;订购</td> 
+  </tr>
+   </thead>
+   <tbody>
+<!--{loop $goodslist1['list'] $gkey $gvar}-->
+  <tr onmouseover="inStyle(this);control('altimg_{$gvar[ID]}', 'show');"  onmouseout="outStyle(this);control('altimg_{$gvar[ID]}', 'hide');">
+    <td height="42"><div id="altimg_{$gvar[ID]}" class="altimg"><!--{if !empty($gvar['Picture'])}--><img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" /><!--{/if}--></div>&nbsp;{$gvar['Coding']}</td>
+    <td><a href="content.php?id={$gvar['ID']}" target="_blank" >{$gvar['Name']}</a></td>
+    <td><span class="test_2">¥ {$gvar['Price']}</span><span class="gray">&nbsp;/{$gvar['Units']}</span></td>
+    <td>&nbsp;<label>{$gvar['Casing']}</label></td>
+    <td>
+    <!--{if $gvar['CommendID']=="9"}-->
+    <a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="{CONF_PATH_IMG}images/notic.jpg" border="0" class="img" /></a>    
+    <!--{else}-->
+        <!--{if $pn=="on" && $png=="off" && $goodslist1['number'][$gvar['ID']] <= 0}-->
+        <a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="{CONF_PATH_IMG}images/notic.jpg" border="0" class="img" title="缺货" /></a>
+        <!--{else}-->
+        <a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" ><img src="{CONF_PATH_IMG}images/buy.jpg" border="0" class="img" /></a>
+        <!--{/if}-->    
+    <!--{/if}-->
+    </td>
+  </tr>
+   <!--{/loop}--> 
+   </tbody>
+</table>
+    <!--{/if}-->
+
+  <div align="right" style="float:left; width:95%;"><a href="list.php?m=spc&ty=1">更多 &#8250;&#8250;</a></div>
+  </DIV>     
+ </div>
+ 
+ <div class="buy_tit">
+  <DIV class=menub1_1 id=menu_2_1 onmouseover=showtabs(2,1,2);>特价促销</DIV>
+      <DIV class=menub1_2 id=menu_2_2 onmouseover=showtabs(2,2,2);>热销商品</DIV></div>
+    <div class="buy_main">
+    
+<DIV class="menugtab" id="menutab_2_1">
+     <!--{if $in['t'] == "imglist"}-->
+     <ul>
+      <!--{loop $goodslist2['list'] $gkey $gvar}-->
+      <li>
+      <dd><a href="content.php?id={$gvar['ID']}" target="_blank">
+                <!--{if !empty($gvar['Picture'])}-->
+                <img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" />
+                <!--{else}-->
+                <img src="{CONF_PATH_IMG}images/default.jpg" title="{$gvar['Name']}" border="0" />
+                <!--{/if}-->
+                </a></dd>
+      <dt><a href="content.php?id={$gvar['ID']}" target="_blank">{$gvar['Name']}</a> </dt>
+      <dd>
+      <span class="price_1" title="元 /{$gvar['Units']}">¥ {$gvar['Price']}</span>
+      <span class="buy_1">
+                <!--{if $gvar['CommendID']!="9"}-->
+                <!--{if $pn=="on" && $png=="off" && $goodslist2['number'][$gvar['ID']] <= 0}-->
+                【缺货】
+                <!--{else}-->
+                <a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" ><img src="{CONF_PATH_IMG}images/dg.jpg" /></a>
+                <!--{/if}-->
+                <!--{/if}-->
+      </span>
+      </dd>
+      </li>
+      <!--{/loop}-->
+  </ul>
+
+    <!--{else}-->
+
+<table width="96%" border="0" cellspacing="0" cellpadding="0" align="center">
+  <thead>
+  <tr>
+    <td width="22%" height="28">&nbsp;编号/型号</td>
+    <td>&nbsp;名称</td>
+    <td width="16%">&nbsp;价格 (元)</td>
+    <td width="14%">&nbsp;包装</td>
+    <td width="10%">&nbsp;订购</td> 
+  </tr>
+   </thead>
+   <tbody>
+<!--{loop $goodslist2['list'] $gkey $gvar}-->
+  <tr onmouseover="inStyle(this);control('altimg_{$gvar[ID]}', 'show');"  onmouseout="outStyle(this);control('altimg_{$gvar[ID]}', 'hide');">
+    <td height="42"><div id="altimg_{$gvar[ID]}" class="altimg"><!--{if !empty($gvar['Picture'])}--><img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" /><!--{/if}--></div>&nbsp;{$gvar['Coding']}</td>
+    <td><a href="content.php?id={$gvar['ID']}" target="_blank" >{$gvar['Name']}</a></td>
+    <td><span class="test_2">¥ {$gvar['Price']}</span><span class="gray">&nbsp;/{$gvar['Units']}</span></td>
+    <td>&nbsp;<label>{$gvar['Casing']}</label></td>
+    <td>
+    <!--{if $gvar['CommendID']=="9"}-->
+    <a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="{CONF_PATH_IMG}images/notic.jpg" border="0" class="img" /></a>    
+    <!--{else}-->
+        <!--{if $pn=="on" && $png=="off" && $goodslist2['number'][$gvar['ID']] <= 0}-->
+        <a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="{CONF_PATH_IMG}images/notic.jpg" border="0" class="img" title="缺货" /></a>
+        <!--{else}-->
+        <a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" ><img src="{CONF_PATH_IMG}images/buy.jpg" border="0" class="img" /></a>
+        <!--{/if}-->    
+    <!--{/if}-->
+    </td>
+  </tr>
+   <!--{/loop}--> 
+   </tbody>
+</table>
+    <!--{/if}-->
+  <div align="right" style="float:left; width:95%;"><a href="list.php?m=spc&ty=2">更多 &#8250;&#8250;</a></div>
+  </DIV>
+
+     <DIV class=menugtab id=menutab_2_2 style="DISPLAY: none"> 
+     <!--{if $in['t'] == "imglist"}-->
+     <ul>
+              <!--{loop $goodslist4['list'] $gkey $gvar}-->
+      <li>
+      <dd><a href="content.php?id={$gvar['ID']}" target="_blank">
+                <!--{if !empty($gvar['Picture'])}-->
+                <img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" />
+                <!--{else}-->
+                <img src="{CONF_PATH_IMG}images/default.jpg" title="{$gvar['Name']}" border="0" />
+                <!--{/if}-->
+                </a></dd>
+      <dt><a href="content.php?id={$gvar['ID']}" target="_blank">{$gvar['Name']}</a> </dt>
+      <dd>
+      <span class="price_1" title="元/{$gvar['Units']}">¥ {$gvar['Price']}</span>
+      <span class="buy_1">
+                <!--{if $gvar['CommendID']!="9"}-->
+                <!--{if $pn=="on" && $png=="off" && $goodslist4['number'][$gvar['ID']] <= 0}-->
+                【缺货】
+                <!--{else}-->
+                <a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" ><img src="{CONF_PATH_IMG}images/dg.jpg" /></a>
+                <!--{/if}-->
+                <!--{/if}-->
+      </span>
+      </dd>
+      </li>
+      <!--{/loop}-->
+  </ul>
+
+    <!--{else}-->
+
+<table width="96%" border="0" cellspacing="0" cellpadding="0" align="center">
+                    <thead>
+  <tr>
+    <td width="22%" height="28">&nbsp;编号/型号</td>
+    <td>&nbsp;名称</td>
+    <td width="16%">&nbsp;价格 (元)</td>
+    <td width="14%">&nbsp;包装</td>
+    <td width="10%">&nbsp;订购</td> 
+  </tr>
+   </thead>
+   <tbody>
+<!--{loop $goodslist4['list'] $gkey $gvar}-->
+  <tr onmouseover="inStyle(this);control('altimg_{$gvar[ID]}', 'show');"  onmouseout="outStyle(this);control('altimg_{$gvar[ID]}', 'hide');">
+    <td height="42"><div id="altimg_{$gvar[ID]}" class="altimg"><!--{if !empty($gvar['Picture'])}--><img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" /><!--{/if}--></div>&nbsp;{$gvar['Coding']}</td>
+    <td><a href="content.php?id={$gvar['ID']}" target="_blank" >{$gvar['Name']}</a></td>
+    <td><span class="test_2">¥ {$gvar['Price']}</span><span class="gray">&nbsp;/{$gvar['Units']}</span></td>
+    <td>&nbsp;<label>{$gvar['Casing']}</label></td>
+    <td>
+    <!--{if $gvar['CommendID']=="9"}-->
+    <a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="{CONF_PATH_IMG}images/notic.jpg" border="0" class="img" /></a>    
+    <!--{else}-->
+        <!--{if $pn=="on" && $png=="off" && $goodslist4['number'][$gvar['ID']] < 0}-->
+        <a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="{CONF_PATH_IMG}images/notic.jpg" border="0" class="img" title="缺货" /></a>
+        <!--{else}-->
+        <a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" ><img src="{CONF_PATH_IMG}images/buy.jpg" border="0" class="img" /></a>
+        <!--{/if}-->    
+    <!--{/if}-->
+    </td>
+  </tr>
+   <!--{/loop}--> 
+   </tbody>
+</table>
+
+    <!--{/if}-->
+
+  <div align="right" style="float:left; width:95%;"><a href="list.php?m=spc&ty=4">更多 &#8250;&#8250;</a></div>
+  </DIV>
+</div>
+</div>
+</div>
+
+{template bottom}
+</body>
+</html>

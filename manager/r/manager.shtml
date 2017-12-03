@@ -1,0 +1,536 @@
+<?php 
+$menu_flag = "manager";
+include_once ("header.shtml");
+$erp_version = include_once("inc/erp_version.shtml");
+setcookie("backurl", $_SERVER['REQUEST_URI']);
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<meta name='robots' content='noindex,nofollow' />
+
+<title><? echo SITE_NAME;?> - 管理平台</title>
+
+<link href="css/main.css?v=<? echo VERID;?>" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" href="css/jquery.treeview.css" />
+
+<link rel="stylesheet" href="css/showpage.css" />
+
+<link type="text/css" href="../plugin/jquery-ui/development-bundle/themes/base/ui.all.css" rel="stylesheet" />
+
+<script src="../scripts/jquery.min.js" type="text/javascript"></script>
+
+<script src="../scripts/jquery.cookie.js" type="text/javascript"></script>
+
+<script src="../scripts/jquery.treeview.js" type="text/javascript"></script>
+
+<script src="../scripts/jquery.blockUI.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="../plugin/jquery-ui/development-bundle/ui/ui.core.js"></script>
+<script type="text/javascript" src="../plugin/jquery-ui/development-bundle/ui/ui.datepicker.js"></script>
+
+<script src="js/manager.js?v=<? echo VERID;?>" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+		$(function() {
+
+			$("#tree").treeview({
+
+				collapsed: true,
+
+				animated: "medium",
+
+				control:"#sidetreecontrol",
+
+				persist: "location"
+
+			});
+			$("#bdate").datepicker({changeMonth: true,	changeYear: true});
+			$("#edate").datepicker({changeMonth: true,	changeYear: true});
+
+		})
+
+</script>
+
+</head>
+
+
+
+<body>
+
+<?php include_once ("top.shtml");?>
+
+    
+
+<?php include_once ("inc/son_menu_bar.shtml");?>
+
+        
+
+    <div id="bodycontent">
+
+    	<div class="lineblank"></div>
+
+    	<div id="searchline">
+
+        	<div class="leftdiv">
+
+        	  <form id="FormSearch" name="FormSearch" method="get" action="manager.shtml">
+
+        	    <label>
+
+        	      &nbsp;&nbsp;名称/联系人/电话： <input type="text" name="kw" id="kw" class="inputline" />
+
+       	        </label>
+
+        	    <label>
+        	      &nbsp;&nbsp;到期时间： 
+       	        </label>
+				<label>&nbsp;&nbsp;<input type="text" name="bdate" id="bdate" class="inputline" style="width:80px;" value="<? if(!empty($in['bdate'])) echo $in['bdate'];?>" /> - </label>
+				<label>&nbsp;&nbsp;<input type="text" name="edate" id="edate" class="inputline" style="width:80px;" value="<? if(!empty($in['edate'])) echo $in['edate'];?>" />
+
+       	        </label>
+				<label>
+
+       	          <input name="searchbutton" type="submit" class="mainbtn" id="searchbutton" value=" 搜 索 " />
+
+   	            </label>
+
+   	          </form>
+
+   	        </div>
+
+            
+
+			<div class="location"><strong>当前位置：</strong><a href="manager.shtml">客户管理</a> </div>
+
+        </div>
+
+    	
+
+        <div class="line2"></div>
+
+        <div class="bline">
+
+       	  <div id="sortleft">
+
+		  <div class="linebutton"><input type="button" name="newbutton" id="newbutton" value=" 新增客户 " class="button_2" onclick="javascript:window.location.href='company_add.shtml'" /></div>
+
+<hr style="clear:both;" />
+<div class="leftlist">
+<div >
+<strong><img src="css/images/home.gif" alt="地区"  />&nbsp&nbsp<a href="manager.shtml">行业分类</a></strong></div>
+<ul>
+	<?php 
+		$accarr = $db->get_results("SELECT IndustryID,IndustryName FROM ".DATABASEU.DATATABLE."_order_industry ORDER BY IndustryID ASC ");
+		foreach($accarr as $accvar)
+		{
+			if($in['iid'] == $accvar['IndustryID']) $smsg = 'class="locationli"'; else $smsg ="";
+			echo '<li><a href="manager.shtml?iid='.$accvar['IndustryID'].'" '.$smsg.' > - '.$accvar['IndustryName'].'</a></li>';
+		}
+	?>
+</ul>
+<br style="clear:both;" />
+		  <hr style="clear:both;" />
+
+<!-- tree --> 
+
+
+
+<div id="sidetree"> 
+
+<div class="treeheader">
+
+<strong><a href="manager.shtml">地区分类</a></strong></div>  	  
+
+<div id="sidetreecontrol"><img src="css/images/home.gif" alt="地区"  />&nbsp;&nbsp;[ <a href="?#">关闭</a> | <a href="?#">展开</a> ]</div>
+
+<ul id="tree">
+
+	<?php 
+	    $areainfoselected = null;
+
+		$sortarr = $db->get_results("SELECT AreaID,AreaParent,AreaName,AreaAbout FROM ".DATABASEU.DATATABLE."_order_city  ORDER BY AreaParent asc,AreaOrder DESC,AreaID ASC ");
+
+		echo ShowTreeMenuList($sortarr,0);
+
+
+
+		foreach($sortarr as $areavar)
+
+		{
+
+			if($areavar['AreaID']==$in['aid']) $areainfoselected = $areavar;
+			$areaarr[$areavar['AreaID']] = $areavar['AreaName'];
+
+		}
+
+	?>
+
+	
+
+</ul>
+
+</div>
+
+<!-- tree --> 
+
+
+</div>
+
+       	  </div>
+
+<?php
+
+	$sqlmsg = '';
+	if(!empty($in['iid']))  $sqlmsg .= " and c.CompanyIndustry=".$in['iid']." "; else $in['iid'] = '';
+	if(!empty($in['aid']))
+	{
+		if(empty($areainfoselected['AreaParent']))
+		{
+			$sqlmsg .= " and ( c.CompanyArea=".$in['aid']." or c.CompanyArea in (SELECT AreaID FROM ".DATABASEU.DATATABLE."_order_city where  AreaParent=".$in['aid']." ORDER BY AreaID ASC) ) ";
+		}else{
+			$sqlmsg .= " and c.CompanyArea=".$in['aid']." ";
+		}
+	}else{
+		$in['aid'] = '';
+	}
+	if(!empty($in['bdate'])) $sqlmsg .= " and s.CS_EndDate >= '".$in['bdate']."' ";
+	if(!empty($in['edate'])) $sqlmsg .= " and s.CS_EndDate <= '".$in['edate']."' ";
+
+	if(!empty($in['kw']))  $sqlmsg .= " and (c.CompanyName like '%".$in['kw']."%' or c.CompanyPhone like '%".$in['kw']."%' or c.CompanyContact like '%".$in['kw']."%' ) ";
+
+	$InfoDataNum = $db->get_row("SELECT count(*) AS allrow FROM ".DATABASEU.DATATABLE."_order_company c left join ".DATABASEU.DATATABLE."_order_cs s on c.CompanyID=s.CS_Company where c.CompanyFlag='0'  ".$sqlmsg."  ");
+	$page = new ShowPage;
+    $page->PageSize = 100;
+    $page->Total = $InfoDataNum['allrow'];
+    $page->LinkAry = array("kw"=>$in['kw'],"iid"=>$in['iid'],"aid"=>$in['aid']);        
+	
+	$datasql   = "SELECT c.*,s.*,l.SerialNumber,l.Password,l.Status,l.Version FROM ".DATABASEU.DATATABLE."_order_company c left join ".DATABASEU.DATATABLE."_order_cs s on c.CompanyID=s.CS_Company LEFT JOIN ".DATABASEU.DATATABLE."_api_serial as l ON l.CompanyID=c.CompanyID where c.CompanyFlag='0' ".$sqlmsg."  ORDER BY c.CompanyID DESC";
+	$list_data = $db->get_results($datasql." ".$page->OffSet());			
+?>
+
+
+        <div id="sortright">
+
+          <form id="MainForm" name="MainForm" method="post" action="" target="exe_iframe" >
+
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+     			 <tr>
+       				 <td width="4%"  height="30" ></td>
+
+   			       <td  class="sublink"></td>
+       			     <td width="50%" align="right"><? echo $page->ShowLink('manager.shtml');?></td>
+     			 </tr>
+              </table>
+			  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+               <thead>
+
+                <tr>
+
+                  <td width="8%" class="bottomlinebold">编号</td>
+
+                  <td class="bottomlinebold">公司名称</td>
+
+				  <td width="10%" class="bottomlinebold">用户数</td>
+
+                  <td width="12%" class="bottomlinebold">联系人</td>
+
+                  <td class="bottomlinebold">ERP接口</td>
+
+                    <td width="8%" class="bottomlinebold" style="text-align:right;">审核</td>
+
+                  <td width="12%" class="bottomlinebold" align="right">开通时间</td>
+
+                  <td width="12%" class="bottomlinebold" align="right">到期时间</td>
+
+                  <td width="16%" class="bottomlinebold" align="center">管理</td>
+
+                </tr>
+
+     		 </thead> 
+
+      		<tbody>
+
+<?php
+
+	if(!empty($list_data))
+	{		
+
+		foreach($list_data as $lsv)
+		{ ?>
+
+
+
+                <tr id="line_<? echo $lsv['CompanyID'];?>" class="bottomline"  onmouseover="inStyle(this)"  onmouseout="outStyle(this)"   >
+
+                  <td onclick="javascript: window.location.href='do_login.shtml?m=admintologin&companyid=<? echo $lsv['CompanyID'];?>'"><? echo $lsv['CompanyID'];?></td>
+
+                  <td ><a href="manager_company.shtml?ID=<? echo $lsv['CompanyID']; ?>"  title="<?php echo $lsv['CompanyRemark'];?>"><? echo $lsv['CompanyName'];?></a></td>
+
+				  <td >&nbsp;<strong><? echo $lsv['CS_Number'];?></strong></td>
+
+                  <td ><? echo $lsv['CompanyContact'];?></td>
+                  <td>
+                      <?php
+                        if(empty($lsv['SerialNumber'])){
+                            echo "<a href='javascript:;' class='showErp' data-company='".$lsv['CompanyID']."' title='开通ERP接口'>[开通]</a>";
+                        }else{
+                            echo "<a href='javascript:;' class='showErp' data-serial='".$lsv['SerialNumber']."' data-password='".$lsv['Password']."' data-version='".$lsv['Version']."' data-status='".$lsv['Status']."' data-company='".$lsv['CompanyID']."' title='查看ERP接口信息'>[查看".($lsv['Status']=='F' ? "-<font color='red'>已停用</font>" : "")."]</a>";
+                        }
+                      ?>
+
+                  </td>
+
+                    <td class="TitleNUM">
+                        <?php
+                            switch($lsv['CS_Flag']) {
+                                case 'T': echo "通过"; break;
+                                case 'F': echo "不通过"; break;
+                                case 'W': echo "待上传"; break;
+                                case 'D':
+                                    echo "待审";
+                                    echo '-' . '<a href="company_check.shtml?ID='.$lsv['CS_Company'].'">去审核</a>';
+                                    break;
+                                default:break;
+                            }
+                        ?>
+                    </td>
+
+                  <td class="TitleNUM"><? echo $lsv['CS_BeginDate'];?></td>
+
+                  <td class="TitleNUM"><? 
+
+				  $timsgu = strtotime($lsv['CS_EndDate']);
+
+				  if($timsgu - time() < 30*24*60*60){
+
+					echo "<font color=red>".$lsv['CS_EndDate']."</font>";
+
+				  }else{
+
+					echo $lsv['CS_EndDate'];
+
+				  }				  
+
+				  ?></td>
+
+                  
+
+                  <td align="center" title="<?php echo $lsv['CompanyRemark'];?>">
+
+				    <a href="company_user.shtml?ID=<? echo $lsv['CompanyID'];?>" ><img src="img/user.gif" border="0" class="img" title="帐号" /></a>&nbsp;&nbsp;
+
+					<a href="company_edit.shtml?ID=<? echo $lsv['CompanyID'];?>" ><img src="img/icon_edit.gif" border="0" title="修改" class="img" /></a>&nbsp;&nbsp;
+
+					<a href="javascript:void(0);" onclick="do_delete('<? echo $lsv['CompanyID'];?>');" ><img src="img/icon_delete.gif" border="0" class="img" title="删除" /></a>
+
+				  
+
+				  </td>
+
+                </tr>
+
+<? } }else{?>
+
+     			 <tr>
+
+       				 <td colspan="8" height="30" align="center">暂无符合此条件的内容!</td>
+
+       			 </tr>
+
+<? }?>
+
+ 				</tbody>
+
+              </table>
+
+                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+     			 <tr>
+       				 <td width="4%"  height="30" ></td>
+
+   			       <td  class="sublink"></td>
+
+       			     <td width="50%" align="right"><? echo $page->ShowLink('manager.shtml');?></td>
+
+     			 </tr>
+
+              </table>
+
+              <INPUT TYPE="hidden" name="referer" value ="" >
+
+              </form>
+
+       	  </div>
+        </div>
+        <br style="clear:both;" />
+    </div>
+ 
+<?php include_once ("bottom.shtml");?>
+
+<iframe name="exe_iframe" style="width:0; height:0;" frameborder="0" scrolling="no"></iframe>
+<div id="windowForm">
+    <div class="windowHeader">
+        <h3 id="windowtitle">ERP接口信息</h3>
+        <div class="windowClose"><div class="close-form" onclick="closewindowui()" title="关闭" >x</div></div>
+    </div>
+    <div id="windowContent">
+        <input name="company" type="hidden" value=""/>
+        <table width="100%">
+            <tr class="bottomline">
+                <td width="24%" align="right">序列号：</td>
+                <td align="left">
+                    <input name="serial" value="" type="hidden"/>
+                    <span data-serial></span>
+                </td>
+            </tr>
+            <tr class="bottomline">
+                <td align="right">密码：</td>
+                <td align="left">
+                    <input name="password" type="hidden" value=""/>
+                    <span data-password></span>
+                </td>
+            </tr>
+            <tr class="bottomline">
+                <td align="right">版本：</td>
+                <td align="left">
+                    <select name="version">
+                        <option value="">请选择</option>
+                        <?php
+                            foreach($erp_version as $ver){
+                                echo "<option value='".$ver."'>".$ver."</option>";
+                            }
+                        ?>
+                    </select>
+                </td>
+            </tr>
+            <tr class="bottomline">
+                <td colspan="2">
+                    <input class="button_1 dredgeErp" type="button" value="开通" />
+                    <input class="button_1 stopErp" type="button" data-status="F" value="停用"/>
+                    <input class="button_1 startErp" type="button" data-status="T" value="启用"/>
+                    <input class="button_3" onclick="closewindowui();" title="关闭" type="button" value="关闭"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        /**
+         * @desc 显示接口信息
+         */
+        $(".showErp").click(function(){
+            var serial = $(this).data('serial');
+            var password = $(this).data('password');
+            var version = $(this).data('version');
+            var ct = $("#windowContent");
+            var status = $(this).data('status') == 'T';
+            ct.find("input[name='company']").val($(this).data('company'));
+            if(serial){
+                ct.find("span[data-serial]").html(serial);
+                ct.find("input[name='serial']").val(serial);
+                ct.find("span[data-password]").html(password);
+                ct.find("input[name='password']").val(password);
+                if(status){
+                    $(".dredgeErp,.startErp").hide();
+                    $(".stopErp").show();
+                }else{
+                    $(".dredgeErp,.stopErp").hide();
+                    $(".startErp").show();
+                }
+                $("select[name='version']").val($(this).data('version'));
+
+            }else{
+                $.post("do_manager.shtml?m=buildErp",function(json){
+                    serial = json.serial;
+                    password = json.password;
+                    ct.find("span[data-serial]").html(serial);
+                    ct.find("input[name='serial']").val(serial);
+                    ct.find("span[data-password]").html(password);
+                    ct.find("input[name='password']").val(password);
+                    $("select[name='version']").val('');
+                    $(".startErp,.stopErp").hide();
+                    $(".dredgeErp").show();
+                },'json');
+            }
+            $.blockUI({ message : $("#windowForm")});
+        });
+
+        /**
+         * @desc 启用/停用接口
+         */
+        $(".stopErp,.startErp").click(function(){
+            var status = $(this).data('status');
+            var company = $("#windowContent input[name='company']").val();
+            var version = $("#windowContent select[name='version']").val();
+            $.post("do_manager.shtml?m=erpDisabled",{company:company,version:version,status:status},function(json){
+                $.unblockUI();
+                $.blockUI({ message : '<p>'+json.info+'</p>'});
+                if(json.status==1){
+                    setTimeout(function(){
+                        window.location.reload();
+                    },700);
+                }
+            },'json');
+        });
+
+        /**
+         * @desc 确认开通接口
+         */
+        $(".dredgeErp").click(function(){
+            var ct = $("#windowContent");
+            var serial = ct.find("input[name='serial']").val();
+            var password = ct.find("input[name='password']").val();
+            var version = ct.find("select[name='version']").val();
+            var company = ct.find("input[name='company']").val();
+            $.post("do_manager.shtml?m=dredgeErp",{serial:serial,password:password,version:version,company:company},function(json){
+                $.unblockUI();
+                $.blockUI({ message : '<p>'+json.info+'</p>'});
+                if(json.status==1){
+                    setTimeout(function(){
+                        window.location.reload();
+                    },700);
+                }
+            },'json');
+
+        });
+
+    });
+</script>
+
+</body>
+</html>
+<?php
+ 	function ShowTreeMenuList($resultdata,$p_id) 
+	{
+		$frontMsg  = "";				
+		foreach($resultdata as $key => $var)
+		{
+			if($var['AreaParent'] == $p_id)
+			{
+				if($var['AreaParent'] == "0")
+				{
+					$frontMsg  .= '<li><a href="manager.shtml?aid='.$var['AreaID'].'"  ><strong>'.$var['AreaName'].'</strong></a>';
+				}	
+				else
+				{
+					$frontMsg  .= '<li><a href="manager.shtml?aid='.$var['AreaID'].'"  >'.$var['AreaName'].'</a>';
+				}	
+
+					$frontMsg2 = "";
+					$frontMsg2 .= ShowTreeMenuList($resultdata,$var['AreaID']);
+					if(!empty($frontMsg2)) $frontMsg .= '<ul>'.$frontMsg2.'</ul>';
+					$frontMsg .= '</li>';
+			}
+		}		
+		return $frontMsg;
+	}
+?>

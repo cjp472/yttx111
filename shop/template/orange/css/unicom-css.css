@@ -1,0 +1,62 @@
+a:hover{ color:#f97e07}
+
+.search-title{ width:270px; height:31px; border:1px solid #f97e07; padding-left:15px;padding-right:0px;}
+.search-btn{ width:80px; height:35px; border: none !important; text-align:center; border-left:none; background-color:#f97e07; color:#fff; font-weight:bold; font-size:14px; font-family: "微软雅黑", Arial, Helvetica, sans-serif !important; line-height:35px; display:block}
+.search-btn:hover{ background-color:#f97e07; color:#fff;}
+
+.menu{ width:100%; height:35px;  color:#fff; background-color:#f97e07; font-size:14px; box-shadow:0px 1px 1px #cbcbcb;}
+.menu ul li a:hover{ color:#fff; background-color:#e36000;}
+
+.kuaijie ul li a:hover{ background-color:#f97e07; color:#fff;}
+
+.pingpai ul li a:hover{ background-color:#f97e07; color:#fff;}
+.pingpai-more:hover{ background-color:#f97e07; color:#fff;}
+
+.p-style{ width:10px; height:10px; border-radius:90px; border:1px solid #f97e07; display:block; float:left}
+.title-line{ width:988px; border-bottom:1px solid #f97e07; margin-top:-7px; margin-left:11px; float:left; height:1px; display:block}
+.title-info { font-size:16px; font-weight:bold; color:#f97e07; padding:5px; background-color:#fff; float:left; margin-top:-20px; margin-left:20px;}
+.product-info ul li:hover{width:198px;height:259px; border:1px solid #f97e07;}
+
+.pro-01:hover{width:398px;height:259px; border:1px solid #f97e07;}
+
+.footer{ width:1000px; border-top:2px solid #f97e07; margin:0 auto; margin-top:15px;}
+
+
+
+.main-info-title b{ margin-left:15px;color:#f97e07; border-left:3px solid #f97e07; padding-left:10px; overflow:hidden; float:left; height:14px; line-height:14px; margin-top:12px;}
+.color-b{ color:#f97e07}
+
+.xiala:hover{  border:1px solid #f97e07; }
+.btn-6{ height:25px; border-radius:3px; background-color:#f97e07; color:#fff; font-size:12px; display:block; text-align:center; padding-left:5px;padding-right:5px; border:none;}
+.btn-6:hover{ background-color:#e36000; color:#fff;}
+
+.pagelink a:hover{background-color:#f97e07;color:#fff;}
+.kuaijie2 a:hover{ background-color:#f97e07; color:#fff;}
+
+.ordertd tr th{ color:#f97e07; border-bottom:1px solid #eee;text-align:left; padding-left:3px; font-size:12px; background-color:#fff;}
+.ordertd  thead tr td{ color:#f97e07; border-bottom:1px solid #eee;text-align:left; padding-left:3px; font-size:12px; font-weight:bold}
+
+.border_line {
+  border: #f97e07 solid 1px;
+  background-color: #eef9ff;
+  width: 95%;
+  margin: 0 auto;
+}
+.product-img-info ul li a:hover{border:2px solid #f97e07; }
+
+.spec-control a:hover{
+color:#f97e07
+}
+
+.sub_shop_info_1 dl dt a:hover{background-color:#f97e07;border-bottom:1px solid #f97e07; color:#fff;}
+.select1{background-color:#f97e07!important; color:#fff;border-bottom:1px solid #f97e07;}
+.sub_shop_info_2{ border:#eeeeee 1px solid; border-top:2px solid #f97e07; }
+
+
+.border_line {
+  border: #f97e07 solid 1px;
+  background-color: #fffbf7;
+  width: 95%;
+  margin: 0 auto;
+}
+.border_line1 { background-color:#fff; border: #e8e7e7 solid 1px; padding-top:0px;width: 998px;}

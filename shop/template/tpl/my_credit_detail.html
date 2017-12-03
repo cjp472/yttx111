@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - {SITE_NAME}</title>
+<meta name='robots' content='noindex,nofollow' />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="{CONF_PATH_IMG}css/base.css?v={VERID}" type="text/css" rel="stylesheet" />
+<link href="{CONF_PATH_IMG}css/showpage.css" rel="stylesheet" type="text/css">
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js" type="text/javascript"></script>
+<script src="template/js/my.js?v={VERID}" type="text/javascript"></script>
+<script type="text/javascript" src="plugin/jquery-ui/development-bundle/ui/ui.datepicker.js"></script>
+
+<script src="template/js/echarts.js" type="text/javascript" charset="utf-8"></script>
+<link type="text/css" href="plugin/jquery-ui/development-bundle/themes/base/ui.all.css" rel="stylesheet" />
+
+<link rel="stylesheet" type="text/css" href="template/css/credit.css?v={VERID}"/>
+<link rel="stylesheet" type="text/css" href="template/css/icon.css?v={VERID}"/>
+<style type="text/css">
+	.icon-xiala-copy{
+		width: 10px;
+		height: 10px;
+		text-align: center;
+		line-height: 10px;
+		font-weight: 400;
+		font-size: 10px;
+		color: #faa70d;
+		
+		position: absolute;
+		top: 25.5px;
+		left: 34%;
+		
+		background: #f3f3f3;
+		
+		z-index: 1000;
+	}
+	
+</style>
+</head>
+
+<body>
+{template header}
+
+<div id="main">
+	<div id="location">
+		当前位置： <a href="home.php">首页</a> / <a href="my.php?m=profile">我的医药账户</a> / <a href="my.php?m=creditDetail">账期详情</a>
+	</div>
+	<div class="main_left">
+		<div class="fenlei_bg_tit"><span>我的医药账户</span></div>
+		  <div class="news_info">
+		    <!-- 载入菜单 -->
+		  	{template my_profile_menu}
+		
+		  </div>
+		<div class="fenlei_bottom" style="width: 223px;height: 9px;border-left: 1px solid #D6D6D6;border-right: 1px solid #D6D6D6;border-bottom: 1px solid #D6D6D6"></div>
+	
+	</div>
+	
+	<div class="main_right">
+	
+		<div class="right_product_tit">
+			<div class="xs_0"><span class="iconfont icon-changfangxing" style="color: #FFB135;font-size:16px;margin-left: -10px;"></span><!--修改密码-->医统账期/账期对账</div>
+		</div>
+	
+		<div class="right_product_main">
+			<div class="list_line">
+			<form method="get" action="" id="detail_form">
+			<input type="hidden" name="m" value="{$in['m']}" />
+			<input type="hidden" name="timeselect" value=""  id="timeselect" />
+				<div class="credit_search">
+					<div class="time_choose">
+						<p>
+							<span>开始时间：</span>
+							<input name="begindate" style="border: 1px solid #ABADB3;height: 20px;"type="text" id="begindate"   maxlength="12" onfocus="this.select();" value="<!--{if $in['type'] == 'Upmonth'}-->{$lastFirst}<!--{else}-->{$in['begindate']}<!--{/if}-->" />
+						</p>
+						<p>
+							<span>结束时间：</span>
+							<input name="enddate" style="border: 1px solid #ABADB3;height: 20px;"type="text" id="enddate" maxlength="12" onfocus="this.select();" value="<!--{if $in['type'] == 'Upmonth'}-->{$lastEnd}<!--{else}-->{$in['enddate']}<!--{/if}-->"   />
+						</p>
+					</div>
+					<div class="credit_choose">
+						<span><a id="seven-days" <!--{if ($in['timeselect'] == 'seven')}-->style="color:#01A157;font-weight:;"<!--{/if}-->>7天</a></span>
+						<span><a id="current-month" <!--{if ($in['timeselect'] == 'month')}-->style="color:#01A157;font-weight:;"<!--{/if}-->>本月</a></span>	
+						<select name="billtype">
+							<option value="">全部</option>
+							<option value="out" <!--{if $in['billtype'] == 'out'}-->selected<!--{/if}-->>支付</option>
+							<option value="in" <!--{if $in['billtype'] == 'in'}-->selected<!--{/if}-->>退款</option>
+							<option value="isup" <!--{if $in['billtype'] == 'isup'}-->selected<!--{/if}-->>本期应还</option>
+						</select>
+						<span><a onclick='Selectquer()'>查询</a></span>
+					</div>
+					
+				</div>
+				<div class="credit_money">
+                        <span><!--{if $in['isup']}-->应还款额：<!--{else}-->交易总额：<!--{/if}-->{$TotalSumMoneyFormat}</span>
+						<span>利息：<!--{echo MoneyFormat::MoneyOfFenToYuan($detailAdd['sql_Sel']['InterestSum'],true)}--></span>
+						<span>滞纳金：<!--{echo MoneyFormat::MoneyOfFenToYuan($detailAdd['sql_Sel']['FineSum'],true)}--></span>
+					</div>
+				</form>
+				<table class="trade_detail" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td width="11%">记账日</td>
+						<td width="15%" class="pay_number">订单号</td>
+						<td width="11%">金额(元)</td>
+						<td width="11%" class="bankIn">利息<i class="iconfont icon-wenhao wenhao1"></i><i class="iconfont icon-xiala-copy iconf1 hide"></i></td>
+						<td width="11%" class="lateFee">滞纳金<i class="iconfont icon-wenhao wenhao2"></i><i class="iconfont icon-xiala-copy iconf2 hide"></i></td>
+						<td width="12%" class="accouts">结算金额<i class="iconfont icon-wenhao wenhao3"></i><i class="iconfont icon-xiala-copy iconf3 hide"></i></td>
+						<td width="8%">类型</td>
+						<td width="18%">摘要</td>
+					</tr>
+					
+					<!--{if $detailAdd['list']}-->
+                      {loop $detailAdd['list'] $k $v}
+					<tr>
+						<td>{echo date('Y-m-d', $v[RecordDate])}</td>
+						<td class="pay_number">
+							<!--{if !empty($v[OrderID])}-->
+								<a href="myorder.php?m=showorder&id={$v[OrderID]}" title="点击查看">{$v[OrderSN]}</a>
+							<!--{else}-->
+							-
+							<!--{/if}-->
+						</td>
+						<td>{$v[OrderTotal]}</td>
+						<td>{$v[Interest]}</td>
+						<td>{$v[OverdueFine]}</td>
+						<td>{$v[sumTotalf]}</td>   
+						<td><!--{if $v[Type]=='out'}-->支付<!--{else}-->退款<!--{/if}--></td>   
+						<td style="text-align:left;line-height:20px;font-size:12px;">{$v[DescribeContent]}</td>
+					</tr>
+					{/loop}
+					<tr>
+						<td colspan="2" style="text-align: right;height: 60px;color: #666 !important;">本页小计：</td>
+						<td>{$suMToal}</td>
+						<td>{$suMInterest}</td>
+						<td>{$sumOverdueFine}</td>
+                        <td style="text-align: center;text-indent: 10px;">{$sumTotalf}</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+					</tr>
+					<!--{else}-->
+					<tr>
+						<td colspan="8" align="center">没有数据可显示...</td>   
+					</tr>
+					<!--{/if}-->
+				</table>
+				<br class="clear" />
+				<div class="list_showpage">{$detailAdd[showpage]}</div>
+				
+			  	<div class="popBank sameFee hide">
+					<p>1.医统账期为您提供安全、方便的信用支付，首月免息。为您的药品采购提供资金保障，年化利息仅<b>18%</b>；</p>
+					<p>2.计算公式：<b>本金*(18%/12)*N(N：代表还款自然月)</b>；</p>
+					<p>3.具体解释权归医统天下公司所有；</p>
+					<p>4.如有疑问请联系医统天下公司；</p>
+				</div>
+				<div class="popFee sameFee hide">
+					<p>1.若您在三个自然月内未还清款项，医统按日息<b>5‱ </b>收取滞纳金(复利)，建议您及时还款；</p>
+					<p>2.计算公式：<b>本金*(18%/12)*3(收取滞纳金前的应还款月数)+滞纳金*逾期天数</b>；</p>
+					<p>3.如有疑问请联系医统天下公司；</p>
+				</div>
+				<div class="popAccount sameFee hide">
+					<p>1.计算公式：<b>本金+利息+滞纳金</b>；</p>
+					<p>2.如有疑问请联系医统天下公司；</p>
+				</div>
+			</div>
+			<br />&nbsp;
+	   <!-- </div>-->
+			
+		</div>
+	</div>
+</div>
+
+{template bottom}
+</body>
+<script type="text/javascript">
+	/*类型点击*/
+//	$('.credit_choose>div').hover(function(){
+//		$('.credit_choose>div>div').toggleClass('hide');
+//	});
+    $(function(){
+    	//点击出现利息、滞纳金说明
+    	function intro(node1,node2,node3){
+    		var eleNode1 = $('.'+node1);
+    		var eleNode2 = $('.'+node2);
+    		var eleNode3 = $('.'+node3);
+    		
+    		$('.sameFee').addClass('hide');
+			$('.icon-xiala-copy').addClass('hide');
+			eleNode3.addClass('hover');
+    		if(eleNode1.hasClass('hide')){
+    			eleNode1.removeClass('hide');
+    			eleNode2.removeClass('hide');
+    		}else{
+    			eleNode1.addClass('hide');
+    			eleNode2.removeClass('hide');
+    		};
+    	};
+    	$('.wenhao1').mouseenter(function(){
+			intro('popBank','iconf1','wenhao1');
+    	});
+    	$('.wenhao2').mouseenter(function(){
+			intro('popFee','iconf2','wenhao2');
+    	});
+    	$('.wenhao3').mouseenter(function(){
+			intro('popAccount','iconf3','wenhao3');
+    	});
+    	$('.wenhao1,.wenhao2,.wenhao3').mouseleave(function(){
+    		$('.wenhao1,.wenhao2,.wenhao3').removeClass('hover');
+    		$('.sameFee').addClass('hide');
+			$('.icon-xiala-copy').addClass('hide');
+    	});
+		//初始化日期
+		$("#begindate").datepicker();
+		$("#enddate").datepicker();
+		
+		//绑定7天和本月
+		$('#seven-days').click(function(){
+			$('#begindate').val('{$sevenSub}');
+			$('#enddate').val('{$sevenPre}');
+			$('#timeselect').val('seven');
+			$('#detail_form').submit();
+		});
+		
+		$('#current-month').click(function(){
+			$('#begindate').val('{$monthSub}');
+			$('#enddate').val('{$monthPre}');
+			$('#timeselect').val('month');
+			$('#detail_form').submit();
+		});
+		
+    });
+    function Selectquer(){
+    	$('#detail_form').submit();
+    };
+</script>
+</html>

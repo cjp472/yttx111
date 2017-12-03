@@ -1,0 +1,433 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - {SITE_NAME}</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="{CONF_PATH_IMG}css/base.css?v={VERID}" type="text/css" rel="stylesheet" />
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js?v={VERID}" type="text/javascript"></script>
+<script src="template/js/cart.js?v={VERID}" type="text/javascript"></script>
+
+<script type="text/javascript" language="javascript" > 
+
+
+function shownoPay(){
+	var str = "<div class='noPay'></div><div class='msgPrompt'><div class='promptImg'></div><div class='close'></div><p>您的供应商未开通快捷支付<br/>可通过电话、微信等方式，提醒他开通</p><div class='close2'>关闭</div></div>";
+	$("body").append(str);
+	
+	//	关闭按钮
+	$(".close").click(function(){
+		$(".noPay").remove();
+		$(".msgPrompt").remove();
+	});
+	$(".close2").click(function(){
+		$(".noPay").remove();
+		$(".msgPrompt").remove();
+	});
+}
+
+function payto(ptype)
+{
+	var jurl = "finance.php?OID={$oinfo['OrderID']}";
+	var chk_value = '';    
+	var obj = document.getElementsByName("data_FinanceOrder[]");//选择所有name="interest"的对象，返回数组    
+    for(var i=0;i<obj.length;i++){
+        if(obj[i].checked) //取到对象数组后，我们来循环检测它是不是被选中
+        chk_value += obj[i].value+',';   //如果选中，将value添加到变量s中    
+    }
+
+	if(ptype == "alipay"){
+		var total = parseFloat($('#alipay_pay_total').val());
+		if(!(total > 0)){
+			alert('请输入您要支付的金额！');
+			return false;
+		}
+		jurl = jurl + '&m=pay&total='+$("#alipay_pay_total").val() + '&osn=' + chk_value;
+	}
+
+	if(ptype == "allinpay"){
+		var total = parseFloat($('#netpay_pay_total').val());
+		if(!(total > 0)){
+			alert('请输入您要支付的金额！');
+			return false;
+		}
+		jurl = jurl + '&m=netpay&total='+$("#netpay_pay_total").val() + '&osn=' + chk_value;
+	}
+	
+	if(ptype == "yijifu"){
+		var total = parseFloat($('#yijifu_pay_total').val());
+		if(!(total > 0)){
+			alert('请输入您要支付的金额！');
+			return false;
+		}
+		jurl = jurl + '&m=yijifu&total='+$("#yijifu_pay_total").val() + '&osn=' + chk_value+'&acType='+$("#accountType").val();
+	}
+	
+	window.location = jurl;
+}
+
+function checkForYJFStatus(){
+	
+	backendActionOrder();
+}
+</script>
+	<style>
+		#main{
+			margin-bottom: 50px;
+		}
+		.promptImg{
+			margin-bottom: 100px;
+		}
+		.font14{
+			font-size: 16px ;
+			color: #000000;
+		}
+		.font15{
+			font-size: 14px ;
+			color: #333333;
+		}
+		.font16{
+			font-size: 14px ;
+			color: #ff2828;
+		}
+		.linkTo{
+			font-size: 14px;
+			color: #124f78;
+		}
+		.font17{
+			font-size: 20px;
+			color: #ff2828;
+		}
+		.font18{
+			font-size: 14px ;
+			color: #999999;
+		}
+		.changeWay{
+			list-style: none;
+			display: inline-block;
+			margin-left: -10px!important;
+		}
+		.changeWay li{
+			float: left;
+			height:34px !important;
+			overflow: hidden;
+			text-align: left;
+			margin-right: 10px;
+			margin-left: 10px;
+		}
+		.changePayWay{
+			font-size: 14px;
+			color: #666666;
+			line-height: 34px;
+		}
+		.changeWay li img{
+			float: left;
+		}
+		.onlinePay{
+			display: block;
+			width: 150px;
+			height: 40px;
+			background: #FE6600;
+			text-align: center;
+			line-height: 40px;
+			font-size: 18px;
+			text-decoration: none;
+			color: white !important;
+			margin-bottom: 25px;	margin-top: 15px;
+		}
+		.tolAccount{
+			width: 90%;
+			margin: auto;
+			margin-bottom: 50px;
+		}
+		.tolAccount h3{
+			font-size: 14px;
+			color: #333333;
+		}
+		.tolAccount table tr {
+			text-align: center;
+		}
+		.tolAccount table tr td {
+			border: none;
+			line-height: 30px;
+		}
+		.tolAccount table tbody {
+			background: #EFEFEF;
+			font-size: 12px;
+			color: #999999;
+		}
+		.tolAccount table thead{
+			background: #E1E1E1;
+			font-size: 12px;
+			color: #000000;
+		}
+		.nowDredge{
+			display: block;
+			width: 180px;
+			height: 40px;
+			background: #FE6600;
+			text-align: center;
+			line-height: 40px;
+			font-size: 18px;
+			text-decoration: none;
+			color: white !important;
+			margin-bottom: 25px;	margin-top: 15px;
+		}
+		.promptP{
+			display: block !important;
+			height: 34px !important;
+			line-height: 34px !important;
+			position: relative;
+		}
+		.speedPayImg{
+			position: absolute;
+			left: 80px;
+		}
+		.goFullData{
+			display: block;
+			position: absolute;
+			top:0px;
+			left: 220px;
+		}
+		.payInfo{
+			margin-top: 20px;
+			margin-bottom: 100px
+		}
+		.payInfo tr td{
+			border: none !important;
+		}
+		.payMoney{
+			width: 150px;
+			height: 25px;
+			margin-left: 20px;
+			margin-right: 10px;
+		}
+		.ok{
+			display: block;
+			width: 180px;
+			height: 40px;
+			background: #FE6600;
+			text-align: center;
+			line-height: 40px;
+			font-size: 18px;
+			text-decoration: none;
+			color: white !important;
+			margin-bottom: 25px;	margin-top: 15px;
+			margin-left: 78px;
+		}
+		.noPay{
+			background: rgba(0,0,0,0.4);
+			/*兼容IE7*/
+			*background-color: black;
+			*filter:alpha(opacity=40);
+			*zoom:1;
+			/*兼容IE8*/
+			background: #000000 \0;
+			filter:Alpha(opacity=80) \0; 	/*只支持IE6、7、8、9*/
+			position:static \0;    /*IE6、7、8只能设置position:static(默认属性) ，否则会导致子元素继承Alpha值*/
+			position: fixed;top:0;left:0;height:100%;width: 100%;z-index: 22222;
+		}
+		.msgPrompt{
+			width: 420px;
+			height: 220px;
+			background: white;
+			border: 4px solid #CCCCCC;
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			margin: auto;
+			/*兼容IE7*/
+			*margin: 300px 700px;
+			z-index: 11111111;
+		}
+		.promptImg{
+			width: 57px;
+			height: 60px;
+			background: url("./template/img/iconfont-tishi.png") no-repeat;
+			background-size: 100%;
+			margin: 10px auto 0 auto;
+		}
+		.close{
+			width: 14px;
+			height: 14px;
+			background: url("./template/img/iconfont-guanbi.png") no-repeat;
+			background-size: 100%;
+			position: absolute;
+			top: 5px;
+			right: 5px;
+			cursor: pointer;
+		}
+		.msgPrompt p {
+			text-align: center;
+			font-size: 14px;
+			color: #333333;
+		}
+		.close2{
+			width: 100px;
+			height: 40px;
+			background:#FE6601 ;
+			line-height: 40px;
+			text-align: center;
+			color: white;
+			font-size: 15px;
+			margin:20px  auto 0 auto;
+			cursor: pointer;
+		}
+	</style>
+</head>
+
+<body>
+{template header}
+
+<div id="main">
+<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="cart.php">我的购物车 </a>&#8250;&#8250; <a href="#">提交订单</a></div>
+
+<div class="car_tit">您的订单</div>
+
+<div class="main_car">
+			
+         	<div class="line96">
+				<br class="clear" style="margin-top:50px;" />
+				<table width="92%"  border="0" cellpadding="4" cellspacing="4" bgcolor="#FFFFFF" align="center">
+                 <tr>
+                   <td height="80" width="60" align="center" ><img src="template/img/check48.jpg" class="promptImg" /></td>
+				   <td class="font14">感谢您，订单提交成功，请您尽快付款，以便库房及时发货！
+					   <br/><br/><span class="font15">您的订单号是：<span class="font16"><font color=red>{$in[id]}</font></span></span>&nbsp;&nbsp;
+					   <span style="font-size: 12px ;color: #666666">点此</span> &#8250;&#8250; <a href="myorder.php?m=showorder&sn={$in[id]}" class="linkTo">查看订单状态</a>
+					   <span style="font-size: 12px ;color: #666666">或者</span> <a href="home.php" class="linkTo">返回首页</a>
+
+					<!--支付金额-->
+					   <br/><span class="font15">应付金额：<span class="font17">￥{$oinfo[OrderTotal]}</span></span>
+					   <!--支付方式-->
+					   <br/><span class="font15">支付方式：<span style="font-size: 12px ;color: #666666">您已选择</span ><span class="font16"> $paytypearr[$oinfo['OrderPayType']]</span>
+						   <span style="font-size: 12px ;color:#666666">,您可以尝试</span>&nbsp;&nbsp;<a href="finance.php?m=new&id={$oinfo[OrderID]}">其他支付方式</a>
+					   </span>
+				   <br /><br />
+
+				   </td>
+                 </tr>
+               </table>
+				<input type="hidden" name="data_FinanceOrder[]" id="data_FinanceOrder" value="{$oinfo['OrderSN']}" />
+				<br class="clear" style="margin-top:30px;" />
+				<table width="92%" border="0" cellpadding="4" cellspacing="1" bgcolor="#FFFFFF" align="center">
+				<tr>
+					<td height="80" width="60" align="center" ><img src="template/img/check48.jpg" class="promptImg" style="display: none" /></td>
+					<td>
+						<p>不想使用当前支付方式？我们还支持以下<span class="font14">在线支付</span>方式,方便快捷~</p>
+						<!--{if ((empty($allinpayInfo))&&(empty($allinpayInfo))&&(!empty($myYJF)))}-->
+						<p  class="promptP" style="display: inline-block;height: 34px ;line-height: 34px"><span class="font14">快捷支付</span><img src="template/img/yijifu.gif" alt="" class="speedPayImg" /> </p>
+						<p>&nbsp;</p>
+						<!--在线支付按钮 链接跳转-->
+						<p  class="font15">支付金额:<input type="text" value="{$oinfo[OrderTotal]}" name="yijifu_pay_total" id="yijifu_pay_total"  class="payMoney" onKeypress="if ((event.keyCode < 48 || event.keyCode > 57) && event.keyCode!=46) event.returnValue = false;"/>元&nbsp;&nbsp;&nbsp;&nbsp;
+							<select id="accountType" name="accountType" style="width:auto;<!--{if count($netInfo)<2}-->visibility:hidden;<!--{/if}-->">
+								<!--{loop $netInfo $avar}-->
+									<option value="{$avar['SignNO']}" <!--{if $avar['IsDefault']=='Y'}-->selected="selected"<!--{/if}-->>{$getway_account_type[$avar['AccountType']]}</option>	
+								<!--{/loop}-->
+							</select>
+							</p>
+						<a onclick="payto('yijifu');" style="cursor:pointer;" class="ok">立即支付</a>
+						<!--{/if}-->
+						<!--{if ((empty($allinpayInfo))&&(empty($allinpayInfo))&&(empty($myYJF)))}-->
+						<p  class="promptP" style="display: inline-block;height: 34px ;line-height: 34px"><span class="font14">快捷支付</span><img src="template/img/yijifu.gif" alt="" class="speedPayImg" /> <span class="font18 goFullData">您还未开通该支付方式，请开通并完善资料</span></p>
+
+						<!--在线支付按钮 链接跳转-->
+						<!--{if empty($netInfo)}-->
+						<a onclick="shownoPay()" href="#" class="nowDredge">立即开通</a>
+						<!--{/if}-->
+						<!--{if !empty($netInfo)}-->
+						<a href="openpay.php?type=setAccount" target="_blank" onclick="checkForYJFStatus()" class="nowDredge">立即开通</a>
+						<!--{/if}-->
+						<!--{/if}-->
+						<!--{if ((!empty($allinpayInfo))||(!empty($allinpayInfo)))}-->
+						<ul class="changeWay">
+							<li class="changePayWay">快捷支付</li>
+							<li><a href="order.php?id={$in[id]}&type=9"><img src="template/img/yijifu.gif"  alt=""/></a></li>
+							<!--{if !empty($allinpayInfo)}-->
+							<li class="changePayWay">网银支付</li>
+							<li><a href="order.php?id={$in[id]}&type=10"><img src="template/img/wyzf.jpg"  alt=""/></a></li>
+							<!--{/if}-->
+							<!--{if !empty($alipayInfo)}-->
+							<li class="changePayWay">支付宝支付</li>
+							<li><a href="order.php?id={$in[id]}&type=11"><img src="template/img/alipay.png"  alt=""/></a></li>
+							<!--{/if}-->
+						</ul>
+						<!--{/if}-->
+						<br /><br />
+						<!--在线支付按钮 链接跳转-->
+						<!--{if empty($myYJF)}-->
+						<!--<a href="openpay.php?type=setAccount" target="_blank" onclick="openMaskLayer()" style="display:block;width:120px;height:30px;background:#F8B767;line-height:30px;text-align:center;">立即开通</a>-->
+						<!--{else}-->
+						<!--<a href="finance.php?m=yijifu&OID={$in[id]}" target="_blank"><img onclick="openMaskLayer()" src="template/img/yijifu.gif" border="0"/></a>-->
+						<!--{/if}-->
+				</td>
+				<td >
+				
+				</td></tr>	
+				
+				</table>
+				
+
+	<!--{if !empty($getway['MerchantNO'])}-->
+				<!--<br class="clear" style="margin-top:30px;" />-->
+
+				<!--<table width="92%" border="0" cellpadding="4" cellspacing="1" bgcolor="#FFFFFF" align="center">-->
+				<!--<tr><td width="20%" height="60">-->
+				<!--<strong class="font14">网银支付：</strong>-->
+				<!--</td><td >	<a href="finance.php?m=netpay&OID={$in[id]}" target="_blank"><img onclick="openMaskLayer()" src="template/img/wyzf.jpg" border="0"/></a></td></tr>-->
+				<!--</table>-->
+	<!--{/if}-->
+
+	<!--{if $ispay=="pay"}-->
+				<!--<br class="clear" style="margin-top:30px;" />-->
+
+				<!--<table width="92%" border="0" cellpadding="4" cellspacing="1" bgcolor="#FFFFFF" align="center">-->
+				<!--<tr><td width="20%" height="60">-->
+				<!--<strong class="font14">支付宝支付：</strong>-->
+				<!--</td><td >	<a href="finance.php?m=pay&OID={$in[id]}" target="_blank"><img onclick="openMaskLayer()" src="template/img/alipay.jpg" border="0"/></a></td></tr>-->
+				<!--</table>-->
+	<!--{/if}-->
+
+					<div class="tolAccount">
+
+						<h3 class="font14">收款帐号：</h3>
+						<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" align="center">
+							<thead>
+							<tr>
+								<td height="30"><strong>开户行</strong></td>
+								<td ><strong>帐号：</strong></td>
+								<td><strong>开户名称(收款人)</strong></td>
+							</tr>
+							</thead>
+							<tbody>
+							<!--{loop $bankarr $bkey $bvar}-->
+							<tr>
+								<td height="30">{$bvar[AccountsBank]}</td>
+								<td >{$bvar[AccountsNO]}</td>
+								<td>{$bvar[AccountsName]}</td>
+							</tr>
+							<!--{/loop}-->
+							</tbody>
+
+
+						</table>
+					</div>
+				</div>
+			</div>
+</div>
+</div>
+{template bottom}
+
+<!-- 遮罩层 -->
+{template mask_layer}
+
+
+</body>
+</html>

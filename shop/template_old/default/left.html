@@ -1,0 +1,77 @@
+		
+		<div class="line margin_top">
+        	<div class="line"><img src="template/default/img/search_title.jpg" /></div>
+         	<div class="line bg639029">
+            	 <form name="searchform" id="searchform" action="search.php" method="get">
+				 <div class="search_line"><input name="kw" id="kw" type="text" class="inputsearch" onfocus="this.select();" value="{$enkw}" />&nbsp;<input name="searchbutton" value="搜索" type="submit" class="yellowbtn" />
+				 <div class="search_ism"><input type="checkbox" name="ism" id="ism" value="yes" <!--{if $in[ism]=="yes"}-->checked="checked"<!--{/if}--> />模糊搜索</div>
+				 </div>
+				 </form>
+            </div>
+        	<div class="line"><img src="template/default/img/bottom_t_3.jpg" /></div>        
+        </div>
+
+        <div class="line" style="display:; margin-top:8px;">
+<b class="b1"></b><b class="b2 d1"></b><b class="b3 d1"></b><b class="b4 d1"></b>
+<div class="b d1" style="height:68px;">
+
+<div class="line">
+	<div class="cartimg" onclick="javascript:window.location.href='cart.php'"><div id="cartnumber" ><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></div></div>
+	<div class="carttext">
+		<div><a href="cart.php"><img src="template/default/img/view_order.jpg" border="0" title="查看我的购物车" /></a></div>
+		<div align="right" class="white">您已预订 <span id="cartnumber_2"><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></span> 种商品！</div>
+	</div>
+</div>
+
+</div>
+<b class="b4b d1"></b><b class="b3b d1"></b><b class="b2b d1"></b><b class="b1b"></b>
+		</div>
+
+		<div class="line margin_top">
+        	<div class="sort_title"><a href="catalog.php">商品目录</a></div>
+         	<div class="sort_line">
+				<!--{loop $listsite $skey $svar}-->
+                	<dt><a href="list.php?s={$svar['SiteID']}&t={$in['t']}" > &#8250;&#8250; {$svar[SiteName]}</a></dt>
+					<!--{loop $svar[son] $sonkey $sonvar}-->
+                 	<dd><a href="list.php?s={$sonvar['SiteID']}&t={$in['t']}" > &#8250;&#8250; {$sonvar[SiteName]}</a></dd>
+					 <!--{/loop}-->
+				<!--{/loop}-->
+				<dd>&nbsp;</dd>
+				<dt><a href="wishlist.php" > &#8250;&#8250; 我的收藏</a></dt>
+            </div>
+        	<div class="line"><img src="template/default/img/sort_bottom.jpg" /></div>        
+        </div>
+
+
+<!--{if $brand_info}-->
+        <div class="line" style="display:; margin-top:18px;">
+		<b class="g1"></b><b class="g2 h1"></b><b class="g3 h1"></b><b class="g4 h1"></b>
+		<div class="g h1" >
+		<div class="line96" style="margin:0;padding:4px;" >
+
+				<dt><a href="list.php" > <strong>&#8250;&#8250; 商品品牌</strong></a></dt>
+				<!--{loop $brand_info $sonkey $sonvar}-->
+					<li style="width:80px; height:24px; margin:0 0 0 12px; line-height:24px; float:left; padding:2px;"><a href="list.php?b={$sonvar['BrandID']}&t={$in['t']}" > {$sonvar[BrandName]}</a></li>
+				<!--{/loop}-->
+		</div>
+		</div>
+		<b class="g4g h1"></b><b class="g3g h1"></b><b class="g2g h1"></b><b class="g1g"></b>
+		</div>
+<!--{/if}-->
+
+    <div id="windowForm">
+		<div id="windowContent">  </div>
+	</div>
+
+	<div id="shareit-box">
+	<div id="shareit-header"></div>
+	<div id="shareit-body">
+		<div id="shareit-blank"></div>
+		<div id="shareit-url">数量：<input type="text" value="1" onfocus="this.select();"  name="shareit-field" id="shareit-field" class="field" onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" />
+		<input type="hidden" value="" name="togoodsid" id="togoodsid"  /></div>
+		<div id="shareit-icon">
+			<a href="javascript:void(0);" title="关闭" onclick="hideshow('shareit-box');">X</a> <input type="button" name="addtocart" id="addtocart" value="订 购" class="yellowbtn" onclick="saveonetocart();"  />   
+	
+		</div>
+	</div>
+</div>

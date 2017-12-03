@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - 订货宝 网上订货系统</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="template/default/css/style.css?v={VERID}" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/list.css?v={VERID}" rel="stylesheet" type="text/css" media="screen" />
+<LINK href="plugin/rollimg/css/sharejs.css?v={VERID}" type="text/css" rel="stylesheet">
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/home.js?v={VERID}" type="text/javascript"></script>
+<script src="template/js/function.js?v={VERID}" type="text/javascript"></script>
+<script src="template/js/cart.js?v={VERID}" type="text/javascript"></script>
+<SCRIPT src="plugin/rollimg/js/sharejs.js?v={VERID}" type="text/javascript"></SCRIPT>
+</head>
+
+<body onload="fixpng24();">
+{template header}
+
+<div id="contentbody">
+	<div id="contentleft">
+	{template left}
+	</div>
+    
+    <div id="contentright">
+    	<div class="line margin_top" style="display:none;">
+			<img src="template/default/img/banner/1.png" border="0" />
+		</div>
+		<!--{if !empty($xd_info)}-->
+		<div class="line margin_top">
+			    <DIV id="imgPlay">
+				<UL class="imgs" id="actor">
+					<!--{loop $xd_info $xkey $xvar}-->
+					<LI><A href="{$xvar['ArticleLink']}" target="_blank"><IMG title="{$xvar['ArticleName']}" src="{RESOURCE_PATH}{$xvar['ArticlePicture']}" border="0" /></A></LI>
+					<!--{/loop}-->
+				</UL>
+				<DIV class="num">
+				<P class="lc"></P>
+				<P class="mc"></P>
+				<P class="rc"></P></DIV>
+				<DIV class="num" id="numInner"></DIV>
+				<DIV class="prev">上一张</DIV>
+				<DIV class="next">下一张</DIV></DIV>
+		</div>
+     	<!--{/if}-->
+		{template top_gg}
+        
+		<div class="line margin_top">
+        	<div class="list_title">
+            	<div class="leftdiv" id="chenge_title_2" style="cursor:pointer; margin-right:1px;" onclick="change_spc('2');"><img src="template/default/img/home_title2_over.jpg" border="0" title="新品上架" /></div>
+
+				<div class="leftdiv" id="chenge_title_1" style="cursor:pointer; margin-right:1px;" onclick="change_spc('1');"><img src="template/default/img/home_title1.jpg" border="0" title="特价促销" /></div>
+				
+				<div class="leftdiv" id="chenge_title_3" style="cursor:pointer; margin-right:1px;" onclick="change_spc('3');"><img src="template/default/img/home_title3.jpg" border="0" title="推荐商品" /></div>
+            </div>
+
+			<!--{if $in['t'] == "imglist"}-->
+
+         	<div class="list_home" id="show_product_1"  style="display:none;">
+				<br class="clear" />
+            	<ul>
+				<!--{loop $goodslist2['list'] $gkey $gvar}-->
+            		<li>
+                    	<div class="list_img_home"><a href="content.php?id={$gvar['ID']}" target="_blank">
+						<!--{if !empty($gvar['Picture'])}-->
+						<img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" />
+						<!--{else}-->
+						<img src="template/default/img/default.jpg" title="{$gvar['Name']}" border="0" />
+						<!--{/if}-->
+						</a></div>
+                        <div class="list_name_home">
+                        	<a href="content.php?id={$gvar['ID']}" target="_blank">{$gvar['Name']}</a>                     
+                        </div>
+						<div class="line" > 
+						<div style="float:left; width:100px; text-align:center;" class="font14" title="元/{$gvar['Units']}">¥ {$gvar['Price']}</div>
+						<!--{if $gvar['CommendID']!="9"}-->
+						<!--{if $pn=="on" && $png=="off" && $goodslist2['number'][$gvar['ID']] <= 0}-->
+						<!--{else}-->
+						<div style="float:left; width:40px; text-align:right;"><a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" >订购 &#8250;</a></div>
+						<!--{/if}-->
+						<!--{/if}-->
+						</div>
+                    </li>
+                 <!--{/loop}-->  
+                </ul>
+				<div class="line96" align="right"><a href="list.php?m=spc&ty=2">更多 &#8250;&#8250;</a>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+			<br class="clear" />
+            </div>
+
+
+         	<div class="list_home" id="show_product_2">
+				<br class="clear" />
+            	<ul>
+				<!--{loop $goodslist3['list'] $gkey $gvar}-->
+            		<li>
+                    	<div class="list_img_home"><a href="content.php?id={$gvar['ID']}" target="_blank">
+						<!--{if !empty($gvar['Picture'])}-->
+						<img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" />
+						<!--{else}-->
+						<img src="template/default/img/default.jpg" title="{$gvar['Name']}" border="0" />
+						<!--{/if}-->
+						</a></div>
+                        <div class="list_name_home">
+                        	<a href="content.php?id={$gvar['ID']}" target="_blank">{$gvar['Name']}</a>                     
+                        </div>
+						<div class="line" > 
+						<div style="float:left; width:100px; text-align:center;" class="font14" title="元/{$gvar['Units']}">¥ {$gvar['Price']}</div>
+						<!--{if $gvar['CommendID']!="9"}-->
+						<!--{if $pn=="on" && $png=="off" && $goodslist3['number'][$gvar['ID']] <= 0}-->
+
+						<!--{else}-->
+						<div style="float:left; width:40px; text-align:right;"><a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" >订购 &#8250;</a></div>
+						<!--{/if}-->
+						<!--{/if}-->
+						</div>
+                    </li>
+                 <!--{/loop}-->  
+                </ul>
+				<div class="line96" align="right"><a href="list.php?m=spc&ty=3">更多 &#8250;&#8250;</a>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+			<br class="clear" />
+            </div>
+
+
+
+
+         	<div class="list_home" id="show_product_3" style="display:none;">
+				<br class="clear" />
+            	<ul>
+				<!--{loop $goodslist1['list'] $gkey $gvar}-->
+            		<li>
+                    	<div class="list_img_home"><a href="content.php?id={$gvar['ID']}" target="_blank">
+						<!--{if !empty($gvar['Picture'])}-->
+						<img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" />
+						<!--{else}-->
+						<img src="template/default/img/default.jpg" title="{$gvar['Name']}" border="0" />
+						<!--{/if}-->
+						</a></div>
+                        <div class="list_name_home">
+                        	<a href="content.php?id={$gvar['ID']}" target="_blank">{$gvar['Name']}</a>                     
+                        </div>
+						<div class="line" > 
+						<div style="float:left; width:100px; text-align:center;" class="font14" title="元/{$gvar['Units']}">¥ {$gvar['Price']}</div>
+						<!--{if $gvar['CommendID']!="9"}-->
+						<!--{if $pn=="on" && $png=="off" && $goodslist1['number'][$gvar['ID']] <= 0}-->
+
+						<!--{else}-->
+						<div style="float:left; width:40px; text-align:right;"><a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" >订购 &#8250;</a></div>
+						<!--{/if}-->
+						<!--{/if}-->
+						</div>
+                    </li>
+                 <!--{/loop}-->  
+                </ul>
+				<div class="line96" align="right"><a href="list.php?m=spc&ty=1">更多 &#8250;&#8250;</a>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+			<br class="clear" />
+            </div>
+
+			<!--{else}-->
+
+         	<div class="list_line" id="show_product_1"  style="display:none;">
+				<br class="clear" />
+					<table width="96%" border="0" cellspacing="0" cellpadding="0" align="center">
+                    <thead>
+  <tr>
+    <td width="22%" height="28">&nbsp;编号/型号</td>
+    <td>&nbsp;名称</td>
+    <td width="16%">&nbsp;价格 (元)</td>
+    <td width="14%">&nbsp;包装</td>
+    <td width="10%">&nbsp;订购</td> 
+  </tr>
+   </thead>
+   <tbody>
+<!--{loop $goodslist2['list'] $gkey $gvar}-->
+  <tr onmouseover="inStyle(this);control('altimg_{$gvar[ID]}', 'show');"  onmouseout="outStyle(this);control('altimg_{$gvar[ID]}', 'hide');">
+    <td height="42"><div id="altimg_{$gvar[ID]}" class="altimg"><!--{if !empty($gvar['Picture'])}--><img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" /><!--{/if}--></div>&nbsp;{$gvar['Coding']}</td>
+    <td><a href="content.php?id={$gvar['ID']}" target="_blank" >{$gvar['Name']}</a></td>
+    <td><span class="font12">¥ {$gvar['Price']}</span><span class="gray">&nbsp;/{$gvar['Units']}</span></td>
+    <td>&nbsp;<label>{$gvar['Casing']}</label></td>
+    <td>
+	<!--{if $gvar['CommendID']=="9"}-->
+	<a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="template/default/img/cart_email_s.gif" border="0" class="img" /></a>	
+	<!--{else}-->
+		<!--{if $pn=="on" && $png=="off" && $goodslist2['number'][$gvar['ID']] <= 0}-->
+		<a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="template/default/img/cart_email_s.gif" border="0" class="img" /></a>	
+		<!--{else}-->
+		<a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}"><img src="template/default/img/cart_s.gif" border="0" class="img" /></a>
+		<!--{/if}-->
+	<!--{/if}-->
+	</td>
+  </tr>
+   <!--{/loop}--> 
+   </tbody>
+</table>
+
+
+				<div class="line96" align="right"><a href="list.php?m=spc&ty=2">更多 &#8250;&#8250;</a>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+			<br class="clear" />
+            </div>
+
+
+
+         	<div class="list_line" id="show_product_2"  style="display:;">
+				<br class="clear" />
+					<table width="96%" border="0" cellspacing="0" cellpadding="0" align="center">
+                    <thead>
+  <tr>
+    <td width="22%" height="28">&nbsp;编号/型号</td>
+    <td>&nbsp;名称</td>
+    <td width="16%">&nbsp;价格 (元)</td>
+    <td width="14%">&nbsp;包装</td>
+    <td width="10%">&nbsp;订购</td>  
+  </tr>
+   </thead>
+   <tbody>
+<!--{loop $goodslist3['list'] $gkey $gvar}-->
+  <tr onmouseover="inStyle(this);control('altimg_{$gvar[ID]}', 'show');"  onmouseout="outStyle(this);control('altimg_{$gvar[ID]}', 'hide');">
+    <td height="42"><div id="altimg_{$gvar[ID]}" class="altimg"><!--{if !empty($gvar['Picture'])}--><img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" /><!--{/if}--></div>&nbsp;{$gvar['Coding']}</td>
+    <td><a href="content.php?id={$gvar['ID']}" target="_blank" >{$gvar['Name']}</a></td>
+    <td><span class="font12">¥ {$gvar['Price']}</span><span class="gray">&nbsp;元/{$gvar['Units']}</span></td>
+    <td>&nbsp;<label>{$gvar['Casing']}</label></td>
+    <td>
+	<!--{if $gvar['CommendID']=="9"}-->
+	<a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="template/default/img/cart_email_s.gif" border="0" class="img" /></a>	
+	<!--{else}-->
+		<!--{if $pn=="on" && $png=="off" && $goodslist3['number'][$gvar['ID']] <= 0}-->
+		<a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="template/default/img/cart_email_s.gif" border="0" class="img" /></a>	
+		<!--{else}-->
+		<a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" ><img src="template/default/img/cart_s.gif" border="0" class="img" /></a>
+		<!--{/if}-->
+	<!--{/if}-->
+	</td>
+  </tr>
+   <!--{/loop}--> 
+   </tbody>
+</table>
+
+
+				<div class="line96" align="right"><a href="list.php?m=spc&ty=2">更多 &#8250;&#8250;</a>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+			<br class="clear" />
+            </div>
+
+
+         	<div class="list_line" id="show_product_3"  style="display:none;">
+				<br class="clear" />
+					<table width="96%" border="0" cellspacing="0" cellpadding="0" align="center">
+                    <thead>
+  <tr>
+    <td width="22%" height="28">&nbsp;编号/型号</td>
+    <td>&nbsp;名称</td>
+    <td width="16%">&nbsp;价格 (元)</td>
+    <td width="14%">&nbsp;包装</td>
+    <td width="10%">&nbsp;订购</td> 
+  </tr>
+   </thead>
+   <tbody>
+<!--{loop $goodslist1['list'] $gkey $gvar}-->
+  <tr onmouseover="inStyle(this);control('altimg_{$gvar[ID]}', 'show');"  onmouseout="outStyle(this);control('altimg_{$gvar[ID]}', 'hide');">
+    <td height="42"><div id="altimg_{$gvar[ID]}" class="altimg"><!--{if !empty($gvar['Picture'])}--><img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" /><!--{/if}--></div>&nbsp;{$gvar['Coding']}</td>
+    <td><a href="content.php?id={$gvar['ID']}" target="_blank" >{$gvar['Name']}</a></td>
+    <td><span class="font12">¥ {$gvar['Price']}</span><span class="gray">&nbsp;元/{$gvar['Units']}</span></td>
+    <td>&nbsp;<label>{$gvar['Casing']}</label></td>
+    <td>
+	<!--{if $gvar['CommendID']=="9"}-->
+	<a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="template/default/img/cart_email_s.gif" border="0" class="img" /></a>	
+	<!--{else}-->
+		<!--{if $pn=="on" && $png=="off" && $goodslist1['number'][$gvar['ID']] <= 0}-->
+		<a href="javascript:void(0);" onclick="noticegoods('{$gvar[ID]}');"><img src="template/default/img/cart_email_s.gif" border="0" class="img" /></a>	
+		<!--{else}-->
+		<a href="javascript:void(0);" onclick="addtocart('{$gvar[ID]}','{$gvar['cs']}');" id="shareit_{$gvar[ID]}" ><img src="template/default/img/cart_s.gif" border="0" class="img" /></a>
+		<!--{/if}-->
+	<!--{/if}-->
+	</td>
+  </tr>
+   <!--{/loop}--> 
+   </tbody>
+</table>
+
+			<div class="line96" align="right"><a href="list.php?m=spc&ty=2">更多 &#8250;&#8250;</a>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+			<br class="clear" />
+            </div>
+			<!--{/if}-->
+
+        	<div class="line"><img src="template/default/img/list_bottom_1.jpg" /></div>        
+        </div> 
+              
+    </div> 
+</div>
+
+{template bottom}
+</body>
+</html>

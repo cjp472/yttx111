@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - 订货宝 网上订货系统</title>
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link href="template/default/css/style.css?v={VERID}" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/list.css?v={VERID}" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/showpage.css?v={VERID}" rel="stylesheet" type="text/css" media="screen" />
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js?v={VERID}" type="text/javascript"></script>
+<script src="template/js/cart.js?v={VERID}" type="text/javascript"></script>
+</head>
+
+<body>
+{template header}
+<div id="contentbody">
+    	<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="cart.php">我的购物车</a>
+		<!--{loop $location $lkey $lvar}-->
+			 &#8250;&#8250; <a href="list.php?s={$lvar['SiteID']}&t={$in[t]}">{$lvar['SiteName']}</a>
+		<!--{/loop}-->
+		</div>     	
+       
+		<div class="line margin_top">
+        	<div class="list_title2">
+            	<div class="leftdiv"><img src="template/default/img/coner_top_left.jpg" border="0" /></div>
+            	<div class="leftdiv line-height" align="left">订购商品列表：</div>
+                <div class="rightdiv"><img src="template/default/img/coner_top_right.jpg" border="0" /></div>
+          </div>
+
+<div class="list_line2">
+<form id="formcart" name="formcart" method="post" action="cart.php?m=updatecart&page={$splitp['page']}">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+<tr style="background-color:#FFFF99;">
+<td  height="30" width="80" align="center">
+	<strong>快速订购： </strong></td>
+	<td width="220"><input name="inputsp" class="searchqinput" type="text" id="inputsp" size="40" onKeyDown="javascript: if(window.event.keyCode == 13) select_product();" /> 
+     </td>
+	 <td >
+                  <input name="buttonsp" type="button" class="bluebtn" id="buttonsp" value="......"  onClick="select_product();"  />
+                  (可通录入商品的ID、名称、编号、拼音码查询)
+	</td>
+	</tr>
+</table>
+			<!--{if empty($cartproduct)}-->
+			<br />&nbsp;
+			<br />&nbsp;
+					<div class="line font12" ><p align="center"><a href="list.php"><img src="template/default/img/emptycart.jpg" title="您还没有预订任何商品！,返回订购" /></a><br /><br />您还没有预订任何商品！<a href="list.php">返回订购</a></p></div>			<br />&nbsp;
+			<br />&nbsp;
+			<!--{else}-->
+   <table width="99%" border="0" cellspacing="0" cellpadding="0" align="center">
+      <thead>
+	  <tr>
+		<td width="5%" height="28">&nbsp;序号</td>
+		<td width="12%">&nbsp;编号/货号</td>
+		<td>&nbsp;商品名称</td>
+		<td width="10%">&nbsp;颜色 / 规格</td>
+		<!--{if $pns=="on"}-->
+		<td width="6%" align="right">库存</td>
+		<!--{/if}-->
+		<td width="10%" align="right">数量 / 单位</td>
+		<td width="10%" align="right">单价</td>
+		<td width="4%" align="right">折扣</td>
+		<td width="10%" align="right">折后价</td>
+		<td width="10%" align="right">小计(元)</td>
+		<td width="4%" align="center">删除</td>   
+	  </tr>
+   </thead>
+   <tbody>
+	<!--{loop $carttempproduct $cartkey $cartvar}-->
+	<!--{if ($cartvar[No] >= $splitp['pagestart'] && $cartvar[No] <=$splitp['pageend'])}-->
+	<!--{if $cartvar[library]=="empty"}-->
+	<tr id="linegoods_{$cartvar[kid]}" style="background-color:#FFFF99;"  >
+	<!--{else}-->
+	<tr id="linegoods_{$cartvar[kid]}" <!--{if fmod($cartkey,2)==0}--> style="background-color:#f9f9f9;"<!--{else}-->style="background-color:#ffffff;" <!--{/if}-->  >
+	<!--{/if}-->
+    <td height="35">&nbsp;<input name="kid[]" type="hidden" value="{$cartvar[kid]}" />{$cartvar[No]}</td>
+	    <td >&nbsp;{$cartvar[Coding]}</td>
+    <td <!--{if !empty($cartvar[Casing])}-->title="（包装：{$cartvar[Casing]}）"<!--{/if}-->><a href="content.php?id={$cartvar[id]}" target="_blank">{$cartvar[Name]}</a></td>
+    <td <!--{if !empty($cartvar[Casing])}-->title="（包装：{$cartvar[Casing]}）"<!--{/if}-->>&nbsp;<!--{if !empty($cartvar[color])}-->{$cartvar[color]}<!--{/if}--> / <!--{if !empty($cartvar[spec])}-->{$cartvar[spec]}<!--{/if}--></td>
+	<!--{if $pns=="on"}-->
+	<td class="font12h" align="right"><!--{if $cartvar[onumber]==9999999999}-->充足<!--{else}-->{$cartvar[onumber]}&nbsp;<!--{/if}--></td>
+	<!--{/if}-->
+	<td align="right" <!--{if !empty($cartvar[package])}-->title="（订购数必需为 {$cartvar[package]} 的倍数!）"<!--{/if}--> ><input name="cart_num[]" id="cart_num_{$cartvar[kid]}" type="text" size="6" maxlength="6" value="{$cartvar[number]}" onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" onfocus="this.select();"  style="width:40px;"  onBlur="checkcartnumber('cart_num_{$cartvar[kid]}','{$cartvar[package]}');"   />&nbsp;/&nbsp;{$cartvar[Units]}</td>
+	<td align="right" >¥ {$cartvar[price]} </td>
+	<td align="right" >{$cartvar[pencent]}</td>    
+    <td align="right">¥ {$cartvar[price_end]}</td>
+    <td class="font12" align="right" id="line_total_{$cartvar[kid]}">¥ {$cartvar[notetotal]}&nbsp;</td>    	
+    <td align="center"><input type="checkbox" value="del" name="kiddel_{$cartvar[kid]}" /></td>
+  </tr>
+  <!--{/if}-->
+   <!--{/loop}--> 
+
+	<!--{if $splitp['total'] > $pagesize}-->
+  <tr>
+	<td>&nbsp;</td>
+    <td height="28" class="font12h">本页小计：</td>
+	<td>&nbsp;</td>
+	<!--{if $pns=="on"}-->
+	<td >&nbsp;</td>
+	<!--{/if}-->
+		<td>&nbsp;</td>
+    <td class="font12h" id="all_number_total" align="center">{$productnum2} </td>
+	<td>&nbsp;</td>
+    <td class="font14">&nbsp;</td>
+	<td colspan="2" class="font12h" align="right" id="all_price_total">¥ {$producttotal2}&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+	<!--{/if}-->
+  <tr>
+	<td>&nbsp;</td>
+    <td height="28" class="font14">订单总计：</td>
+	<td>&nbsp;</td>
+	<!--{if $pns=="on"}-->
+	<td >&nbsp;</td>
+	<!--{/if}-->
+		<td>&nbsp;</td>
+    <td class="font14" id="all_number_total" align="center">{$productnum} </td>
+	<td>&nbsp;</td>
+    <td class="font14">&nbsp;</td>
+	<td colspan="2" class="font14" align="right" id="all_price_total">¥ {$producttotal}&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+   </tbody>
+</table>
+	<!--{if $splitp['showpage']}-->
+			<div class="list_showpage" >{$splitp['showpage']}</div>
+	<!--{/if}-->
+			<div class="list_showpage" ><a href="cart.php?m=clearcart" onClick="return confirm('确认要清空购物车吗?')"><img src="template/img/delete.gif" border="0" class="img" />&nbsp;清空购物车</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<input name="goorder" value="返回，继续订购" type="button" class="greenbtn" onclick="javascript:window.location.href='list.php'" />
+&nbsp;&nbsp;&nbsp;&nbsp;<input name="updatecart" value="更新购物车" type="submit" class="bluebtn" />&nbsp;&nbsp;&nbsp;&nbsp;
+<!--{if $isempty}-->
+<font color="red">注：黄色部份为：订货量超出可用库存数，请更新该商品的订购数量，再提交订单!</font>
+<!--{else}-->
+<input name="nextordercart" id="nextordercart" value="下一步，填写订单信息" type="button" class="redbtn" onclick="updatecartsub();" />
+<!--{/if}-->
+			</div>
+<!--{/if}-->
+			</form>
+<br />&nbsp;<br />&nbsp;<br />&nbsp;
+			<br />&nbsp;
+            </div>
+        	<div class="line" style="background-image:url(template/default/img/coner_bottom_bg.jpg); height:8px;">
+            	<div class="spanleft"><img src="template/default/img/coner_bottom_left.jpg" /></div>
+                <div class="spanright"><img src="template/default/img/coner_bottom_right.jpg" /></div>
+            </div>        
+        </div> 
+</div>
+{template bottom}
+
+    <div id="windowForm6">
+		<div class="windowHeader">
+			<h3 id="windowtitle">请选择订购商品</h3>
+			<div class="windowClose"><div class="close-form" onclick="backtocart()" title="关闭" >x</div></div>
+		</div>
+		<div id="windowContent">
+        正在载入数据...       
+        </div>
+	</div>
+</body>
+</html>

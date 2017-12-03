@@ -1,0 +1,313 @@
+<?php
+include_once ('common.php');
+include_once (SITE_ROOT_PATH."/class/islogin.php");
+include_once (SITE_ROOT_PATH."/module/orderdata.php");
+include_once ('./class/PHPExcel.php');
+$objPHPExcel = new PHPExcel();
+
+$input		=	new Input;
+$in			=	$input->parse_incoming();
+$db			= dbconnect::dataconnect()->getdb();
+
+if(!intval($in['ID']))
+{
+	Error::AlertJs('参数错误!');
+}else{	 
+	$oinfo = $db->get_row("SELECT * FROM ".DATATABLE."_order_orderinfo where OrderCompany = ".$_SESSION['cc']['ccompany']." and OrderID=".intval($in['ID'])." and OrderUserID=".$_SESSION['cc']['cid']." limit 0,1");
+}
+if(empty($oinfo['OrderID'])) Error::AlertJs('数据不存在!');
+
+$cinfo    = $db->get_row("SELECT ClientID,ClientName,ClientCompanyName,ClientTrueName,ClientPhone,ClientMobile,ClientAdd FROM ".DATATABLE."_order_client where ClientCompany = ".$_SESSION['cc']['ccompany']." and ClientID=".$oinfo['OrderUserID']." limit 0,1");
+$cartdata = $db->get_results("select  c.*,i.BrandID,i.Model,i.Coding,i.Price1,i.Price2,i.Units,i.Casing,i.CommendID from ".DATATABLE."_order_cart c left join ".DATATABLE."_order_content_index i on c.ContentID=i.ID where c.CompanyID=".$_SESSION['cc']['ccompany']." and i.CompanyID=".$_SESSION['cc']['ccompany']." and c.OrderID=".$oinfo['OrderID']." order by i.SiteID asc,c.ID asc");
+
+$valuearr = null;
+$setinfo  = $db->get_row("SELECT SetID,SetName,SetValue FROM ".DATABASEU.DATATABLE."_order_companyset where SetCompany = ".$_SESSION['cc']['ccompany']." and SetName='printf' limit 0,1");
+$valuearr1 = unserialize($setinfo['SetValue']);
+// 导出配置 by zjb  20161107
+if(empty($valuearr1['order'])) $valuearr = unserialize('a:8:{s:2:"NO";a:3:{s:4:"name";s:6:"序号";s:5:"width";s:3:"6 %";s:4:"show";i:1;}s:11:"ContentName";a:3:{s:4:"name";s:13:"商品名称 ";s:5:"width";s:0:"";s:4:"show";i:1;}s:9:"BrandName";a:3:{s:4:"name";s:6:"品牌";s:5:"width";s:4:"18 %";s:4:"show";i:1;}s:5:"Model";a:3:{s:4:"name";s:6:"型号";s:5:"width";s:3:"8 %";s:4:"show";i:1;}s:13:"ContentNumber";a:3:{s:4:"name";s:6:"数量";s:5:"width";s:3:"8 %";s:4:"show";i:1;}s:5:"Units";a:3:{s:4:"name";s:6:"单位";s:5:"width";s:3:"5 %";s:4:"show";i:1;}s:12:"PercentPrice";a:3:{s:4:"name";s:6:"单价";s:5:"width";s:4:"10 %";s:4:"show";i:1;}s:9:"LineTotal";a:3:{s:4:"name";s:7:"金额 ";s:5:"width";s:4:"12 %";s:4:"show";i:1;}}'); else $valuearr = $valuearr1['order'];
+// if(empty($valuearr1['order'])) $valuearr = unserialize('a:13:{s:2:"NO";a:3:{s:4:"name";s:6:"序号";s:5:"width";s:3:"6 %";s:4:"show";i:1;}s:11:"ContentName";a:3:{s:4:"name";s:13:"商品名称 ";s:5:"width";s:0:"";s:4:"show";i:1;}s:9:"BrandName";a:3:{s:4:"name";s:12:"生产厂家";s:5:"width";s:4:"18 %";s:4:"show";i:1;}s:5:"Model";a:3:{s:4:"name";s:7:"规格 ";s:5:"width";s:3:"8 %";s:4:"show";i:1;}s:13:"ContentNumber";a:3:{s:4:"name";s:6:"数量";s:5:"width";s:3:"8 %";s:4:"show";i:1;}s:5:"Units";a:3:{s:4:"name";s:6:"单位";s:5:"width";s:3:"5 %";s:4:"show";i:1;}s:6:"Price1";a:3:{s:4:"name";s:7:"价格1";s:5:"width";s:0:"";s:4:"show";s:0:"";}s:6:"Price2";a:3:{s:4:"name";s:7:"价格2";s:5:"width";s:0:"";s:4:"show";s:0:"";}s:12:"ContentPrice";a:3:{s:4:"name";s:6:"价格";s:5:"width";s:4:"10 %";s:4:"show";i:1;}s:14:"ContentPercent";a:3:{s:4:"name";s:6:"折扣";s:5:"width";s:3:"6 %";s:4:"show";i:1;}s:12:"PercentPrice";a:3:{s:4:"name";s:10:"折后价 ";s:5:"width";s:4:"10 %";s:4:"show";i:1;}s:9:"LineTotal";a:3:{s:4:"name";s:7:"金额 ";s:5:"width";s:4:"12 %";s:4:"show";i:1;}s:16:"CompanyInfoPrint";i:2;}'); else $valuearr = $valuearr1['order'];
+//if(empty($valuearr1['order'])) $valuearr = unserialize('a:14:{s:2:"NO";a:3:{s:4:"name";s:6:"序号";s:5:"width";s:2:"6%";s:4:"show";i:1;}s:6:"Coding";a:3:{s:4:"name";s:6:"货号";s:5:"width";s:3:"10%";s:4:"show";i:1;}s:11:"ContentName";a:3:{s:4:"name";s:12:"商品名称";s:5:"width";s:0:"";s:4:"show";i:1;}s:12:"ContentColor";a:3:{s:4:"name";s:6:"颜色";s:5:"width";s:2:"8%";s:4:"show";s:1:"1";}s:20:"ContentSpecification";a:3:{s:4:"name";s:6:"规格";s:5:"width";s:2:"8%";s:4:"show";s:1:"1";}s:13:"ContentNumber";a:3:{s:4:"name";s:6:"数量";s:5:"width";s:2:"8%";s:4:"show";i:1;}s:5:"Units";a:3:{s:4:"name";s:6:"单位";s:5:"width";s:2:"5%";s:4:"show";i:1;}s:6:"Price1";a:3:{s:4:"name";s:7:"价格1";s:5:"width";s:0:"";s:4:"show";s:0:"";}s:6:"Price2";a:3:{s:4:"name";s:7:"价格2";s:5:"width";s:0:"";s:4:"show";s:0:"";}s:12:"ContentPrice";a:3:{s:4:"name";s:6:"价格";s:5:"width";s:3:"10%";s:4:"show";s:1:"1";}s:14:"ContentPercent";a:3:{s:4:"name";s:6:"折扣";s:5:"width";s:2:"6%";s:4:"show";s:1:"1";}s:12:"PercentPrice";a:3:{s:4:"name";s:9:"折后价";s:5:"width";s:3:"10%";s:4:"show";i:1;}s:9:"LineTotal";a:3:{s:4:"name";s:6:"金额";s:5:"width";s:3:"12%";s:4:"show";i:1;}s:16:"CompanyInfoPrint";s:1:"2";}'); else $valuearr = $valuearr1['order'];
+$rightarr = array('ContentNumber','Price1','Price2','ContentPrice','ContentPercent','PercentPrice','LineTotal');
+
+unset($valuearr['CompanyInfoPrint']);
+
+//获取去厂家  by zjb 20160623
+$brandsql   = "SELECT * FROM ".DATATABLE."_order_brand where CompanyID = ".$_SESSION['cc']['ccompany']." ORDER BY BrandPinYin ASC";
+$brandsql_data = $db->get_results($brandsql);
+foreach ($brandsql_data as $val){
+    $brandsqlarr[$val['BrandID']] = $val;
+}
+$kk = 'A';
+foreach($valuearr as $k=>$v)
+{
+	if($v['show']!="1") continue;
+	$narr[$kk] = $k;
+	$endc = $kk;
+	if($k=="ContentNumber") $nkey = $kk;
+	if($k=="Price1") $n1key = $kk;
+	if($k=="Price2") $n2key = $kk;
+	$kk++;
+}
+
+$objPHPExcel->getProperties()->setCreator("订货宝 订货管理系统 DHB.HK")
+							 ->setLastModifiedBy("DingHuoBao")
+							 ->setTitle("订货宝-详细订单数据")
+							 ->setSubject("订货宝-详细订单数据")
+							 ->setDescription("订货宝-详细订单数据")
+							 ->setKeywords("订货宝 订货管理系统")
+							 ->setCategory("订单详细");
+
+$objPHPExcel->setActiveSheetIndex(0);
+$objActSheet = $objPHPExcel->getActiveSheet();
+$objActSheet->setTitle('订单'.$oinfo['OrderSN']);
+//$objActSheet->getDefaultRowDimension()->setRowHeight(20);
+
+$objActSheet->setCellValue('A1', $_SESSION['ucc']['CompanyName'].' 在线订单');
+$objActSheet->mergeCells('A1:'.$endc.'1');
+//$objActSheet->getColumnDimension('A' )->setAutoSize(true);
+foreach($narr as $key=>$val)
+{
+	$w = $valuearr[$val]['width'] * 1.4;
+	if(empty($w) && $val=="ContentName") $w = 36;
+	if(!empty($w)) $objActSheet->getColumnDimension($key)->setWidth($w);
+}
+$objActSheet->getRowDimension('1')->setRowHeight(32);
+
+$objStyleA5 = $objActSheet->getStyle('A1'); 
+//设置字体    
+$objFontA5 = $objStyleA5->getFont();   
+$objFontA5->setName('黑体' );   
+$objFontA5->setSize(18);   
+$objFontA5->setBold(true);     
+//$objFontA5 ->getColor()->setARGB('FF999999' );
+
+//设置对齐方式
+$objAlignA5 = $objStyleA5 ->getAlignment();   
+$objAlignA5->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+//$objAlignA5->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_TOP);
+
+$objActSheet->setCellValue('A2', '订单号：'.$oinfo['OrderSN']);
+$objActSheet->mergeCells('A2:B2');
+
+$objActSheet->setCellValue('C2', '客户：'.$cinfo['ClientCompanyName']);
+$objActSheet->mergeCells('C2:F2');
+
+$objActSheet->setCellValue('G2', '订购时间：'.date("Y-m-d H:i",$oinfo['OrderDate']));  
+$objActSheet->mergeCells('G2:'.$endc.'2');
+$objActSheet->getStyle('G2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+$objActSheet->getStyle('A2:'.$endc.'2')->getFont()->setBold(true);
+
+foreach($narr as $key=>$val)
+{
+	$objActSheet->setCellValue($key.'3', $valuearr[$val]['name']);
+}
+
+$objActSheet->getStyle('A3:'.$endc.'3')->getFont()->setBold(true);
+$objActSheet->getStyle('F2:'.$endc.'3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+	$alltotal   = 0;
+	$alltotal1 = $alltotal2 = 0;
+	$allnumber = 0;
+	$baseRow   = 3;
+	$n = 0;
+	
+	foreach($cartdata as $ckey=>$cvar)
+	{
+		$baseRow++;
+		$n++;
+		$cvar['BrandName'] = $brandsqlarr[$cvar['BrandID']]['BrandName'];
+		$cvar['ContentName'] = html_entity_decode($cvar['ContentName'], ENT_QUOTES,'UTF-8');
+				
+		$alltotal1  = $alltotal1 + $cvar['Price1'] * $cvar['ContentNumber'];
+		$alltotal2  = $alltotal2 + $cvar['Price2'] * $cvar['ContentNumber'];
+		$linetotal = $cvar['ContentNumber']*$cvar['ContentPrice']*$cvar['ContentPercent']/10;
+		$alltotal   = $alltotal + $linetotal;
+		$allnumber = $allnumber + $cvar['ContentNumber'];
+		foreach($narr as $key=>$val)
+		{
+			if($val=="NO")
+			{
+				$vv = $n;
+			}else if($val=="PercentPrice"){
+				$vv = $cvar['ContentPrice']*$cvar['ContentPercent']/10;
+			}else if($val=="LineTotal"){
+				$vv = $linetotal;
+			}else if($val=="ContentName" && $cvar['CommendID'] == '2'){
+			    $vv = "【特】".$cvar[$val];
+			}else{
+				$vv = $cvar[$val];
+			}
+			if($key=="A" || $key=="B")
+			{
+				$objActSheet->setCellValueExplicit($key.$baseRow , $vv,PHPExcel_Cell_DataType::TYPE_STRING); 
+			}else{
+				$objActSheet->setCellValue($key.$baseRow, $vv);
+			}
+		}	
+	}
+	
+$alltotal = sprintf("%01.2f", round($alltotal,2));
+
+if((floatval($oinfo['OrderTotal']) * 100) != (floatval($alltotal) * 100)){
+	$now = "原价：¥ " . number_format($alltotal, 2, '.', '') . "\r\n";
+	$now .= "特价：¥ " .  number_format($oinfo['OrderTotal'], 2, '.', '');
+	$orderMoney = $oinfo['OrderTotal'];
+}else{
+	$now = number_format($alltotal, 2, '.', '');
+	$orderMoney = $alltotal;
+}
+
+	
+$baseRow++;
+$objActSheet->setCellValue('A'.$baseRow, '合计：');
+//$objActSheet->setCellValue('B'.$baseRow, '大写：'.toCNcap($alltotal));//原订单金额
+$objActSheet->setCellValue('B'.$baseRow, '大写：'.toCNcap($orderMoney));
+$objActSheet->setCellValue($nkey.$baseRow, $allnumber);
+if(!empty($n1key)) $objActSheet->setCellValue($n1key.$baseRow, $alltotal1);
+if(!empty($n2key)) $objActSheet->setCellValue($n2key.$baseRow, $alltotal2);
+$objActSheet->setCellValue($endc.$baseRow, $now);
+$objActSheet->getStyle($endc.$baseRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+$objPHPExcel->getActiveSheet()->getStyle('A'.$baseRow.':'.$endc.$baseRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER); 
+//$objActSheet->setCellValue($endc.$baseRow, $alltotal);	//原订单金额
+$objActSheet->mergeCells('B'.$baseRow.':C'.$baseRow);
+$objActSheet->getStyle('A'.$baseRow.':'.$endc.$baseRow)->getFont()->setBold(true);
+
+
+$cartdata_gifts = $db->get_results("select  c.*,i.BrandID,i.Model,i.Coding,i.Price1,i.Price2,i.Units,i.Casing from ".DATATABLE."_order_cart_gifts c left join ".DATATABLE."_order_content_index i on c.ContentID=i.ID where c.CompanyID=".$_SESSION['cc']['ccompany']." and i.CompanyID=".$_SESSION['cc']['ccompany']." and c.OrderID=".$oinfo['OrderID']." order by i.SiteID asc,c.ID asc");
+if(!empty($cartdata_gifts))
+{
+	$baseRow++;
+	$objActSheet->setCellValue('A'.$baseRow, ' 赠品清单：');
+	$objActSheet->mergeCells('A'.$baseRow.':'.$endc.$baseRow);
+	$objActSheet->getStyle('A'.$baseRow.':'.$endc.$baseRow)->getFont()->setBold(true);
+	$alltotal = 0;
+	$allnumber = 0;
+	$n=1;
+	foreach($cartdata_gifts as $ckey=>$cvar)
+	{
+		$baseRow++;
+		$n++;
+		$cvar['BrandName'] = $brandsqlarr[$cvar['BrandID']]['BrandName'];
+		$cvar['ContentName'] = html_entity_decode($cvar['ContentName'], ENT_QUOTES,'UTF-8');
+		$cvar['ContentPercent'] = 10;
+		$linetotal = $cvar['ContentNumber']*$cvar['ContentPrice'];
+		$alltotal  = $alltotal + $linetotal;
+		$allnumber = $allnumber + $cvar['ContentNumber'];
+
+		foreach($narr as $key=>$val)
+		{
+			if($val=="NO")
+			{
+				$vv = $n;
+			}else if($val=="PercentPrice"){
+				$vv = $cvar['ContentPrice'];
+			}else if($val=="LineTotal"){
+				$vv = $linetotal;
+			}else{
+				$vv = $cvar[$val];
+			}
+			if($key=="A" || $key=="B")
+			{
+				$objActSheet->setCellValueExplicit($key.$baseRow , $vv,PHPExcel_Cell_DataType::TYPE_STRING); 
+			}else{
+				$objActSheet->setCellValue($key.$baseRow, $vv);
+			}
+		}	
+	}
+	$alltotal = sprintf("%01.2f", round($alltotal,2));
+	$baseRow++;
+	$objActSheet->setCellValue('A'.$baseRow, '合计：');
+	$objActSheet->setCellValue('B'.$baseRow, '大写：'.toCNcap($alltotal));
+	$objActSheet->setCellValue($nkey.$baseRow, $allnumber);
+	$objActSheet->setCellValue($endc.$baseRow, $alltotal);
+	$objActSheet->mergeCells('B'.$baseRow.':C'.$baseRow);
+	$objActSheet->getStyle('A'.$baseRow.':'.$endc.$baseRow)->getFont()->setBold(true);
+}
+
+$baseRow++;
+$objActSheet->setCellValue('A'.$baseRow, '收货人：'.$oinfo['OrderReceiveCompany'].' / '.$oinfo['OrderReceiveName']);
+$objActSheet->mergeCells('A'.$baseRow.':D'.$baseRow);
+$objActSheet->setCellValue('E'.$baseRow, '联系电话：'.$oinfo['OrderReceivePhone']);
+$objActSheet->mergeCells('E'.$baseRow.':'.$endc.$baseRow);
+
+$baseRow++;
+$objActSheet->setCellValue('A'.$baseRow, '收货地址：'.$oinfo['OrderReceiveAdd']);
+$objActSheet->mergeCells('A'.$baseRow.':'.$endc.$baseRow);
+
+$baseRow++;
+$objActSheet->setCellValue('A'.$baseRow, '备注说明：'.$oinfo['OrderRemark']);
+$objActSheet->mergeCells('A'.$baseRow.':'.$endc.$baseRow);
+$objActSheet->getStyle('A'.$baseRow)->getAlignment()->setWrapText(true);
+
+//设置边框
+$styleThinBlackBorderOutline = array(
+	'borders' => array(
+		'allborders' => array(
+			'style' => PHPExcel_Style_Border::BORDER_THIN,
+			'color' => array('argb' => 'FF666666'),
+		),
+	),
+);
+$objPHPExcel->getActiveSheet()->getStyle('A3:'.$endc.$baseRow)->applyFromArray($styleThinBlackBorderOutline);
+$objPHPExcel->getActiveSheet()->getStyle('C4:'.$endc.$baseRow)->getAlignment()->setWrapText(true);
+
+$baseRow++;
+$objActSheet->setCellValue('A'.$baseRow, '');
+$objActSheet->mergeCells('A'.$baseRow.':B'.$baseRow);
+$objActSheet->setCellValue('G'.$baseRow, '导出时间：'.date("Y-m-d H:i"));  
+$objActSheet->mergeCells('G'.$baseRow.':'.$endc.$baseRow);
+$objStyleBottom = $objActSheet->getStyle('G'.$baseRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+$objActSheet->getStyle('A2:'.$endc.$baseRow)->getFont()->setSize(10);
+
+$ua = $_SERVER["HTTP_USER_AGENT"];
+$filename = '订单_'.$oinfo['OrderSN'].'.xls';
+$encoded_filename = urlencode($filename);
+$encoded_filename = str_replace("+", "%20", $encoded_filename);
+header('Content-Type: application/vnd.ms-excel');
+if (preg_match("/MSIE/", $ua)) {
+	header('Content-Disposition: attachment; filename="' . $encoded_filename . '"');
+} else if (preg_match("/Firefox/", $ua)) {
+	header('Content-Disposition: attachment; filename*="utf8\'\'' . $filename . '"');
+} else {
+	header('Content-Disposition: attachment; filename="' . $filename . '"');
+}
+header('Cache-Control: max-age=0');	
+
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+$objWriter->save('php://output');
+exit;
+
+
+ function toCNcap($data){
+   $capnum=array("零","壹","贰","叁","肆","伍","陆","柒","捌","玖");
+   $capdigit=array("","拾","佰","仟");
+   $subdata=explode(".",$data);
+   $yuan=$subdata[0];
+   $j=0; $nonzero=0;
+   for($i=0;$i<strlen($subdata[0]);$i++){
+      if(0==$i){ //确定个位 
+         if($subdata[1]){ 
+            $cncap=(substr($subdata[0],-1,1)!=0)?"圆":"圆零";
+         }else{
+            $cncap="圆";
+         }
+      }   
+      if(4==$i){ $j=0;  $nonzero=0; $cncap="万".$cncap; } //确定万位
+      if(8==$i){ $j=0;  $nonzero=0; $cncap="亿".$cncap; } //确定亿位
+      $numb=substr($yuan,-1,1); //截取尾数
+      $cncap=($numb)?$capnum[$numb].$capdigit[$j].$cncap:(($nonzero)?"零".$cncap:$cncap);
+      $nonzero=($numb)?1:$nonzero;
+      $yuan=substr($yuan,0,strlen($yuan)-1); //截去尾数	  
+      $j++;
+   }
+
+   if($subdata[1]){
+     $chiao=(substr($subdata[1],0,1))?$capnum[substr($subdata[1],0,1)]."角":"零";
+     $cent=(substr($subdata[1],1,1))?$capnum[substr($subdata[1],1,1)]."分":"零分";
+   }
+   $cncap .= $chiao.$cent."整";
+   $cncap=preg_replace("/(零)+/","\\1",$cncap); //合并连续“零”
+   return $cncap;
+ }
+?>

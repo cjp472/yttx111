@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<nav class="animated" id="menu">
+    <ul data-menu-active>
+        <li> <!-- ui-sref="empty" -->
+            <a href="#" class="active"><!-- &#xe600; -->
+                <!--<p class="icon icon-home-outline"></p>-->
+                <img src="img/10.png" id="img00"  onclick="changeImg(imgid)" style=""alt=""/>
+                <p>首页</p>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;" ng-click="changePath('/goods-sort');">
+                <!--<p class="icon icon-list"></p>-->
+                <img src="img/01.png" id="img01" onclick="changeImg(imgid)" alt=""/>
+                <p>分类</p>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;" ng-click="changePath('/find');">
+                <!--<p class="icon icon-star"></p>-->
+                <img src="img/02.png" id="img02"  onclick="changeImg(imgid)" alt=""/>
+                <p>药企</p>
+            </a>
+        </li>
+        <li style="position: relative;">
+            <a href="javascript:;" ng-click="changePath('/my-cart');">
+                <!--<p class="icon icon-cart"></p>-->
+                <img src="img/03.png" id="img03"  onclick="changeImg(imgid)" alt=""/>
+                <p>购物车</p>
+                <span ng-show="cartGoods.length!=0" class="caret caret-index"></span>
+            </a>
+        </li>
+
+        <li>
+            <a href="javascript:;" ng-click="changePath('/my-home');">
+                <!--<p class="icon icon-head"></p>-->
+                <img src="img/04.png" id="img04"  onclick="changeImg(imgid)" alt=""/>
+                <p>我的</p>
+            </a>
+        </li>
+    </ul>
+</nav>
+</body>
+</html>

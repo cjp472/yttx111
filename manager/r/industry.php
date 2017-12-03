@@ -1,0 +1,133 @@
+<?php 
+$menu_flag = "manager";
+include_once ("header.php");
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><? echo SITE_NAME;?> - 管理平台</title>
+<link href="css/main.css?v=<? echo VERID;?>" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="css/jquery.treeview.css" />
+
+<script src="../scripts/jquery.min.js" type="text/javascript"></script>
+<script src="../scripts/jquery.cookie.js" type="text/javascript"></script>
+<script src="../scripts/jquery.treeview.js" type="text/javascript"></script>
+<script src="../scripts/jquery.blockUI.js" type="text/javascript"></script>
+
+<script src="js/manager.js?v=<? echo VERID;?>" type="text/javascript"></script>
+
+<script type="text/javascript">
+/******tree****/
+		$(function() {
+			$("#tree").treeview({
+				collapsed: true,
+				animated: "medium",
+				control: "#sidetreecontrol",
+				persist: "location"
+			});
+		})
+</script>
+</head>
+
+<body>
+<?php include_once ("top.php");?>
+<?php include_once ("inc/son_menu_bar.php");?>
+    
+
+    <div id="bodycontent">
+    	<div class="lineblank"></div>        
+
+		<div id="searchline">
+        	<div class="rightdiv">
+        	 <div class="locationl"><a name="editname"></a><strong>当前位置：</strong><a href="manager.php">客户管理</a> &#8250;&#8250; <a href="industry.php">行业管理</a> </div>
+          </div>
+            
+        </div>
+
+    	
+        <div class="line2"></div>
+        <div class="bline" >
+
+       	  <div id="sortleft">
+<!-- tree --> 
+
+<div id="sidetree"> 
+<div class="treeheader">&nbsp;<strong>行业分类</strong>&nbsp;&nbsp;(<a href="industry.php" title="新增行业后，刷新后方能看到效果。">刷新行业</a>)</div>  	  
+<div id="sidetreecontrol"><img src="css/images/home.gif" alt="行业"  />&nbsp;&nbsp;[ <a href="?#">关闭</a> | <a href="?#">展开</a> ]</div>
+<ul id="tree">
+	<?php 
+		$sortarr = $db->get_results("SELECT IndustryID,IndustryName,IndustryAbout,IndustryOrder FROM ".DATABASEU.DATATABLE."_order_industry ORDER BY IndustryID ASC ");
+		foreach($sortarr as $svar)
+		{
+			echo '<li><a href="#" onclick="set_edit_industry(\''.$svar['IndustryID'].'\',\''.$svar['IndustryName'].'\',\''.$svar['IndustryAbout'].'\')">'.$svar['IndustryName'].'</a></li>';
+		}
+	?>	
+</ul>
+ </div>
+<!-- tree -->  
+<div>&nbsp;<br />点击相应的行业<br />在右边进行修改,删除操作</div>
+</div>
+
+
+<div id="sortright">
+ <form id="MainForm" name="MainForm" enctype="multipart/form-data" method="post" target=""  action="">
+			<fieldset title="“*”为必填项！" class="fieldsetstyle">
+		<legend>新增行业</legend>
+       
+              <table width="92%" border="0" cellpadding="4" cellspacing="1" bgcolor="#FFFFFF" class="inputstyle">              
+                <tr>
+                  <td width="16%" bgcolor="#F0F0F0"><div align="right">行业名称：</div></td>
+                  <td width="55%" bgcolor="#FFFFFF"><label>
+                    <input type="text" name="data_IndustryName" id="data_IndustryName" />
+                    <span class="red">*</span></label></td>
+                </tr>
+                <tr>
+                  <td bgcolor="#F0F0F0"><div align="right">行业描述：</div></td>
+                  <td bgcolor="#FFFFFF"><textarea name="data_IndustryAbout" cols="70" rows="4" id="data_IndustryAbout" ></textarea></td>
+                </tr>
+            </table>
+		</fieldset>
+            <div class="rightdiv sublink" style="padding-right:20px;">
+			<input name="saveclientid" type="button" class="button_1" id="saveclientid" value="保 存" onclick="do_save_industry();" />
+			</div>
+
+            
+		<fieldset  class="fieldsetstyle">
+			<legend>修改行业（先点击左边相应的行业）</legend>
+			<table width="92%" border="0" cellpadding="4" cellspacing="1" bgcolor="#FFFFFF" class="inputstyle">
+             
+                <tr>
+                  <td width="16%" bgcolor="#F0F0F0"><div align="right">行业名称：</div></td>
+                  <td width="55%" bgcolor="#FFFFFF"><label>
+                    <input type="hidden" name="edit_IndustryID" id="edit_IndustryID" />
+					<input type="text" name="edit_IndustryName" id="edit_IndustryName" />
+                    <span class="red">*</span></label></td>
+                </tr>
+                <tr>
+                  <td bgcolor="#F0F0F0"><div align="right">行业描述：</div></td>
+                  <td bgcolor="#FFFFFF"><textarea name="edit_IndustryAbout" cols="70" rows="4" id="edit_IndustryAbout" ></textarea></td>
+                </tr>
+            </table>
+           </fieldset>    
+            
+            <div class="rightdiv sublink" style="padding-right:20px;">
+			<input name="saveeditid" type="button" class="button_1" id="saveeditid" value="保 存" onclick="do_save_edit_industry();" />
+			<input name="savedelid" type="button" class="button_3" id="savedelid" value="删 除" onclick="do_delete_industry();" />
+
+              <INPUT TYPE="hidden" name="referer" value ="" >
+      </form>
+
+        </div>
+              
+          </div>    
+        <br style="clear:both;" />
+
+    </div>
+    
+    <? include_once ("bottom.php");?>
+
+<iframe name="exe_iframe" style="width:0; height:0;" frameborder="0" scrolling="no"></iframe> 
+</body>
+</html>

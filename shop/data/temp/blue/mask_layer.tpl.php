@@ -1,0 +1,39 @@
+<div id="mask" class="xftx" style="height:100%;width:100%;position:fixed;background:#000;top:0px;z-index:9999999;display:none;">
+</div>
+<div class="xftx" id="xftx_content" style="width:490px;height:210px;background:#fff;border-radius:3px;z-index:999999990;position:fixed;top:0px;display:none;">
+    <div style="border-bottom:1px solid #ccc;background:rgb(106,158,218);height:45px;line-height:45px;margin-bottom:0px;">
+        <h2 style="color:#fff;text-align:center;font-weight:150;margin:0px;">操作提醒</h2>
+    </div>
+    <div style="height:60px;margin:0px;">
+        <p style="line-height:25px;text-align:center;font-size:14px;margin:20px">请在新打开页面上完成下一步操作，未完成前请不要刷新或关闭此窗口</p>
+    </div>
+    <div style="text-align:center;">
+        <button onclick="window.location.reload();" style="font-family:微软雅黑;cursor:pointer;width:140px;height:40px;background:rgb(106,158,218);border:none;border-radius: 3px;color:#fff;font-size:14px;margin-right:10px;">完成操作</button>
+        <button onclick="window.location.reload();" style="font-family:微软雅黑;cursor:pointer;width:140px;height:40px;background:#f5f5f5;border:1px solid #ccc;border-radius: 3px;color:#000;font-size:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);">关闭</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+//弹出遮罩层
+function openMaskLayer(){
+
+var mask = $("#mask"),
+xftxLayer = $("#xftx_content");
+
+var W = $(window).width(), 
+H = $(window).height();
+
+var layerW = xftxLayer.width(),
+layerH = xftxLayer.height();
+
+var scroll = $(window).scrollTop();
+
+//显示
+xftxLayer.css({
+"top" : (H - layerH) / 2 + 'px',
+"left" : (W - layerW) / 2 + 'px'
+}).show();
+
+mask.css('opacity', 0.6).show();
+}
+</script>

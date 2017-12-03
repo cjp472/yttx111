@@ -1,0 +1,364 @@
+<!--{if DHB_RUNTIME_MODE === 'experience'}-->
+<script type="text/javascript">
+function do_save_experience_contact_un(){
+	$('#un_set_contact').css('opacity','0.5').removeAttr('onclick').text('等待中...');
+
+	$.post("do_feedback.php",
+		{m:"contact_add_save_un"},
+		function(data){
+		data = $.trim(data);
+			if(data == "ok"){
+				window.location.reload();
+			}else{
+				alert(data);
+				$('#un_set_contact').css('opacity','1').attr('onclick','do_save_experience_contact_un();').text('联系服务专员');
+			}
+		}
+	);
+}
+</script>
+
+<style type="text/css">
+/* 头部菜单 */
+.clearfix:after{content:'\0020';display:block;height:0;clear:both;visibility:hidden;}
+.clearfix{*zoom:1;}
+.float-left{float:left;}
+.float-right{float:right;}
+.page-top{
+	width: 100%;
+	height: 4em;
+	background-color: #ff4a00;
+	color: #FFFFFF;
+}
+.page-top > div{
+	width: 100em;
+	margin: auto;
+	padding-top: .7em;
+	color: #FFFFFF;
+}
+
+.page-top > div  button{
+	font-family: Microsoft YaHei,SimSun,Arial;
+	border-radius: .4em;
+	width: 10em;
+	height: 2.4em;
+	/*padding: .4em .6em;
+	*padding: .3em .6em;
+	*overflow:visible;*/
+	cursor: pointer;
+}
+.page-top > div  button.go-free ,.page-top > div .go-bsmm{
+	background-color: transparent;
+	border: 1px solid #FFFFFF;
+	color: #FFFFFF;
+}
+.page-top > div  button.go-pay{
+	border: none;color: #f57256;
+	background-color: #FFFFFF;
+	width: 9em;
+	/*padding: .4em .8em;
+	*padding: .3em .8em;
+	*overflow:visible;*/
+}
+.page-top > div > .float-right > span{
+	margin-right: 1.4em;
+	*vertical-align: bottom;
+	cursor: pointer;
+}
+.page-top > div > .float-right > span > em{
+	display: inline-block;
+	width: 1.5em;height: 1.666667em;
+	vertical-align: -0.6666667em;
+	*vertical-align: -0.4em;
+}
+.page-top > div > .float-right > span.help > em{
+	background: url(/template/img/help.png) no-repeat;
+}
+.page-top > div > .float-right > span.seek > em{
+	background: url(/template/img/help.png) no-repeat -20px 0;
+}
+</style>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	//验证IE版本
+	if(parseInt($.browser.version) == 6){
+		$("#fix-ie6").show();
+		$(".experience_content").remove();
+	}
+//	setTimeout(function(){$("#experience_mask experience_opacity").css('height', '10px');alert($("#experience_mask experience_opacity").length)}, 500);
+	
+});
+</script>
+
+<div style="left: 0;position: fixed !important;top: 0;width: 100%;z-index: 1000;height:50px;">
+	<div class="page-top">
+		<div class="clearfix" style="_margin-top: 10px">
+		    <div class="float-left">
+    			<span style="*vertical-align: super;">您正在体验演示账号，账号内容为模拟内容，操作仅在当天保存。若想正式使用您可以</span>&nbsp;&nbsp;
+    			<button class="go-free" onclick="window.open('http://m.dhb.hk/pro/openAccount.php');">开通20用户免费版</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    			<button class="go-pay" onclick="window.open('http://m.dhb.hk/pro/openAccount.php?action=buy');">购买无限版</button>
+			</div>
+			<div class="float-right">
+				<!--{if !($bContact_excerience===false && $_SESSION['cc']['ccompany'] > 109)}-->
+				<!--<span class="seek" href="javascript:void(0);" onclick="do_save_experience_contact_un();" id="un_set_contact"><em></em> 联系服务专员</span>-->
+				<!--{/if}-->
+				<!--{if ($bError_experience === true)}-->
+				【行业未指定，无法切换】
+				<!--{else}-->
+				{eval $sFrontUrl = makeAdmin($sOldIndustry_experience,$sCp_experience);}
+				<span class="seek" onclick="window.open('http://wpa.b.qq.com/cgi/wpa.php?ln=2&uin=4006311682')"><em></em> 售前咨询</span>
+				<button class="go-bsmm" onclick="window.location.href='{$sFrontUrl}';">切换到管理端</button>
+				<!--{/if}-->
+			</div>
+		</div>
+	</div>
+	<div id="fix-ie6" style="display:none;">
+		<p style="line-height:35px;text-align:center;font-size:16px;margin:0px;padding:0px;color:#ff4a00;font-weight:bold">尊敬的客户，为保障信息的安全和展现，建议升级浏览器 &nbsp;&nbsp;&nbsp;<span style="font-size:12px;font-weight:normal;">前往下载>> &nbsp;<a style="color:#ff4a00;" href="http://se.360.cn/index.html" target="_blank">360安全浏览器</a>
+		&nbsp;&nbsp;<a style="color:#ff4a00;" href="http://www.firefox.com.cn/" target="_blank">火狐浏览器</a>
+		</span></p>
+	</div>
+</div>
+<!--{/if}-->
+
+<div id="tip" onclick="show_hide('hide','tip')"><img src="template/img/gou.png"  border="0" /> 正在执行，请稍候...</div>
+
+	<div id="head" <!--{if DHB_RUNTIME_MODE === 'experience'}-->style="clear:both; display:bock; padding:0;margin-top:50px;*padding-top:50px;_margin-top:0px;_padding-top:0px;"<!--{/if}-->>
+		<div id="headdiv">
+			<div class="logo"><a href="home.php"><!--{if empty($_SESSION['ucc']['CompanyLogo'])}--><img src="template/img/logo.jpg" alt="{$_SESSION['ucc']['CompanyName']} - 订货宝" border="0" /><!--{else}--><img src="{RESOURCE_PATH}{$_SESSION['ucc']['CompanyLogo']}" alt="{$_SESSION['ucc']['CompanyName']} - 订货宝" border="0" /><!--{/if}--></a></div>
+			<div class="information">欢迎 <span class="test_1">{$_SESSION['cc']['ccompanyname']}</span> 光临  <span class="test_1">{$_SESSION['ucc']['CompanySigned']}</span> 网上订货系统!   &nbsp;&nbsp; <span class="test_1"> [ <a href="login.php?m=logout">退出</a> ]</span>  &nbsp;&nbsp; <span  style="display:none;" class="test_1">[ <a target="_blank" href="http://help.dhb.net.cn/client.php?skey=<!--{echo think_encrypt(HELP_URL,ENCODE_KEY)}-->">帮助?</a> ]</span></div>
+            <!--{if commondata::get_is_show()}-->
+			<div style="position:absolute;border:1px solid rgb(192,220,241);bottom:10px;line-height:40px;border-radius:5px;background:rgb(229,241,255);right:0px;width:380px;">
+                <span style="margin-left:20px;color:rgb(32,128,168);font-size:14px;">当前余额：<span style="color:#f60;font-size:20px;"><!--{echo commondata::get_amount()}--></span>元</span>
+                <a href="finance.php?m=new&t=y" title="立即支付" style="position:absolute;right:20px;top:7px;"><img src="template/img/pay_btn.jpg" /></a>
+            </div>
+			<!--{/if}-->
+		</div>
+	</div>
+
+	<div id="nav" style="clear:both;">
+		<div class="menu">
+			<div class="nav_left"></div>
+			<ul>
+					<li class="home"><a href="home.php">首 页</a></li>
+					<li><a href="list.php">商 品</a></li>
+					<li><a href="list.php?m=spc">特价促销</a></li>      
+					<li><a href="myorder.php">我的订单</a></li>
+					<li><a href="consignment.php">发货单</a></li>
+					<li><a href="return.php">退货单</a></li> 
+					<li><a href="finance.php">付款单</a></li>
+					<li><a href="statistics.php">数据统计</a></li>
+					<li><a href="forum.php">在线客服</a></li>     	
+					<li><a href="infomation.php">信 息</a></li>	
+					<li><a href="my.php?m=profile">我的药店账户</a></li>
+			</ul>
+			<div class="nav_right"></div>
+		</div>
+		<div id="nav_c">
+			<div class="nav_serch">
+				<form name="searchform" id="searchform" action="search.php" method="get">
+					<div>商品搜索：</div>   
+					<div class="sc"><input type="text" name="kw" id="kw" class="scinput" onfocus="this.select();" value="{$enkw}" title="可以输入多个关键词组合搜索 以空格隔开" /></div> 
+					<div class="nav_serch_div"><input name="searchbutton" value="" type="submit" class="searchbtn"  /></div>
+					<div>&nbsp;&nbsp; </div>
+				</form>
+			</div>
+  
+			<div class="nav_car" >
+			<!--{if !$isnotshowloadcart}-->
+				<div id="topcart" style="width:auto;">
+						<div id="to_topcart" onclick="javascript:window.location.href='cart.php'">&nbsp; </div>
+						<div id="Shopping_Cart_info" class="Shopping_Cart_info"  >
+							<p align="center">正在载入数据......</p>
+            			</div>
+				</div>
+			<!--{/if}-->
+			您已预订<span class="test_1" id="cartnumber_2"><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></span> 种商品！</div><div class="nav_car_gou"><a href="cart.php"><img src="{CONF_PATH_IMG}images/car_1.jpg" /></a><span id="cartnumber"></span>
+
+			</div>
+		</div>
+	</div>
+
+
+<style type="text/css">
+#topcart{
+    position:absolute; 
+	z-index:99; 
+	display: block;
+	height: 30px; 
+	width: 100%;
+}
+#to_topcart{
+    position:absolute; 
+	z-index:100; 
+	display: block;
+	height: 28px; 
+	width: 280px;
+	left:0;
+	top:0;
+	cursor:pointer;
+}
+.Shopping_Cart_info{ 
+    position:absolute; 
+	z-index:99; 
+	display: none;
+	min-height: 80px; 
+	height: auto;
+	width: 281px;
+	left:-32px;
+	top:27px;
+	background-color:#f4f8e1;
+	border: #f5c91e 1px solid;
+	border-top: #f5c91e 0px solid;
+	overflow:visible;
+}
+.Shopping_Cart_info ul{ list-style:none; margin:10px;}
+.Shopping_Cart_info ul li{ height:25px; margin-top:3px; padding-bottom:3px; display:block; width:260px; border-bottom:#efefef 1px dashed; font-weight:normal;}
+.Shopping_Cart_info ul li b{ float:left; height:25px; line-height:25px; margin-right:5px; width:180px; overflow:hidden; font-weight:normal;}
+.Shopping_Cart_info ul li b a{ color:#333;}
+.Shopping_Cart_info ul li span{ width:20px; height:20px; background-image:url(template/img/cross.png); margin-top:2px; float:right; margin-left:0px; font-weight:normal; cursor:pointer;}
+.Shopping_Cart_btn input{ background-color:#ff8a00; color:#FFF; width:70px; height:28px; text-align:center;  float:left;  line-height:22px; cursor:pointer;}
+.Shopping_Cart_btn input:hover{ background-color:#f1691b;}
+.Shopping_Cart_info1{ margin:10px; width:260px; height:auto; text-align: right; }
+.Shopping_Cart_info1 .text{ line-height:23px; width:260px;}
+.Shopping_Cart_info1 .text i {	font-style: normal;    font-weight: bold;    color: #e4393c;}
+.TextOut{ width:38px; }
+</style>
+<!--{if DHB_RUNTIME_MODE === 'experience' && $bContact_excerience===false && $_SESSION['cc']['ccompany'] > 109}-->
+<!-- <div class="experience_mask experience_opacity" id="experience_mask experience_opacity"></div>
+<div class="experience_content">
+<h1>温馨提示</h1>
+	为了更好的帮助您体验系统，我们为您安排了一位服务专员，<br />请留下您的联系信息以便她与您联系：
+	<div class="experience_item">手机号码<input type="text" placeholder="请输入您的正确的手机号码以便联络" id="experience-Phone" name="experience-Phone"> <br /><span id="experience_phone_error" class="experience_error"></span></div>
+	<div class="experience_item" style=" padding-left:13px;">联系人<input type="text" placeholder="请填写联系人" id="experience-Name" name="experience-Name"><br /><span id="experience_name_error" class="experience_error"></span></div>
+	<div class="experience_button">
+		<a  onclick="do_save_experience_contact();" value="确定" id="experience-submitbutton" name="" class="btn">确定</a>
+		<!--{if $sCookieContactUn}-->
+		<a onclick="do_save_experience_contact2();" value="跳过" id="experience-submitbutton2" name="" class="btn1">跳过</a>
+		<!--{/if}-->
+	</div>
+</div> -->
+
+<!--{eval $sWidthCode = !$sCookieContactUn ? 360 : 140;}-->
+
+<style type="text/css">
+html,body{ height:100%; margin:0; padding:0; font-size:14px;}
+.experience_mask{height:100%; width:100%;  _position:absolute;position:fixed; top:0; z-index:9999999;left:0; }
+.experience_opacity{ opacity:0.5; filter: alpha(opacity=30); background-color:#000; }
+.experience_content{-webkit-box-shadow: 8px 3px 8px;  -moz-box-shadow: 8px 8px 8px;  box-shadow: 3px 3px 3px; -webkit-border-radius: 2px; border-radius: 2px; height:300px; width:500px; overflow:auto; border:2px solid #ccc;border:none; background-color:#fff; position:fixed; top:50%; left:50%; margin:-160px auto auto -300px; z-index:10000000; word-wrap: break-word; padding:25px;font-size:15px;color:#565655;padding-bottom:25px; text-align:center }
+.experience_content h1{ color:#f57256; font-size:24px; font-weight: normal; line-height:36px; margin-top:0px;}
+.experience_item{display:block;margin:15px 0;font-size:14px;font-weight:bold;}
+.experience_item input{width:410px;height:50px;width:300px;height:30px;margin-left:10px;margin-right:8px;font-size:14px;border:1px solid #ccc;padding:0px 3px;color:#999;}
+.experience_error{font-weight:normal;font-size:14px;color:red;}
+.experience_button{text-align:center; width:324px; margin:0 auto;}
+
+
+.experience_item span{ height:15px; text-align:left; width:250px; display:block; margin:0 auto;}
+.btn{width:{$sWidthCode}px; height:35px; text-align:center; display:block;  color:#fff; border-radius:90px; font-size:18px; background-color:#FC5A38; float:left; margin:5px;cursor:pointer; overflow:hidden; line-height:35px;}
+.btn1{width:150px; height:33px; text-align:center; display:block;border-radius:90px; font-size:18px; background-color:#fff; float:left; margin:5px;cursor:pointer; overflow:hidden; border:1px solid #ff5c1a; color:#ff5c1a;  line-height:33px;}
+.btn:hover{ background-color:#fd4900; color:#fff;text-decoration:none;}
+.btn1:hover{ background-color:#fd4900; color:#fff; text-decoration:none;}
+</style>
+<script type="text/javascript">
+/* 手机号码验证 */
+function isMobile(nMobile){
+	var mobile = /^((1[3|5|7|8][0-9]{1})+\d{8})$/;
+	var length = nMobile.length;
+	return length == 11 && mobile.test(nMobile);
+}
+
+$(document).ready(function(){
+	$('#experience-Phone').blur(function(){
+		if($(this).val() && isMobile($(this).val())){
+			$(this).css('border-color','#ccc');
+			$('#experience_phone_error').html('');
+		}else if($(this).val() && !isMobile($(this).val())){
+			$('#experience_phone_error').html('手机号码格式不正确');
+		}else{
+			$('#experience_phone_error').html('手机号码格式不正确');
+		}
+	});
+	
+	$('#experience-Name').blur(function(){
+		if($(this).val() && /^[\u4E00-\u9FA5]+$/.test($(this).val()) && $(this).val().length>=2 && $(this).val().length<=6){
+			$(this).css('border-color','#ccc');
+			$('#experience_name_error').html('');
+		}else{
+			$('#experience_name_error').css('display','block').html('联系名字只能是2-6个中文');
+		}
+	});
+});
+
+function do_save_experience_contact(){
+	if(!$('#experience-Phone').val()){
+		$('#experience_phone_error').html('请输入您的手机号码');
+		$('#experience-Phone').css('border-color','red');
+	}else if(!isMobile($('#experience-Phone').val())){
+		$('#experience_phone_error').html('手机号码格式不正确');
+		$('#experience-Phone').css('border-color','red');
+	}
+	
+	if(!$('#experience-Name').val()){
+		$('#experience_name_error').html('请输入您的联系名字');
+		$('#experience-Name').css('border-color','red');
+	}
+
+	if(!/^[\u4E00-\u9FA5]+$/.test($('#experience-Name').val())){
+		$('#experience_name_error').html('联系名字只能是中文');
+		$('#experience-Name').css('border-color','red');
+	}
+	
+	if($('#experience-Name').val().length<2 || $('#experience-Name').val().length>6){
+		$('#experience_name_error').html('联系名字只能是2-6个中文');
+		$('#experience-Name').css('border-color','red');
+	}
+	
+	if(!$('#experience-Phone').val()){
+	}else if(!isMobile($('#experience-Phone').val())){
+	}else if(!$('#experience-Name').val()){
+	}else if(!/^[\u4E00-\u9FA5]+$/.test($('#experience-Name').val())){
+	}else if($('#experience-Name').val().length<2 || $('#experience-Name').val().length>6){
+	}else{
+		$('#experience-submitbutton').css('opacity','0.5').removeAttr('onclick').text('正在提交...');
+		$('#experience-Phone,#experience-Name').css('border-color','#ccc');
+		$('#experience_phone_error,#experience_name_error').html('');
+		
+		$.post("do_feedback.php",
+			{m:"contact_add_save", Name: $('#experience-Name').val(),Phone: $('#experience-Phone').val()},
+			function(data){
+			data = $.trim(data);
+				if(data == "ok"){
+					$('#experience-submitbutton').text('提交成功').css({'color':'#fff','font-weight':'bold'});
+					setTimeout(function(){
+						window.location.reload();
+					},1000);
+				}else{
+					alert(data);
+					$('#experience-submitbutton').css('opacity','1').attr('onclick','do_save_experience_contact();').text('确定');
+				}
+			}
+		);
+	}
+}
+
+function do_save_experience_contact2(){
+	$('#experience-submitbutton2').css('opacity','0.5').removeAttr('onclick').text('关闭中...');
+
+	$.post("do_feedback.php",
+		{m:"contact_add_save2"},
+		function(data){
+		data = $.trim(data);
+			if(data == "ok"){
+				$('#experience-submitbutton2').text('关闭中...').css({'color':'#000','font-weight':'bold'});
+				setTimeout(function(){
+					window.location.reload();
+				},1000);
+			}else{
+				alert(data);
+				$('#experience-submitbutton2').css('opacity','1').attr('onclick','do_save_experience_contact2();').text('跳过');
+			}
+		}
+	);
+}
+</script>
+<!--{/if}-->

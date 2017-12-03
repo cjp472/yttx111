@@ -1,0 +1,28 @@
+<div id="tip" onclick="show_hide('hide','tip')"><img src="template/default/img/gou.png"  border="0" /> 正在执行，请稍候...</div>
+<div id="header">
+	<div id="logo"><a href="home.php"><!--{if empty($_SESSION['ucc']['CompanyLogo'])}--><img src="template/default/img/logo.jpg" alt="{$_SESSION['ucc']['CompanyName']} - 订货宝" border="0" /><!--{else}--><img src="{RESOURCE_PATH}{$_SESSION['ucc']['CompanyLogo']}" alt="{$_SESSION['ucc']['CompanyName']} - 订货宝" border="0" /><!--{/if}--></a></div>
+    <div id="userinfo">
+    	<div class="leftdiv"><img src="template/default/img/left_t_1.jpg" /></div>
+        <div class="centerdiv"><p>欢迎 <strong>{$_SESSION['cc']['ccompanyname']}</strong> 光临 <strong>{$_SESSION['ucc']['CompanySigned']}</strong> 在线订货系统!  &nbsp;&nbsp;[<a href="login.php?m=logout">退出</a>]&nbsp;&nbsp;[<a href="help.php">帮助？</a>]</p></div>
+    	<div class="rightdiv"><img src="template/default/img/right_t_1.jpg" /></div>        
+    </div>
+</div>
+
+<div id="menu">
+	<div class="leftdiv"><a href="http://www.dhb.hk"><img src="template/default/img/left_t_2.jpg" border="0" title="订货宝 在线订货系统 网上订货系统" /></a></div>
+    <ul>
+    	<li><a href="home.php">首 页</a></li>
+        <li><a href="list.php">商 品</a></li>
+    	<li><a href="list.php?m=spc">特价促销</a></li>      
+    	<li><a href="myorder.php">我的订单</a></li>
+        <li><a href="consignment.php">发货单</a></li>
+		<li><a href="return.php">退货单</a></li> 
+    	<li><a href="finance.php">付款单</a></li>
+        <li><a href="statistics.php">数据统计</a></li>
+        <li><a href="forum.php">在线客服</a></li>   
+    	<li><a href="my.php?m=profile">我的订货宝</a></li>
+        <li><a href="infomation.php">信 息</a></li>		
+    </ul>
+    <div class="rightdiv"><img src="template/default/img/right_t_2.jpg" /></div>      
+
+</div>

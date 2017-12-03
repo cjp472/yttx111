@@ -1,0 +1,112 @@
+<!-- 运货单页 -->
+<div class="page-order-list page-order-transport" ng-controller="transportController">
+    <!-- 标题 -->
+    <header class="common">
+        <em data-back><a href="javascript:;" class="arrow-left"></a></em>
+        <p>发货单</p>
+        <span ng-show="showScanner" data-start-scanner class="scanner"></span>
+    </header>
+    <div class="order-list" data-load-more="transportOrders.loadMore();">
+        <ul>
+            <li ng-click="transportOrders.getOrderInfo($index,order.ConsignmentID);" data-ng-repeat="order in transportOrders.orderList">
+                <div><span class="caret-list">{{$index + 1}}</span>订单号：{{order.ConsignmentOrder}}<span class="r bgcolor-sllide">{{order.ConsignmentFlagName}}</span></div>
+                <div>
+                    <!-- <img src="../img/order01.jpg" width="100" height="100" alt="" /> -->
+                    <div>
+                        <span>发货时间：{{order.ConsignmentDate}}</span>
+                        <span>发货人：{{order.ConsignmentMan}}</span>
+                        <span>收货地址：{{order.InceptAddress}}</span>
+                    </div>
+                </div>
+                <div class="divider"></div>
+            </li>
+        </ul>
+        <!-- 无数据提示框 -->
+        <div class="no-data" ng-show="transportOrders.noData">
+            <div>
+                <p class="search-result"></p>
+                <p>对不起，没有数据显示</p>
+            </div>
+        </div>
+    </div>
+    <div class="layer info-layer animated default-apk">
+        <div data-iscroll class="iscroll iscroll-top">
+            <!-- 订单信息 -->
+            <div class="order-info">
+                <div class="address">
+                    <p><span class="icon icon-location2">收货信息</span></p>
+                    <address>
+                        <span>{{transportOrders.selectOrder.InceptMan}} {{transportOrders.selectOrder.InceptPhone}}</span>
+                        <p>{{transportOrders.selectOrder.InceptCompany}}</p>
+                        <p>{{transportOrders.selectOrder.InceptAddress}}</p>
+                        <p>运单状态：<em class="status">{{transportOrders.selectOrder.ConsignmentFlagName}}</em></p>
+                    </address>
+                </div>
+                <div class="divider"></div>
+                <div data-toggle-goods class="goods-num">
+                    <span class="r">共<em>{{transportOrders.selectOrder.goodses.length}}</em>种<span class="arrow-right"></span></span>
+                    <span>商品清单</span>
+                </div>
+                <!-- 商品清单 -->
+                <div class="order-goods animated">
+                    <ul>
+                        <li data-ng-repeat="goods in transportOrders.selectOrder.goodses">
+                            <span class="ellipsis-one">{{goods.ContentName}} {{goods.Coding}}</span>
+                            <span>
+                                <span ng-show="goods.ContentSpecification">规格：<em trans-html html-text="goods.ContentSpecification"></em></span> 
+                                <span ng-show="goods.ContentColor">颜色：<em trans-html html-text="goods.ContentColor"></em></span> 
+                            </span>
+                            <span>{{goods.ContentNumber + ' ' + goods.Units}}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="divider"></div>
+                <div data-toggle-log class="goods-num" ng-click="transportOrders.getLogist();">
+                    <span class="r">{{transportOrders.selectOrder.ConsignmentNO}}<span class="arrow-right"></span></span>
+                    <span style="width:50%;">物流信息 <span style="vertical-align: middle;color:#FF5C1E;" class="icon icon-truck"></span></span>
+                </div>
+                <!-- 物流信息 -->
+                <div class="order-goods order-log animated">
+                    <ul>
+                        <li data-ng-repeat="logist in transportOrders.logists">
+                            <span>{{logist.time}} <span></span></span>
+                            <span>{{logist.context}}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="divider"></div>
+                <div class="other">
+                    <ul>
+                        <li>物流公司<span class="r"><em>{{transportOrders.selectOrder.LogisticsName}}</em><span></span></span></li>
+                        <li>发货人<span class="r"><em>{{transportOrders.selectOrder.ConsignmentMan}}</em><span></span></span></li>
+                        <li>发货时间<span class="r"><em>{{transportOrders.selectOrder.ConsignmentDate}}</em><span></span></span></li>
+                        <li ng-show="transportOrders.selectOrder.ConsignmentRemark">备注<span class="r"><em>{{transportOrders.selectOrder.ConsignmentRemark}}</em><span></span></span></li>
+                    </ul>
+                    <div class="divider"></div>
+                    <ul>
+                        <li>运费付款方式<span class="r"><em>{{transportOrders.selectOrder.ConsignmentMoneyType}}</em><span></span></span></li>
+                        <li>运费<span class="r"><em class="bgcolor-sllide">¥ {{transportOrders.selectOrder.ConsignmentMoney}}</em><span></span></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 关闭按钮 -->
+        <div class="layer-footer">
+            <p ng-click="transportOrders.closeLayer();"><span class="arrow-left"></span></p>
+            <button ng-show="transportOrders.selectOrder.ConsignmentFlag=='0'" style="border-radius: 1em;" data-toggle data-selector="div.sure-receive">确认收货</button>
+        </div>
+        
+    </div>
+    <!-- 确认收货 -->
+    <div class="animated fadeIn sure-receive addr-manager">
+        <div>
+            <h4>你确定收货吗？</h4>
+            <div class="btn-group">
+                <a href="javascript:;" data-toggle data-selector="div.sure-receive" ng-click="transportOrders.sureReceive();">确定</a>
+                <a href="javascript:;" data-toggle data-selector="div.sure-receive">取消</a>
+            </div>
+        </div>
+    </div>
+</div>
+

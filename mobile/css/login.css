@@ -1,0 +1,100 @@
+@import "common.css";
+body{ background: white; color:#5e5e5e;font-size: 1.2rem; font-family:  Microsoft YaHei,SimSun,Arial;}
+html,body{height: 100%;/*font-family: '黑体';*/background: url(../img/login_bg.jpg) center center no-repeat;background-size: cover;}
+/**
+ * login page css
+ */
+.login-page{/*background: url(../img/login_bg.jpg) center center no-repeat;background-size: cover;*/width: 100%;height: 100%;-webkit-transition: -webkit-transform .5s;}
+.login-page .logo{background: url(../img/logo.png) center center no-repeat;width:100%;height:7.0rem;
+    background-origin: content-box;background-size: contain;margin: auto;padding-top: 3.0rem;
+}
+.login-page .logo + div{
+    display: table;table-layout: fixed;width: 50%;margin: .3rem auto 0;text-align: center;color:#FFFFFF;
+}
+.login-page .logo + div > span{
+    display: table-cell;
+    width: 30%;
+    font-size: 1.8rem;
+}
+.login-page .logo + div > span:nth-child(2){width: 40%;}
+.login-page .logo + div > span > em{
+    display: inline-block;
+    height: .1rem;
+    background-color: white;
+    width: 100%;
+    vertical-align: middle;
+}
+.login-form section{
+    text-align: center;
+}
+.login-form section button{
+    height: 3.3rem;
+    background-color: transparent;
+    color: #FFFFFF;
+    font-size: 1.6rem;
+}
+.login-page .login-form{margin-top: 3.0rem;}
+.login-page .login-form div{position: relative;width: 90%;margin: 0 auto;margin-bottom: 2.0rem;border-bottom: .1rem solid #eee;color:white;font-size: 1.4rem;}
+.login-page .login-form input{position: absolute;left: 0;width: 100%;border:none;font-size: 2rem;text-indent: 2rem;font-family: '黑体';color: white;background:transparent;}
+.login-page .login-form div:nth-last-of-type(1){text-align: center;font-size: 2rem;border-radius: .3rem;border: none;background-color: #cb4319;
+    height: 4rem;line-height: 4rem;display: block;
+}
+.trial-account{
+    display: inline-block;
+    width: 1.4rem;
+    height: 1.4rem;
+    border: .1rem solid #efefef;
+    border-radius: .2rem;
+    vertical-align: text-top;
+}
+.check{
+    border-color: #FF5C1E;
+}
+.check:before{
+    content: '';
+    height: .9rem;
+    width: .9rem;
+    position: absolute;
+    background: #FF5C1E;
+    margin: .25rem;
+    border-radius: .2rem;
+
+}
+.login-page .replace-img > span{
+    font-size: 3.6rem;
+    color: #FFFFFF;
+    text-align: center;
+    vertical-align: top;
+    padding-top: 3rem;
+    font-weight: 800;
+    display: inherit;
+}
+.login-page footer{height: 2.8rem;font-size: 1.2rem;text-align: center;line-height: 2.8rem;color: white;margin: auto;
+    position: absolute;left: 5%;bottom: 1.0rem;right: 5%;
+}
+footer strong a{color:#FFFFFF !important;}
+.login-page footer strong{
+    display: inline-block;
+    line-height: 2.4rem;
+    padding: 0 2rem;
+    font-size: 1.6rem;
+}
+.login-page footer strong:nth-child(1){border-right: 1px solid white;}
+#bsmm_footer strong{font-family: 'Arial';color: #a3a3a3;font-size: 1.4rem;}
+
+#msg{
+    font-size: 1.8rem;
+    display:none;
+    position: absolute;
+    top: 0;
+    background: rgba(0,0,0,.3);
+    color: #FFFFFF;
+    width: 100%;
+    height: 5.0rem;
+    line-height: 5.0rem;
+    text-align: center;
+    border-radius: .4rem;
+}
+::-webkit-input-placeholder{
+   color:#EFEFEF !important;
+}

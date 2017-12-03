@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - {SITE_NAME}</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<script src="template/js/yu.js" type="text/javascript"></script>
+<script src="template/js/tb.js" type="text/javascript"></script>
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js?v={VERID}" type="text/javascript"></script>
+<script src="template/js/cart.js?v={VERID}" type="text/javascript"></script>
+</head>
+
+<body>
+	{template header}
+	
+	<div class="main-info">
+		<div class="product-type f-l">
+			 {template unicom+leftMenu}
+		</div>	 	    
+	    <!--图片轮播-->
+	    <div class="banner f-l m-l m-t">
+	        <div class="wrap">
+	            <ul class="img-item">
+	            <!-- {if !empty($xd_info)} -->
+	            	<!-- {loop $xd_info $key $info} -->
+	                	<a href="{$info['ArticleLink']}" target="_blank"><li class="item" style="background-image: url('{RESOURCE_PATH}{$info['ArticlePicture']}');"></li></a>
+	            	<!-- {/loop} -->
+	            <!-- {/if} -->
+	            </ul>
+	            <ul class="bt-nav">
+	            </ul>
+	        </div>
+	    </div>
+	    
+	    <div style="margin-left:230px;">
+		    <div class="kuaijie f-l m-l m-t">
+		    	{template unicom+kuaijie}
+		    </div>
+		    
+		    <!-- 公告 Start -->
+		    <div class="gonggao m-t m-l">
+		    	<div class="gonggao-title">公告</div>
+	    		<div style="height:120px;width:230px;overflow:hidden;">
+		    		<marquee  behavior="scroll" direction="up" onMouseOver="this.stop()" onMouseOut="this.start()" truespeed="20" scrollAmount="1" scrollDelay="25"  >
+			        	<ul>
+			        		<!--{loop $gg_info $ggkey $ggvar}-->
+								<li><a href="infomation.php?sid=0&ID={$ggvar[ArticleID]}#locationname"><font color="{$ggvar[ArticleColor]}">· {$ggvar[ArticleTitle]}</font></a></li>
+							<!--{/loop}-->
+			            </ul>
+		            </marquee>
+	            </div>
+		    </div>
+		    <!-- 公告 End -->
+	    </div>
+	    
+	    <div  style=" clear:both"></div>
+	</div>
+	
+	<!-- 商品品牌 Start -->
+	<div class="pingpai m-t">
+		<ul>
+			<!--{loop $brand_info $sonkey $sonvar}-->
+				<li><a href="list.php?b={$sonvar['BrandID']}&t={$in['t']}" > {$sonvar[BrandName]}</a></li>
+			<!--{/loop}-->      
+	    </ul>
+	     <a class="pingpai-more" href="list.php"><b>更多品牌</b> <span class=" icon icon2 f-l">&#x39;</span> </a>
+	</div>
+	<!-- 商品品牌 End -->
+	
+	<div  style=" clear:both"></div>
+	
+	<!-- 最新商品 Start -->
+	<div class="product-info">
+		<div class="product-title">
+	    	<span class="p-style f-l"></span>
+	        <div class="title-line"></div>
+	        <a class="title-info">最新商品</a>
+	    </div>	  
+	    <ul>
+	        <!--{loop $goodslist3['list'] $gkey $gvar}-->
+	        	<!--{if $gkey==0}-->
+	        		<div class="pro-01">
+		        		<a href="content.php?id={$gvar['ID']}" title="{$gvar['Name']}" target="_blank">
+		        			<!--{if !empty($gvar['Picture'])}-->
+								<img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" border="0" width="217" height="217" />
+							<!--{else}-->
+								<img src="{CONF_PATH_IMG}images/default.jpg" title="{$gvar['Name']}" border="0" width="217" height="217"/>
+							<!--{/if}-->
+		        		</a>
+			        	<a class="pro-name1 m-l" title="{$gvar['Name']}" href="content.php?id={$gvar['ID']}" target="_blank">{$gvar['Name']}</a> <span class="price-0 m-l f-l">￥<b class="price-1">{$gvar['Price']}</b></span>
+			        	<!-- <a href="" onclick="" id="" class=" m-l m-b f-r btn-6 m-r-10"> <span class="icon " style="font-size:16px;">&#xe07a;</span> 我要订购</a>-->
+			        </div>
+		        <!--{else}-->
+		        	<li>
+			        	<div style="height:259px;width: 198px">
+				        	<a href="content.php?id={$gvar['ID']}" title="{$gvar['Name']}" target="_blank">
+				        	<!--{if !empty($gvar['Picture'])}-->
+				        		<img src="{RESOURCE_PATH}{$gvar['Picture']}" width="150" height="150" />
+				        	<!--{else}-->
+								<img src="{CONF_PATH_IMG}images/default.jpg" title="{$gvar['Name']}" border="0" width="150" height="150"/>
+								<!--{/if}-->
+				        	</a>
+				        	<a class="pro-name" title="{$gvar['Name']}" href="content.php?id={$gvar['ID']}" target="_blank">{$gvar['Name']}</a> <span class="price-0 m-l f-l">￥<b class="price-1">{$gvar['Price']}</b></span>
+				       		<!-- <a href="" onclick="" id="" class=" m-l m-b f-r btn-6 m-r-10"> <span class="icon " style="font-size:16px;">&#xe07a;</span> 我要订购</a> -->
+				        </div>
+			        </li>
+	        	<!--{/if}-->
+	        <!--{/loop}-->
+	    </ul>	
+	</div>
+	<!-- 最新商品 End -->
+	
+	<!-- 推荐商品 Start -->
+	<div class="product-info">
+		<div class="product-title">
+	    	<span class="p-style f-l"></span>
+	        <div class="title-line"></div>
+	        <a class="title-info">推荐商品</a>
+	    </div>
+	    <ul>
+	    	<!--{loop $goodslist1['list'] $gkey $gvar}-->
+	        	<!--{if $gkey==0}-->
+	        		<div class="pro-01">
+		        		<a href="content.php?id={$gvar['ID']}" title="{$gvar['Name']}" target="_blank">
+		        		<!--{if !empty($gvar['Picture'])}-->
+							<img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" width="217" height="217"/>
+						<!--{else}-->
+							<img src="{CONF_PATH_IMG}images/default.jpg" title="{$gvar['Name']}" width="217" height="217"/>
+						<!--{/if}-->
+		        		</a>
+			        	<a class="pro-name1 m-l" title="{$gvar['Name']}" href="content.php?id={$gvar['ID']}" target="_blank">{$gvar['Name']}</a> <span class="price-0 m-l f-l">￥<b class="price-1">{$gvar['Price']}</b></span>	            
+			        </div>
+		        <!--{else}-->
+		        	<li>
+			        	<div style="height:259px;width: 198px">
+				        	<a href="content.php?id={$gvar['ID']}" title="{$gvar['Name']}" target="_blank">
+			        		<!--{if !empty($gvar['Picture'])}-->
+								<img src="{RESOURCE_PATH}{$gvar['Picture']}" title="{$gvar['Name']}" width="150" height="150"/>
+							<!--{else}-->
+								<img src="{CONF_PATH_IMG}images/default.jpg" title="{$gvar['Name']}" width="150" height="150"/>
+							<!--{/if}-->
+				        	</a>
+				        	<a class="pro-name" title="{$gvar['Name']}" href="content.php?id={$gvar['ID']}" target="_blank">{$gvar['Name']}</a> <span class="price-0 m-l f-l">￥<b class="price-1">{$gvar['Price']}</b></span>
+				        </div>
+			        </li>
+	        	<!--{/if}-->
+	        <!--{/loop}-->
+	    </ul>
+	</div>
+	<!-- 推荐商品 End -->
+	
+	<!-- 尾部 Start -->
+		{template bottom}
+	<!-- 尾部 End -->
+</body>
+</html>
+<script>
+//图片轮播
+$(function(){
+    (function(root){
+        var ImgMove = function(el,object){
+
+            this.el         = $(el);
+            this.pageNum    = 0;
+            this.elNum      = 0;
+            this.state      = true;
+            this.autoTime   = null;
+            this.timeOut    = null;
+            this.option     = {
+                moveX: 0,
+                setAutoTime: 0,
+                navEl:null,
+                navStr:null,
+                navRound:null,
+                leftNav:null,
+                rightNav:null
+            };
+            this.option = $.extend(this.option,object);
+            this._init();
+        };
+        ImgMove.prototype = {
+            _init:function(){
+                var _self = this;
+                _self._setWidth();
+                _self._setNav();
+                _self._navMove();
+                _self._lrMove();
+            },
+            _setWidth:function(){
+                var _self = this;
+                _self.elNum  = _self.el.children().length;
+                _self.el.width(_self.elNum * _self.option.moveX);
+            },
+            _setNav:function(){
+                var _self = this;
+                $(_self.option.navEl).width( _self.elNum * 25 );
+
+
+                var _navStr = '';
+
+                for(var i = 0 ; i < _self.elNum  ; i++){
+                    _navStr += _self.option.navStr;
+                }
+
+                $(_self.option.navEl).html(_navStr);
+                _self._autoMove();
+                _self._navChange(_self.pageNum);
+            },
+
+            _move:function(page){
+
+                var _self  = this;
+                var _moveX = - _self.option.moveX * page;
+
+                if(_self.state == true){
+
+                    _self.state = false;
+
+                    _self._navChange(_self.pageNum);
+
+                    _self.el.animate({
+                        left: _moveX
+                    },1000,function(){
+                        _self.state = true;
+                    });
+
+                };
+
+            },
+            _autoMove:function(){
+                var _self = this;
+                _self.autoTime = setInterval(function(){
+                    _self.pageNum ++;
+                    if(_self.pageNum >= _self.elNum){
+                        _self.pageNum = 0;
+                    };
+                    _self._move(_self.pageNum)
+                },_self.option.setAutoTime);
+
+            },
+            _navMove:function(){
+
+                var _self = this;
+                $(_self.option.navRound).click(function(){
+
+                    var _index = $(_self.option.navEl).find(_self.option.navRound).index($(this));
+
+                    _self._navChange(_index);
+
+                    _self.pageNum = _index;
+
+                    clearInterval(_self.autoTime);
+                    clearTimeout(_self.timeOut);
+
+                    _self._move(_self.pageNum);
+                    _self._autoMove();
+
+                });
+            },
+            _navChange:function(index){
+                var _self = this;
+                $(_self.option.navRound).each(function(_index,_dom){
+                    if($(_dom)[0] == $(_self.option.navRound).eq(index)[0]){
+                        $(_dom).addClass('bg')
+                    }else{
+                        $(_dom).removeClass('bg')
+                    };
+                });
+            },
+            _lrMove:function(){
+                var _self = this;
+               $(_self.option.leftNav).click(function(){
+                    _self.pageNum -- ;
+                    if(_self.pageNum < 0){
+                        _self.pageNum = _self.elNum - 1;
+                    };
+                  
+                    clearInterval(_self.autoTime);
+                    clearTimeout(_self.timeOut);
+
+                    _self._move(_self.pageNum);
+                    _self._autoMove();
+
+                });
+              $(_self.option.rightNav).click(function(){
+                    _self.pageNum ++;
+
+                    if(_self.pageNum >= _self.elNum){
+                        _self.pageNum = 0;
+                    };
+
+                    clearInterval(_self.autoTime);
+                    clearTimeout(_self.timeOut);
+
+                    _self._move(_self.pageNum);
+                    _self._autoMove();
+                });
+            }
+        };
+        root.ImgMove = function(el,object){
+            return new ImgMove(el,object);
+        };
+    })(window);
+
+    ImgMove('.img-item',{
+        moveX:720, //图片容器的宽度
+        setAutoTime:3000, //图片播放时间
+        navEl:'.bt-nav',//导航点父容器的class
+        navRound:'.nav',//导航点的class
+        navStr:'<li class="nav"></li>',//导航点的字符串
+        leftNav:'.left',//左边导航
+        rightNav:'.right'//右边导航
+    });
+});
+
+//控制二级菜单框的高度
+
+$(function(){
+    if(parseInt($(".menuAdd").height())<"474" || parseInt($(".menuAdd").height()) =="474"){
+        $(".menuAdd").css("height","474px");
+    }
+});
+
+$(function(){
+	$(".menu1>li").hover(function(){
+		var sid = $(this).attr('data-id');
+		if($("#ShowSubMenu_"+sid).html()!=null){
+			$(".wrap").css("display","none");
+		}else{
+		    $(".wrap").css("display","block");
+		}
+	},function () {
+		
+	    $(".wrap").css("display","block");
+	});
+})
+</script>

@@ -1,0 +1,44 @@
+<div class="line">&nbsp;</div>
+<div class="clear" style="display:none;"><!--{echo count($bdata = commondata::getcommonclass());}--></div>
+<div id="bottom">
+<div class="bottom_menu_line">
+	<div class="bottom_div">
+	<!--{if !empty($bdata[sort])}-->
+			<!--{loop $bdata[sort] $sortkey $sortvar}-->
+				<!--{if $sortkey!=0}--> | <!--{/if}-->
+				<a href="infomation.php?sid={$sortvar[SortID]}">{$sortvar[SortName]}</a>
+			<!--{/loop}-->
+	<!--{/if}-->
+	</div>
+</div>
+	{$bdata[binfo]}
+</div>
+
+<!--在线客服-->
+<div class="ser_online">
+    <em title="收起"></em>
+    <div class="service_tel" >
+		<div>在线客服</div>
+        <!--{loop $bdata[tools] $skey $svar}-->
+		<!--{if $svar[ToolType]=="QQ"}-->
+			<p title="$svar[ToolName]：{$svar[ToolNO]}"><a target="blank" href="tencent://message/?uin={$svar[ToolNO]}&amp;Site=dhb.hk&amp;Menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=1:{$svar[ToolNO]}:4" alt="点击发送消息给对方" />&nbsp;&nbsp;{$svar[ToolName]}</a> </p>
+		<!--{elseif $svar[ToolType]=="BQQ"}-->
+			<p title="$svar[ToolName]：{$svar[ToolNO]}">
+			<a href="http://wpa.qq.com/msgrd?V=1&Uin={$svar[ToolNO]}&Exe=QQ&Site=c.dhb.hk&Menu=yes" target="_blank" > <img src="http://im.bizapp.qq.com:8000/zx_qq.gif" border="0" alt="点击发送消息给对方" /></a></p>
+		<!--{elseif $svar[ToolType]=="WW"}-->
+			<p title="$svar[ToolName]：{$svar[ToolNO]}">
+			<a target="_blank" href="http://www.taobao.com/webww/ww.php?ver=3&touid={$svar[ToolNO]}&siteid=cntaobao&s=1&charset=utf-8" ><img border="0" src="http://amos.im.alisoft.com/online.aw?v=2&uid={$svar[ToolNO]}&site=cntaobao&s=1&charset=utf-8" alt="点击这里给我发消息" /></a></p>
+        <!--{else}-->
+			<p title="$svar[ToolName]：{$svar[ToolNO]}" > {$svar[ToolName]}<br /> {$svar[ToolNO]}</p>
+		<!--{/if}-->		
+		<!--{/loop}-->
+		<!--{if $bdata[contact]}-->
+        <div>服务热线</div>
+		<!--{loop $bdata[contact] $ckey $cvar}-->
+			<p  title="{$cvar[ContactName]}:{$cvar[ContactValue]}" >  {$cvar[ContactName]}:<br /> {$cvar[ContactValue]}</p>
+		<!--{/loop}-->
+		<!--{/if}-->
+		<div title="查看购物车" style="height:32px; line-height:32px;"><a href="cart.php"><img src="template/img/dh_jc15.gif" style="position: relative; top:6px; margin-left:2px; border:0;" /> 查看购物车</a></div>
+    </div>
+</div>
+<div class="top_online" title="返回顶部"><a href="#top"><strong>TOP ∧</strong></a> </div>

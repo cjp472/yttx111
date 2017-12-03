@@ -1,0 +1,256 @@
+<!-- 商品列表页 -->
+<div class="page-goods-list" data-ng-controller="goodsController">
+    <!-- 标题 -->
+    <header>
+        <div class="search">
+            <em data-back><span class="arrow-left"></span></em>
+            <div>
+                <span data-goods-search class="icon icon-search"></span>
+                <input type="text" ng-keyup="goodses.clearFilter();" ng-model="globalSearch.keyWord" placeholder="商品搜索" />
+                <em on-click="goodses.clearFilter();" class="icon"></em>
+            </div>
+            <span ng-show="showScanner" style="margin-left:0;margin-right: .4rem;" data-start-scanner class="scanner"></span>
+        </div>
+        <div>
+            <ul>
+                <li ng-class="{'bgcolor-sllide':goodses.params.v.orderBy=='4'}" data-ng-click="goodses.refreshBySort(4);">人气</li>
+                <li ng-class="{'bgcolor-sllide':goodses.params.v.orderBy=='3'}" data-ng-click="goodses.refreshBySort(3);">时间</li>
+                <li ng-class="{'bgcolor-sllide':goodses.params.v.orderBy=='1' || goodses.params.v.orderBy=='2'}" data-ng-click="goodses.refreshBySort(2);">价格</li>
+                <li data-toggle-layer data-class-name="fadeInRight">筛选</li>
+                <li ng-click="goodses.toggleList();" data-show-style ng-class="{'icon-grid':showList,'icon-list':!showList}" class="icon" style="width:10%;"></li>
+            </ul>
+        </div>
+    </header>
+    <!-- 无商品提示框 -->
+    <div class="no-data" ng-show="goodses.noData">
+        <div>
+            <p class="search-result"></p>
+            <p>对不起，没有数据显示</p>
+        </div>
+    </div>
+    <div ng-show="goodses.goodsList.length > 0 || goodses.goodsList2.length > 0" class="goods-list" data-load-more="goodses.loadMore();">
+        <div>
+            <!-- list布局 -->
+            <ul ng-show="showList" data-addcart id="list-layout">
+                <li data-ng-click="changePath('/goods-detail/'+goods.ID,true,$event)" data-ng-repeat="goods in goodses.goodsList">
+                    <div>
+                        <div><span class="v-span"></span><img data-img-loaded data-page="list" src="" ng-src="{{goods.Picture}}" alt=""  /></div>
+                    </div
+                    ><div class="r">
+                        <span class="ellipsis">
+                            <span data-trans-html html-text="goods.Name"></span>
+                            <span ng-show="goods.CommendID!=='9'" class="commend">{{goods.CommendName}}</span>
+                        </span>
+                        <span ng-show="goods.Coding">品牌：{{goods.BrandName}}</span>
+                        <span ng-show="goods.Coding" style="float:left;">编号：{{goods.Coding}}</span>
+                      <span  style="float:left;margin-left:1rem;color:#666;font-size:1.4rem;padding:0 1rem;  ">库存：{{goods.OrderNumber}}</span><br/>
+                    <span class="red" >¥ {{goods.Price | number:2}} / {{goods.Units}}</span>
+                        <a ng-show="goods.CommendID!='9'" ng-class="{'red':goods.ordered}" style="color:#B6B4B4" ng-click="goodses.getGoodsContent(goods.ID,$index);" href="####" class="icon icon-shopping-cart cart"></a>
+                        <em data-stop-bubble ng-show="goods.CommendID=='9'" class="nogoods">缺货</em>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- 网格布局 -->
+            <ul ng-show="!showList" id="grid-layout" data-addcart>
+                <li data-ng-click="changePath('/goods-detail/'+goods.ID,true,$event)" data-ng-repeat="goods in goodses.goodsList2">
+                    <div>
+                        <span class="ellipsis-one" data-trans-html html-text="goods.Name"></span>
+                        <span ng-show="goods.Coding">编号：{{goods.Coding}}&emsp;</span>
+                        <span class="red">¥ {{goods.Price | number:2}} / {{goods.Units}}<span class="commend">{{goods.CommendName}}</span></span>
+                        <a ng-show="goods.CommendID!='9'" ng-class="{'red':goods.ordered}" style="color:#B6B4B4" ng-click="goodses.getGoodsContent(goods.ID,$index);" href="####" class="icon icon-shopping-cart cart"></a>
+                        <em data-stop-bubble ng-show="goods.CommendID=='9'" class="nogoods">缺货</em>
+                    </div>
+                </li>
+                <!-- <li data-ng-click="changePath('/goods-detail/'+goods.ID,true,$event)" data-ng-repeat="goods in goodses.goodsList">
+                    <div>
+                        <div><span class="v-span"></span><img src="" ng-src="{{goods.Picture}}" alt=""  /></div>
+                        <div class="r">
+                            <span class="ellipsis" data-trans-html html-text="goods.Name"></span>
+                            <span ng-show="goods.Coding">编号：{{goods.Coding}}</span>
+                            <span class="red">¥ {{goods.Price | number:2}} / {{goods.Units}}</span>
+                            <a ng-class="{'red':goods.ordered}" style="color:#B6B4B4" ng-click="goodses.getGoodsContent(goods.ID,$index);" href="####" class="icon icon-shopping-cart cart"></a>
+                        </div>
+                    </div>
+                </li> -->
+            </ul>
+        </div>
+    </div>
+    
+    <!-- 筛选框 -->
+    <div class="filter-layer animated default-apk layer">
+        <div class="filter">
+            <p>
+                <span data-toggle-layer data-class-name="fadeOutRight" class="l">取消</span>
+                筛选
+                <span class="r" ng-click="goodses.getGoodsListByFilter()">确定</span>
+            </p>
+            <ul>
+                <li data-toggle-operator data-toggle-id="brand" data-is-show="true" ng-click="goodses.getBrand();">品牌
+                    <span class="r" style="height: 100%"><span style="width:10.0rem;display: inline-block;margin:0;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ff5c1e;">
+                        {{goodses.choiceBrand.brandName}}
+                    </span><span class="arrow-right"></span></span>
+                </li>
+                <li data-toggle-operator data-toggle-id="commend" data-is-show="true" ng-click="goodses.getCommand();">商品类型
+                    <span class="r" style="height: 100%"><span style="width:10.0rem;display: inline-block;margin:0;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ff5c1e;">
+                        {{goodses.choiceCommend.commendName}}
+                    </span><span class="arrow-right"></span></span>
+                </li>
+                <!-- <li data-toggle-operator data-toggle-id="site" data-is-show="true" ng-click="goodses.getSite();">商品分类
+                    <span class="r" style="height: 100%"><span style="width:10.0rem;display: inline-block;margin:0;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ff5c1e;">
+                        {{goodses.choiceSite.siteName}}
+                    </span><span class="arrow-right"></span></span>
+                </li> -->
+            </ul>
+            <div class="clear-filter"><button ng-click="goodses.clearFilter();">清除选项</button></div>
+        </div>
+        <!-- 商品品牌  -->
+        <div id="brand" class="filter common animated default-apk">
+            <p>
+                <em data-toggle-operator data-toggle-id="brand" data-is-show="false"><span class="l arrow-left"></span></em>品牌
+            </p>
+            <div data-iscroll class="iscroll">
+                <ul ng-click="goodses.setFilter(0,$event)">
+                    <li data-toggle-operator data-toggle-id="brand" data-is-show="false" data-brandid="-1">全部</li>
+                    <li data-toggle-operator data-toggle-id="brand" data-is-show="false" data-brandid="{{brand.BrandID}}" ng-repeat="brand in goodses.brands">{{brand.BrandName}}</li>
+                </ul>
+            </div>
+        </div>
+        <!-- 商品类型  -->
+        <div id="commend" class="filter common animated default-apk">
+            <p>
+                <em data-toggle-operator data-toggle-id="commend" data-is-show="false"><span class="l arrow-left"></span></em>商品类型
+            </p>
+            <ul ng-click="goodses.setFilter(1,$event)">
+                <li data-toggle-operator data-toggle-id="commend" data-is-show="false" data-commendid="-1">全部</li>
+                <li data-toggle-operator data-toggle-id="commend" data-is-show="false" data-commendid="1">推荐</li>
+                <li data-toggle-operator data-toggle-id="commend" data-is-show="false" data-commendid="2">特价</li>
+                <li data-toggle-operator data-toggle-id="commend" data-is-show="false" data-commendid="3">新款</li>
+                <li data-toggle-operator data-toggle-id="commend" data-is-show="false" data-commendid="4">热销</li>
+                <li data-toggle-operator data-toggle-id="commend" data-is-show="false" data-commendid="9">缺货</li>
+                <li data-toggle-operator data-toggle-id="commend" data-is-show="false" data-commendid="10">收藏</li>
+            </ul>
+        </div>
+        <!-- 商品分类  -->
+        <div id="site" class="filter common animated default-apk">
+            <p>
+                <em data-toggle-operator data-toggle-id="site" data-is-show="flase"><span class="l arrow-left"></span></em>商品分类
+            </p>
+            <div data-iscroll class="iscroll">
+                <ul ng-click="goodses.setFilter(2,$event)">
+                    <li data-toggle-operator data-toggle-id="site" data-is-show="flase" data-siteid="-1">全部</li>
+                    <li data-toggle-operator data-toggle-id="site" data-is-show="flase" data-siteid="{{site.SiteID}}" ng-repeat="site in goodses.sites">{{site.SiteName}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 弹出层 -->
+    <div class="cart-layer layer animated default-apk" data-toggle-layer >
+        <div id="add-cart-block" class="goods-info" data-stop-bubble>
+                <div class="info-header">
+                    <ul>
+                        <li><img data-img-loaded data-page="list" ng-src="{{goodsDetail.Picture}}" alt="" /></li>
+                        <li ng-show="goodsDetail">
+                            <span class="red text-indent" style="font-size:1.8rem;">¥ {{goodsDetail.Price | number:2}}</span>
+                            <span> / {{goodsDetail.Units}}</span>
+                            <p style="font-size: 1.4rem;font-weight:700;text-indent:0;" class="ellipsis text-indent" data-trans-html html-text="goodsDetail.Name"></p>
+                            <p ng-show="goodsDetail.Coding">编号：{{goodsDetail.Coding}}</p>
+                        </li>
+                    </ul>
+                    <span data-toggle-layer style="position: absolute;top: .4rem;right: .4rem;padding: .4rem;border: 1px solid #969696;border-radius:50%;" class="icon icon-cross"></span>
+                </div>
+                <div data-iscroll class="iscroll" style="top:10rem;">
+                    <div style="position:absolute;width:100%;left:0;top:0;padding: 0 3%;-webkit-box-sizing:border-box;">
+                        <!-- 启用多选 -->
+                        <div ng-show="goodsDetail.Specification.length>1 || goodsDetail.Color.length>1" class="choice-more clearfix" ng-click="choiceMore.toggleChoiceMore();">
+                            <span class="l"><em ng-class="{'checked':choiceMore.isChoiceMore}" class=""></em></span>
+                            <span class="l">启用多选</span>
+                        </div>
+                        
+                        <div ng-show="goodsDetail.Specification && choiceMore.isChoiceMore" class="specification">
+                            <h3>规格</h3>
+                            <div id="list-spec" data-choice-spec>
+                                <span ng-class="{'goods-active':$index==0}" data-ng-repeat="specification in goodsDetail.Specification" data-trans-html html-text="specification"></span>
+                            </div>
+                        </div>
+                        <div ng-show="goodsDetail.Color && choiceMore.isChoiceMore" class="color">
+                            <h3>颜色</h3>
+                            <div id="list-color" data-choice-color>
+                                <span ng-class="{'goods-active':$index==0}" data-ng-repeat="color in goodsDetail.Color" data-trans-html html-text="color"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- 未启用多选 -->
+                        <div ng-show="goodsDetail.Specification && !choiceMore.isChoiceMore" class="specification">
+                            <h3>规格</h3>
+                            <div id="spec" data-choice-spec>
+                                <span ng-class="{'goods-active':$index==0}" data-ng-repeat="specification in goodsDetail.Specification" data-trans-html html-text="specification"></span>
+                            </div>
+                        </div>
+                        <div ng-show="goodsDetail.Color && !choiceMore.isChoiceMore" class="color">
+                            <h3>颜色</h3>
+                            <div id="color" data-choice-color>
+                                <span ng-class="{'goods-active':$index===0}" data-ng-repeat="color in goodsDetail.Color" data-trans-html html-text="color"></span>
+                            </div>
+                        </div>
+                        <div style="margin:1.0rem 1.0rem 2.0rem;">
+                            <h3>订货数量</h3>
+                            <div style="margin-bottom: 1.0rem;">
+                                <button data-minus class="l">－</button>
+                                <div class="replace" data-replace-input></div>
+                                <input ng-model="goods.num" class="l" type="text" />
+                                <button data-plus class="l">＋</button>
+                                <span ng-show="goodsDetail.showLibrary=='Y'">&nbsp;库存 {{goodsDetail.allLibrary + ' ' + goodsDetail.Units}}</span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="divider" style="width:106%;margin-left:-3%;"></div>
+                        <div class="color" style="margin-bottom:1.2rem;">
+                            <h3 ng-show="goodsDetail.Model"><strong style="color: rgb(200, 172, 172);">型号：</strong>{{goodsDetail.Model}}</h3>
+                            <h3 ng-show="goodsDetail.Barcode"><strong style="color: rgb(200, 172, 172);">条码：</strong>{{goodsDetail.Barcode}}</h3>
+                            <h3 ng-show="goodsDetail.Casing"><strong style="color: rgb(200, 172, 172);">包装：</strong>{{goodsDetail.Casing}}</h3>
+                            <h3 ng-show="goodsDetail.Package!='' && goodsDetail.Package!=0"><strong style="color: rgb(200, 172, 172);">整包装出库数量：</strong>{{goodsDetail.Package}}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- 底部操作按钮  icon-cross-->
+        <div id="add-cart" class="info-footer" data-stop-bubble>
+            <div class="l">
+                <ul>
+                    <li ng-click="setContentFav('add');" style="width:50%;">
+                        <p ng-class="{'grey':goodsDetail.isFav!='Y','red':goodsDetail.isFav=='Y'}" class="icon icon-heart"></p>
+                        <p>{{favText}}</p>
+                    </li>
+                    <li ng-click="changePath('/my-cart',false,$event)">
+                        <p class="icon icon-cart red"></p>
+                        <p>购物车</p>
+                        <span ng-show="cartGoods.length>0" class="caret" ng-bind="cartGoods.length"></span>
+                    </li>
+                </ul>
+            </div>
+            <div data-add-cart data-from="list" data-refresh-cart="refreshCart();" class="r">加入购物车</div>
+        </div>
+        <!-- 数字键盘 -->
+        <div class="num-key animated" data-stop-bubble>
+            <h4><input class="input-num" type="text" readonly /></h4>
+            <ul data-input-num>
+                <li><span>1</span></li>
+                <li><span>2</span></li>
+                <li><span>3</span></li>
+                <li><span style="line-height:5.0rem;" class="icon icon-delete"></span></li>
+                <li><span>4</span></li>
+                <li><span>5</span></li>
+                <li><span>6</span></li>
+                <li><span>0</span></li>
+                <li><span>7</span></li>
+                <li><span>8</span></li>
+                <li><span>9</span></li>
+                <li data-input-finish><span>完成</span></li>
+            </ul>
+        </div>
+        
+    </div>
+    <div data-ui-view class="animated fadeIn"></div>
+</div>
+

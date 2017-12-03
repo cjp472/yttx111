@@ -1,0 +1,90 @@
+<!-- 添加付款 -->
+<div data-ng-controller="addPayController" class="page-add-pay page-order-confirm page-order-list page-goods-list">
+    <!-- 标题 -->
+    <header class="common">
+        <em data-back><a href="javascript:;" class="arrow-left"></a></em>
+        <p>新增付款单</p>
+        <!-- <span class="icon icon-expand"></span> -->
+    </header>
+    <!-- 添加付款单 -->
+    <div data-iscroll class="iscroll" style="bottom: 5rem;">
+        <form action="" name="addPayForm" class="add-pay">
+            <div class="order-date">
+                <div ng-show="orderCode==0" ng-click="finance.setPrepay();" class="prepay">
+                    <span ng-class="{'choice' : finance.financeYufu}"></span>
+                    <span>预付款</span>
+                </div>
+                <div ng-show="orderCode">
+                    <span>订单号：{{orderCode}}</span>
+                </div>
+                <div ng-show="orderCode==0 && !finance.financeYufu" data-toggle-layer data-class-name="fadeInRight" ng-click="finance.getPayOrder();">
+                    <span class="arrow-right"></span>
+                    <span style="margin-left: 1.0rem;height: 4.4rem;line-height: 4.4rem;" class="ellipsis-one">{{finance.selectOrderText}}</span>
+                </div>
+                <div>
+                    <span class="arrow-right"></span>
+                    <input class="li-input" ng-model="finance.financeToDate" required data-date-picker type="text" placeholder="转款日期：" />
+                    <span style="margin-left: 1.0rem;height: 4.4rem;line-height: 4.4rem;" class="ellipsis-one">转款日期<span class="r" ng-bind="finance.financeToDate"></span></span>
+                </div>
+                <div>
+                    <span style="margin-left: 1.0rem;height: 4.4rem;line-height: 4.4rem;" class="ellipsis-one">转款金额
+                        <input data-focus style="text-align:right;float: right;padding-right: 4.5rem;width:auto;min-width:16.0rem;text-indent:0;" ng-model="finance.financeTotal" required type="text" placeholder="转款金额" />    
+                    </span>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="address">
+                <p style="padding-left:1.2rem;"><span>收款账户</span></p>
+                <address class="order-date">
+                    <div ng-click="finance.toggleChecked($index);" class="account" ng-repeat="account in finance.accounts">
+                        <span ng-class="{'selected' : account.isChecked}">
+                            <em></em>
+                        </span>
+                        <span>{{account.AccountsBank}} - {{account.AccountsName}} <br>({{account.AccountsNO}})</span>
+                    </div>
+                </address>
+            </div>
+            <div class="divider"></div>
+            <div class="address">
+                <p style="padding-left:1.2rem;"><span>说明</span></p>
+                <address data-toggle data-selector="div.pay-message" class="add-pay-msg">
+                    <textarea readonly="true" ng-model="finance.financeAbout" placeholder="说点什么："></textarea>
+                </address>
+            </div>
+        </form> 
+    </div>
+    <div class="pay-message order-message">
+        <div>
+            <h4>留言</h4>
+            <textarea ng-model="finance.financeAbout" placeholder="说点什么："></textarea>
+            <div class="btn-group" style="margin-top: -1.2rem;">
+                <a href="javascript:;" data-toggle data-selector="div.pay-message">确定</a>
+                <a href="javascript:;" ng-click="finance.financeAbout=''">清空</a>
+            </div>
+        </div>
+    </div>
+    <!-- 选择框 -->
+    <div class="filter-layer animated default-apk layer">
+        <div class="filter">
+            <p>
+                <span ng-click="finance.setChoiceOrder(1);" data-toggle-layer data-class-name="fadeOutRight" class="l">取消</span>
+                选择订单
+                <span ng-click="finance.setChoiceOrder(0);" class="r" data-toggle-layer data-class-name="fadeOutRight">确定</span>
+            </p>
+            <div data-iscroll class="iscroll">
+                <ul>
+                    <li ng-click="finance.toggleChecked($index,true);" ng-repeat="payOrder in finance.payOrderList" class="account ellipsis-one">
+                        <span class="checked-order" ng-class="{'selected' : payOrder.isChecked}">
+                            <em style="border-radius:0;"></em>
+                        </span>
+                        <span>{{payOrder.OrderSN + ' (¥ ' + payOrder.OrderTotal +')-' + payOrder.OrderStatus}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="l">转账金额: <em>¥ {{finance.financeTotal}}</em></div>
+        <div class="r" ng-click="finance.submitFinance(addPayForm.$valid);">保存</div>
+    </footer>
+</div>

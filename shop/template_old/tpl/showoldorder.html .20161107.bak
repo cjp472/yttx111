@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - {SITE_NAME}</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link href="{CONF_PATH_IMG}css/base.css?v={VERID}" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+						
+  <table width="98%" border="0" cellspacing="1" cellpadding="0" align="center">
+  <thead>
+  <tr style="background-color:#f9f9f9;">
+    <td width="6%" height="28">&nbsp;序号</td>
+    <td>&nbsp;商品名称</td>
+    <td width="12%">&nbsp;颜色 / 规格</td>
+    <td width="8%" align="right">原数量</td>
+    <td width="8%" align="right" class="tdbg">现数量</td>
+    <td width="10%" align="right">原单价</td>
+    <td width="10%" align="right" class="tdbg">现单价</td>
+    <td width="6%" align="right">原折扣</td>
+    <td width="6%" align="right" class="tdbg">现折扣</td>
+  </tr>
+   </thead>
+   <tbody>
+	<!--{loop $olddata[cart] $cartkey $cartvar}-->
+    <tr id="linegoods_{$cartvar[ID]}" style="background-color:#ffffff;"  >
+    <td height="30">&nbsp;<!--{echo $n++}--></td>
+    <td><div  title="{$cartvar[ContentName]}"><!--{if empty($cartvar[NewNumber])}--><font color=red>[已删除]</font> <!--{/if}--><a href="content.php?id={$cartvar[ContentID]}" target="_blank">{$cartvar[ContentName]}</a></div></td>
+    <td>&nbsp;<!--{if !empty($cartvar[ContentColor])}-->{$cartvar[ContentColor]}<!--{/if}--> / <!--{if !empty($cartvar[ContentSpecification])}-->{$cartvar[ContentSpecification]}<!--{/if}--></td>
+    <td align="right">{$cartvar[ContentNumber]}	</td>
+    <td align="right" class="tdbg">{if $cartvar[ContentNumber]!=$cartvar[NewNumber]} <font color="red">{$cartvar[NewNumber]}</font><!--{else}-->{$cartvar[NewNumber]}<!--{/if}--></td>
+	<td align="right">¥ {$cartvar[ContentPrice]} </td>
+    <td align="right" class="tdbg">{if $cartvar[ContentPrice]!=$cartvar[NewPrice]} <font color="red">¥  {$cartvar[NewPrice]}</font><!--{else}-->¥ {$cartvar[NewPrice]}<!--{/if}--></td>
+    <td align="right">{$cartvar[ContentPercent]}</td>
+    <td align="right" class="tdbg"> {if $cartvar[ContentPercent]!=$cartvar[NewPercent]} <font color="red"> {$cartvar[NewPercent]}</font><!--{else}--> {$cartvar[NewPercent]}<!--{/if}--></td>
+  </tr>
+   <!--{/loop}--> 
+
+	<!--{loop $olddata[ncart] $cartkey $cartvar}-->
+    <tr id="linegoods_{$cartvar[ID]}" style="background-color:#f9f9f9;"  >
+    <td height="30">&nbsp;<!--{echo $n++}--></td>
+    <td><div  title="{$cartvar[ContentName]}"><font color=red>[新增]</font> <a href="content.php?id={$cartvar[ContentID]}" target="_blank">{$cartvar[ContentName]}</a></div></td>
+    <td>&nbsp;<!--{if !empty($cartvar[ContentColor])}-->{$cartvar[ContentColor]}<!--{/if}--> / <!--{if !empty($cartvar[ContentSpecification])}-->{$cartvar[ContentSpecification]}<!--{/if}--></td>
+    <td align="right">	</td>
+    <td align="right" class="tdbg">{$cartvar[ContentNumber]}</td>
+	<td align="right"></td>
+    <td align="right" class="tdbg">¥ {$cartvar[ContentPrice]}</td>
+    <td align="right"></td>
+    <td align="right" class="tdbg">{$cartvar[ContentPercent]}</td>
+  </tr>
+   <!--{/loop}--> 
+   </tbody>
+</table>
+
+</body>
+</html>

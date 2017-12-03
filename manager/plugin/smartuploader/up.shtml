@@ -1,0 +1,47 @@
+<?php
+include_once ("../../common.php");
+if(empty($_SESSION['uinfo']['userid']) || empty($_SESSION['uc']['CompanyID'])) exit('请重新<a href="../" target="top">登陆</a>!');
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>多文件上传</title>
+</head>
+<body>
+<script type="text/javascript">	
+	function goNext() {
+		parent.set_up_mu_img();
+		parent.closewindowui();
+	}
+</script>
+<style type="text/css">
+h1{
+	color:#FF6200;
+	font-size:1.67em;
+	font-family:Arial,Helvetica,sans-serif;
+}
+body {
+color:#5E5E5E;
+font-family:Arial,Helvetica,sans-serif;
+font-size:16px;
+}
+#upflashdiv{width:500px; height:450px; overflow:hidden; text-align:center; top:-20px; position:relative;}
+</style>
+<div id="upflashdiv">
+		<object id="FlashFilesUpload" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" viewastext="" height="471" width="499">
+		<!-- Replace symbols " with the &quot; at all parameters values and symbols "&" with the "%26" at URL values or &amp; at other values! -->
+				<param name="FlashVars" value="uploadUrl=&amp;uploadButtonVisible=No">
+				<param name="Movie" value="fileUpload.v3.swf">
+				<param name="Src" value="fileUpload.v3.swf">
+				<param name="Play" value="-1">
+				<param name="Loop" value="-1">
+				<param name="Quality" value="High">
+				<param name="AllowScriptAccess" value="always">
+				<!-- Embed for Netscape,Mozilla/FireFox browsers support. Flashvars parameters are the same.-->
+				<!-- Replace symbols " with the &quot; at all parameters values and	symbols "&" with the "%26" at URL values or &amp; at other values! -->
+				<embed bgcolor="#FFFFFF" id="EmbedFlashFilesUpload" src="fileUpload.v3.swf" quality="high" pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash"	flashvars="uploadUrl=&amp;seed=" height="470" width="499">
+		</object>
+</div>
+</body>
+</html>

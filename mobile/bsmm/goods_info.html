@@ -1,0 +1,69 @@
+<!-- 商品详情  -->
+<div class="goods-info common-style" style="background-color: white;top: 0;">
+    <!-- 标题 -->
+    <header>
+        <span data-back class="icon">&#x34;</span>
+        <h4>商品详情</h4>
+    </header>
+    
+    <!-- 商品信息 -->
+    <div class="list" id="detail-img" style="overflow: auto;">
+        <div><!-- <img src="" alt="" data-ng-src="{{goodses.selectGoods.PictureBig}}" /> -->
+            <div data-zoom-img class="banner">
+                <ol data-banner-switch data-img-length="{{goodses.selectGoods.PicArray.length}}">
+                    <li ng-repeat="img in goodses.selectGoods.PicArray"><img data-ng-src="{{img}}" style="max-width:100%;" src="" alt=""/></li>
+                </ol>
+                <ul>
+                </ul>
+            </div>
+        </div>
+        <p class="ellipsis text-indent" data-trans-html html-text="goodses.selectGoods.Name"></p>
+        <p style="display: block;" class="text-indent" ng-show="goodses.selectGoods.BrandName"><strong>品牌：</strong>{{goodses.selectGoods.BrandName}}</p>
+        <p style="display: block;" class="text-indent" ng-show="goodses.selectGoods.Coding"><strong>编号：</strong>{{goodses.selectGoods.Coding}}</p>
+        <p class="text-indent">
+            {{goodses.price1Name}}<span class="color-red">：¥ {{goodses.selectGoods.Price1 | number:2}}</span>
+            <span> / {{goodses.selectGoods.Units}}</span>
+        </p>
+        <p class="text-indent">
+            {{goodses.price2Name}}<span class="color-red">：¥ {{goodses.selectGoods.Price2 | number:2}}</span>
+            <span> / {{goodses.selectGoods.Units}}</span>
+        </p>
+        <div class="divider" ng-show="goodses.selectGoods.productTime"></div>
+        <p class="text-indent" ng-show="goodses.selectGoods.productTime.ContentCreateDate"><strong>添加时间：</strong>{{goodses.selectGoods.productTime.ContentCreateDate}}</p>
+        <p class="text-indent" ng-show="goodses.selectGoods.productTime.ContentEditDate"><strong>修改时间：</strong>{{goodses.selectGoods.productTime.ContentEditDate}}</p>
+        <div class="divider"></div>
+        <div ng-show="goodses.selectGoods.Specification" class="specification">
+            <h3>规格</h3>
+            <div>
+                <span data-ng-repeat="specification in goodses.selectGoods.Specification" data-trans-html html-text="specification"></span>
+            </div>
+        </div>
+        <div ng-show="goodses.selectGoods.Color" class="color">
+            <h3>颜色</h3>
+            <div>
+                <span data-ng-repeat="color in goodses.selectGoods.Color" data-trans-html html-text="color"></span>
+            </div>
+        </div>
+        <div ng-show="goodses.selectGoods.Color" class="divider"></div>
+        <div class="color">
+            <h3 ng-show="goodses.selectGoods.Model"><strong style="color: rgb(200, 172, 172);">型号：</strong>{{goodses.selectGoods.Model}}</h3>
+            <h3 ng-show="goodses.selectGoods.Barcode"><strong style="color: rgb(200, 172, 172);">条码：</strong>{{goodses.selectGoods.Barcode}}</h3>
+            <h3 ng-show="goodses.selectGoods.Casing"><strong style="color: rgb(200, 172, 172);">包装：</strong>{{goodses.selectGoods.Casing}}</h3>
+            <h3 ng-show="goodses.selectGoods.Package!='' && goodses.selectGoods.Package!=0"><strong style="color: rgb(200, 172, 172);">整包装出库数量：</strong>{{goodses.selectGoods.Package}}</h3>
+        </div>
+        <div ng-show="goodses.selectGoods.FieldContent" class="divider"></div>
+        <div ng-repeat="field in goodses.selectGoods.FieldContent" class="color">
+            <h3><strong style="color: rgb(200, 172, 172);">{{field.name}}：</strong>{{field.value}}</h3>
+        </div>
+        <div ng-show="goodses.selectGoods.Content" class="divider"></div>
+        <div ng-show="goodses.selectGoods.Content" class="goods-content" data-trans-html html-text="goodses.selectGoods.Content"></div>
+    </div>
+    
+    <!-- 页面底部 -->
+    <footer class="info-footer">
+        <div ng-click="goodses.setGoodsFlag();">
+            <span>{{goodses.selectGoods.flagName}}</span>
+        </div>
+    </footer>
+</div>
+

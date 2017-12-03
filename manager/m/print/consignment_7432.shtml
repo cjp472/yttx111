@@ -1,0 +1,288 @@
+<?php
+$valuearr['ExpiryDate'] = Array(
+            'name'  => '有效期',
+            'width' => '10%',
+            'show'  => '1'
+        );
+?>
+<script language="javascript" type="text/javascript"> 
+	function setMytable()
+	{
+		LODOP=getLodop(document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM'));  
+		LODOP.PRINT_INIT("在线发货单打印");
+		LODOP.SET_PRINT_PAGESIZE(0,<?php echo $paper_width;?>,<?php echo $paper_height;?>,"<?php echo $paper_name;?>");
+		var strStyleCSS="<link href='css/printf.css' type='text/css' rel='stylesheet'>";
+		var strFormHtml=strStyleCSS+"<body>"+document.getElementById("div_content").innerHTML+"</body>";
+		
+		LODOP.ADD_PRINT_TABLE(148,"2%","96%","BottomMargin:20px",strFormHtml);
+		LODOP.SET_PRINT_STYLEA(0,"Vorient",3);		
+		LODOP.ADD_PRINT_HTM(15,"2%","96%",138,strStyleCSS+"<body>"+document.getElementById("div_title").innerHTML+"</body>");
+		LODOP.SET_PRINT_STYLEA(0,"ItemType",1);
+		LODOP.SET_PRINT_STYLEA(0,"LinkedItem",1);	
+
+	<?php if(!empty($cartdatag)){?>
+		LODOP.NewPageA();
+		var strFormHtml2=strStyleCSS+"<body>"+document.getElementById("div_gifts").innerHTML+"</body>";
+		LODOP.ADD_PRINT_TABLE(138,"2%","96%","BottomMargin:20px",strFormHtml2);
+		LODOP.SET_PRINT_STYLEA(0,"Vorient",3);
+		LODOP.ADD_PRINT_HTM(20,"2%","96%",138,strStyleCSS+"<body>"+document.getElementById("div_gifts_title").innerHTML+"</body>");
+		LODOP.SET_PRINT_STYLEA(0,"ItemType",1);
+		LODOP.SET_PRINT_STYLEA(0,"LinkedItem",4);
+	<?php }?>
+
+		LODOP.ADD_PRINT_TEXT(3,60,150,20,"总页号：第#页/共&页");
+		LODOP.SET_PRINT_STYLEA(0,"ItemType",2);
+		LODOP.SET_PRINT_STYLEA(0,"Horient",1);			
+	
+	}
+</script>
+<div id="div_title">
+	<table width="98%" border="0" align="center" cellpadding="0" cellspacing="0" class="noborder">
+	   <tr><td colspan="4" style="font-size:24px; font-weight:bold; text-align:center;"><?php echo $_SESSION['uc']['CompanyName'];?> 销售出库单</td></tr>
+	   <tr>
+		<td width="28%"><strong>订单号：</strong><? echo $oinfo['OrderSN'];?></td>		
+		<td ><strong>日期：</strong><? echo date("Y-m-d",$oinfo['OrderDate']);?></td>
+		<td width="10%" align="right"><strong>联系人：</strong></td>
+		<td width="20%" align=""left""><? echo $cinfo['InceptMan'];?></td>
+	  </tr>
+	  <tr>
+			
+		<td ></td>
+		<td align="right"></td>
+	  </tr>
+	  <tr>
+	    <td ><strong>客户名称：</strong><? echo $clientinfo['ClientCompanyName'];?></td>	
+		<td ><strong>客户电话：</strong><? echo $cinfo['InceptPhone'];?></td>		
+		<td width="10%" align="right"><strong>物流信息：</strong></td>
+		<td width="20%" align="left"><?
+		$logisticsarr = $db->get_row("SELECT LogisticsID,LogisticsCompany,LogisticsName,LogisticsContact,LogisticsPhone FROM ".DATATABLE."_order_logistics where LogisticsCompany=".$_SESSION['uinfo']['ucompany']." and LogisticsID=".$cinfo['ConsignmentLogistics']." ORDER BY LogisticsID DESC Limit 0,1");
+		if(empty($logisticsarr)) echo '上门自提'; else echo $logisticsarr['LogisticsName'];
+		?></td>
+	  </tr>
+	  <tr>
+		<td colspan="4"><strong>备注：</strong><? echo $cinfo['ConsignmentRemark'];?></td>	
+	  </tr>
+	</table>
+</div>
+
+<div id="div_content">
+<table width="98%" border="0" align="center" cellpadding="0" cellspacing="0" >
+  <thead>
+  <tr>
+	<?php
+	$tdmsg = '';	
+	foreach($valuearr as $kk=>$v)
+	{
+		if($kk == 'CompanyInfoPrint') continue;
+		if(empty($v['width'])) $v['width'] = 'wid_th';
+		if($v['show'] == "1")
+		{
+			if(@in_array($kk,$rightarr)) $alignmsg = ' align="right" '; elseif($kk=='Units') $alignmsg = ' align="center" '; else $alignmsg = '';
+			if($kk == 'ContentName') $tdmsg .= '<td >'.$v['name'].'</td>'; else 
+			$tdmsg .= '<td width="'.$v['width'].'" '.$alignmsg.' >'.$v['name'].'</td>';
+			$tdfield[] = $kk;
+		}
+	}
+	$dwidth = 100/count($tdfield).'%';
+	$tdmsg = str_replace('wid_th',$dwidth,$tdmsg);
+	echo $tdmsg;
+	?>
+  </tr>
+   </thead>
+   <tbody >
+   <?php 
+	$alltotal1 = 0;
+	$alltotal  = 0;
+	$allnumber = 0;
+	$n=0;
+	foreach($cartdata as $ckey=>$cvar)
+	{
+		$n++;
+		//$cvar = array_merge($cvar, $pinfo[$cvar['ContentID']]);
+		$cvar['PercentPrice'] = $cvar['ContentPrice'] * $cvar['ContentPercent'] / 10;
+		$cvar['LineTotal'] = $cvar['ContentNumber'] * $cvar['PercentPrice'];
+		$allnumber = $allnumber + $cvar['ContentNumber'];
+		$alltotal1 = $alltotal1 + $cvar['ContentNumber'] * $cvar['ContentPrice'];
+		$alltotal  = $alltotal + $cvar['LineTotal'];		
+
+		$tdmsg = '';
+		foreach($tdfield as $kv)
+		{
+			if($kv == 'NO') $cvar[$kv] = $n;
+			if(@in_array($kv,$rightarr)) $alignmsg = ' align="right" '; elseif($kv=='Units') $alignmsg = ' align="center" '; else $alignmsg = '';
+			if($kv == 'ContentName' && $cvar['CommendID'] == '2')
+			    $tdmsg .= '<td '.$alignmsg.' >【特】'.$cvar[$kv].'</td>';
+			else
+			    $tdmsg .= '<td '.$alignmsg.' >'.$cvar[$kv].'</td>';		
+		}
+		echo '<tr>'.$tdmsg.'</tr>';
+	}
+	echo '</tbody>';
+	$alltotal  = number_format($alltotal,2,'.',',');
+	$alltotal1 = number_format($alltotal1,2,'.',',');
+	$val = $alltotal;
+	if($oinfo['OrderSpecial'] == 'T'){
+	    $val = "<span style='text-decoration:line-through;'>原价 ￥".$alltotal."</span><br/>";
+	    $val .= "<strong>特价 ￥".$oinfo['OrderTotal']."</strong>";
+	    $alltotal = $oinfo['OrderTotal'];
+	}
+
+	$totallinemsg = '';
+	$totallinepage = '';
+	foreach($tdfield as $kk=>$kv)
+	{
+		if(count($cartdata)/$paper_height > 6/1000)
+		{
+			//页小计
+			if($kk==0) $totallinepage .= '<td><strong>页小计：</strong></td>';
+			elseif($kv=="ContentNumber") $totallinepage .= '<td align="right" tdata="subSum" format="#.##"><strong> ######</strong></td>';
+			elseif($kv=="ContentPrice") $totallinepage .= '<td align="right" tdata="subSum" format="#,##0.00"><strong>###</strong></td>';
+			elseif($kv=="LineTotal") $totallinepage .= '<td align="right" tdata="subSum" format="#,##0.00"><strong>###</strong></td>';
+			else $totallinepage .= '<td>&nbsp;</td>';
+		}
+
+		//合计
+		if($kk==0) $totallinemsg .= '<td><strong>合计：</strong></td>';
+// 		elseif($kv=="ContentName") $totallinemsg .= '<td ><strong>大写：</strong>'.toCNcap(str_replace(",","",$alltotal)).'</td>';
+		elseif($kv=="ContentNumber") $totallinemsg .= '<td align="right"><strong> '.$allnumber.'</strong></td>';
+		elseif($kv=="ContentPrice") $totallinemsg .= '<td align="right"><strong> '.$alltotal1.'</strong></td>';
+		elseif($kv=="LineTotal") $totallinemsg .= '<td align="right">'.$val.'</td>';
+		else $totallinemsg .= '<td>&nbsp;</td>';
+	}
+	$bottomtotal = '  <tr>
+    <td colspan="'.(count($tdfield)-1).'"><strong>合计金额（大写）：</strong>'.toCNcap(str_replace(",","",$alltotal)).'&nbsp;&nbsp;&nbsp;&nbsp;<strong>单据合计金额（小写）：</strong> '.$alltotal.'</td>
+    <td rowspan="4"><img src="print/weixin_7432.jpg" style="height:89px;" /></td>
+    </tr>';
+	
+	$bottommsg = '  <tr>
+    <td colspan="'.(count($tdfield)-1).'"><strong>温馨提示：</strong>①功能产品使用前请小面积使用。②收到货后如有破损请务必在2个工作日内通知售后。</td>
+  </tr>';
+	$bottommsg .= '  <tr>
+    <td colspan="'.(count($tdfield)-1).'"><strong>QQ：</strong>2831540510并附上照片&nbsp;&nbsp;&nbsp;&nbsp;<strong>客服电话：</strong>028-84439667、84439293</td>
+  </tr>';
+	$bottommsg .= '  <tr>
+    <td colspan="'.(count($tdfield)-1).'">成都辰翔商务服务有限公司&nbsp;&nbsp;&nbsp;&nbsp;<strong>投诉电话：</strong>028-84432832</td>
+  </tr>';
+	
+	echo '<tfoot><tr>'.$totallinepage.'</tr><tr>'.$totallinemsg.'</tr><tr>'.$bottomtotal.'</tr>'.$bottommsg.'</tfoot>';
+?>
+</table>
+</div>
+
+<?php
+	//赠品
+	if(!empty($cartdatag))
+	{
+?>
+<br />
+<div id="div_gifts_title">
+<table width="98%" border="0" align="center" cellpadding="0" cellspacing="0" class="noborder">
+   <tr><td colspan="4" style="font-size:24px; font-weight:bold; text-align:center;"><?php echo $_SESSION['uc']['CompanyName'];?> 销售出库单 - 赠品</td></tr>
+	   <tr>
+		<td width="28%"><strong>订单号：</strong><? echo $oinfo['OrderSN'];?></td>		
+		<td ><strong>日期：</strong><? echo date("Y-m-d",$oinfo['OrderDate']);?></td>
+		<td width="10%" align="right"><strong>联系人：</strong></td>
+		<td width="20%" align=""left""><? echo $cinfo['InceptMan'];?></td>
+	  </tr>
+	  <tr>
+			
+		<td ></td>
+		<td align="right"></td>
+	  </tr>
+	  <tr>
+	    <td ><strong>客户电话：</strong><? echo $cinfo['InceptPhone'];?></td>	
+		<td ><strong>客户地址：</strong><? echo $cinfo['InceptAddress'];?></td>		
+		<td width="10%" align="right"><strong>物流信息：</strong></td>
+		<td width="20%" align="left"><?
+		$logisticsarr = $db->get_row("SELECT LogisticsID,LogisticsCompany,LogisticsName,LogisticsContact,LogisticsPhone FROM ".DATATABLE."_order_logistics where LogisticsCompany=".$_SESSION['uinfo']['ucompany']." and LogisticsID=".$cinfo['ConsignmentLogistics']." ORDER BY LogisticsID DESC Limit 0,1");
+		if(empty($logisticsarr)) echo '上门自提'; else echo $logisticsarr['LogisticsName'];
+		?></td>
+	  </tr>
+	  <tr>
+		<td colspan="4"><strong>备注：</strong></td>	
+	  </tr>
+</table>
+</div>
+
+<div id="div_gifts">
+<table width="98%" border="0" align="center" cellpadding="0" cellspacing="0" >
+  <thead>
+  <tr>
+<?php
+	$tdmsg = '';	
+	foreach($valuearr as $kk=>$v)
+	{
+		if($kk == 'CompanyInfoPrint') continue;
+		if(empty($v['width'])) $v['width'] = 'wid_th';
+		if($v['show'] == "1")
+		{
+			if(@in_array($kk,$rightarr)) $alignmsg = ' align="right" '; elseif($kk=='Units') $alignmsg = ' align="center" '; else $alignmsg = '';
+			if($kk == 'ContentName') 
+			    $tdmsg .= '<td >'.$v['name'].'</td>'; 
+			else if($kk == 'ContentNumber')
+			    $tdmsg .= '<td width="'.$v['width'].'" '.$alignmsg.'>赠送数量</td>';
+			else if($kk == 'LineTotal')
+			    $tdmsg .= '<td width="'.$v['width'].'" '.$alignmsg.'>赠送金额</td>';
+			else 
+			    $tdmsg .= '<td width="'.$v['width'].'" '.$alignmsg.' >'.$v['name'].'</td>';
+		}
+	}
+	$dwidth = 100/count($tdfield).'%';
+	$tdmsg  = str_replace('wid_th',$dwidth,$tdmsg);
+	echo $tdmsg;
+	?>
+  </tr>
+   </thead>
+   <tbody >
+	<?php 
+		$alltotal = 0;
+		$allnumber = 0;
+		$n = 0;
+		foreach($cartdatag as $ckey=>$cvar)
+		{
+			$n++;
+			$cvar['PercentPrice'] = $cvar['ContentPrice'];
+			$cvar['LineTotal'] = $cvar['ContentNumber'] * $cvar['PercentPrice'];
+			$allnumber = $allnumber + $cvar['ContentNumber'];
+			$alltotal  = $alltotal + $cvar['ContentNumber'] * $cvar['ContentPrice'];
+
+			$tdmsg = '';
+			foreach($tdfield as $kv)
+			{
+				if($kv == 'NO') $cvar[$kv] = $n;
+				if(@in_array($kv,$rightarr)) $alignmsg = ' align="right" '; elseif($kv == 'Units') $alignmsg = ' align="center" '; else $alignmsg = '';
+				$tdmsg .= '<td '.$alignmsg.' >'.$cvar[$kv].'</td>';			
+			}
+			echo '<tr>'.$tdmsg.'</tr>';
+		}
+		echo '</tbody>';
+
+		$alltotal  = number_format($alltotal,2,'.',',');
+		$totallinemsg1 = $totallinepage1 = '';
+		foreach($tdfield as $kk=>$kv)
+		{
+			if(count($cartdata_gifts) > 6)
+			{
+				//页小计
+				if($kk==0) $totallinepage1 .= '<td><strong>页小计：</strong></td>';
+				elseif($kv=="ContentNumber") $totallinepage1 .= '<td align="right" tdata="subSum" format="#.##"><strong> ######</strong></td>';
+				elseif($kv=="ContentPrice") $totallinepage1 .= '<td align="right" tdata="subSum" format="#,##0.00"><strong>###</strong></td>';
+				elseif($kv=="LineTotal") $totallinepage1 .= '<td align="right" tdata="subSum" format="#,##0.00"><strong>###</strong></td>';
+				else $totallinepage1 .= '<td>&nbsp;</td>';
+			}
+			
+			if($kk==0) $totallinemsg1 .= '<td><strong>合计：</strong></td>';
+			elseif($kv=="ContentNumber") $totallinemsg1 .= '<td align="right"><strong> '.$allnumber.'</strong></td>';
+			elseif($kv=="LineTotal") $totallinemsg1 .= '<td align="right"><strong> '.$alltotal.'</strong></td>';
+			else $totallinemsg1 .= '<td></td>';
+		}
+		
+		$bottomtotal = '  <tr>
+    <td colspan="'.(count($tdfield)-1).'"><strong>合计金额（大写）：</strong>'.toCNcap(str_replace(",","",$alltotal)).'&nbsp;&nbsp;&nbsp;&nbsp;<strong>单据合计金额（小写）：</strong> '.$alltotal.'</td>
+    <td rowspan="4"><img src="print/weixin_7432.jpg" style="height:89px;" /></td>
+    </tr>';
+		echo '<tfoot><tr>'.$totallinepage1.'</tr><tr>'.$totallinemsg1.'</tr><tr>'.$bottomtotal.'</tr>'.$bottommsg.'</tfoot>';
+?>
+</table>
+</div>
+<?php }?>

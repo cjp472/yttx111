@@ -1,0 +1,50 @@
+<!-- 收款单详情 -->
+<div class="money-info common-style" style="background-color: white;top: 0;">
+    <header>
+        <span data-back class="icon">&#x34;</span>
+        <h4>收款单详情</h4>
+    </header>
+    <div ng-class="{'bottom':orderMoney.selectOrder.FinanceFlag!=='0'&&(myInfo.module.finance.pope_audit!=='Y'||myInfo.UserFlag==='9'&&myInfo.UserType==='M')}" data-iscroll class="list">
+        <!-- 订单信息 -->
+        <div class="info">
+            <div class="info-common">
+                <p><span>收款账户</span></p>
+                <address>
+                    <span>开户行：{{orderMoney.selectOrder.AccountsBank}} {{paymentOrders.selectOrder.OrderReceivePhone}}</span>
+                    <p>收款人：<em class="status">{{orderMoney.selectOrder.AccountsName}}</em></p>
+                    <p>账&nbsp;&nbsp; 号：{{orderMoney.selectOrder.AccountsNO}}</p>
+                    <p>相关订单：{{orderMoney.selectOrder.FinanceOrder}}</p>
+                    <p>订单状态：<em class="state state-green">{{orderMoney.selectOrder.FinanceFlagName}}</em></p>
+                </address>
+            </div>
+            <div class="info-common">
+                <ul>
+                    <li><span>金额</span><span class="f_right color-red">¥ {{orderMoney.selectOrder.FinanceTotal}}</span></li>
+                    <li><span>转账日期</span><span class="f_right">{{orderMoney.selectOrder.FinanceToDate}}</span></li>
+                    <li ng-show="orderMoney.selectOrder.FinanceUpDate"><span>到账日期</span><span class="f_right">{{orderMoney.selectOrder.FinanceUpDate*1000 | date:'yyyy-MM-dd HH:mm:ss'}}</span></li>
+                    <li><span>填写日期</span><span class="f_right">{{orderMoney.selectOrder.FinanceDate | date:'yyyy-MM-dd HH:mm:ss'}}</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 确认到账 -->
+    <div class="animated fadeIn money-sure common-model">
+        <div>
+            <h4>确认收款</h4>
+            <ul>
+                <li>确认已经到账？</li>
+            </ul>
+            <div class="btn-group">
+                <button ng-click="orderMoney.receiveMoney('confirm');" data-toggle data-selector="div.money-sure">确定</button>
+                <button data-toggle data-selector="div.money-sure">取消</button>
+            </div>
+        </div>
+    </div>
+    <footer ng-show="orderMoney.selectOrder.FinanceFlag==='0'&&(myInfo.module.finance.pope_audit==='Y'||myInfo.UserFlag==='9'&&myInfo.UserType==='M')">
+        <div ng-click="orderMoney.checkIsReceive();">
+            <span class="icon" style="color: #68c8ef;">&#x68;</span>
+             <!-- ng-class="{'grey':orderMoney.selectOrder.FinanceFlag!=='0'}" -->
+            <span>确认到账</span>
+        </div>
+    </footer>
+</div>

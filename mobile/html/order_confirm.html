@@ -1,0 +1,159 @@
+<!-- 确认订单 -->
+<div class="page-order-confirm">
+    <!-- 标题 -->
+    <header class="common">
+        <em data-back><a href="javascript:;" class="arrow-left"></a></em>
+        <p>确认订单</p>
+        <!-- <span data-start-scanner class="scanner"></span> -->
+    </header>
+    <div data-iscroll class="order-info">
+        <div>
+            <div class="address">
+                <div></div>
+                <p><span class="icon icon-location2">收货信息</span></p>
+                <address data-toggle data-selector="div.select-address">
+                    <span>{{selectAddress.AddressContact}} {{selectAddress.AddressPhone}}</span>
+                    <p>{{selectAddress.AddressCompany}}</p>
+                    <p>{{selectAddress.AddressAddress}}</p>
+                    <span class="arrow-right"></span>
+                    <section ng-show="address.length==0">
+                        <button data-toggle data-selector="div.add-addr" ng-click="addrs.setActionType(0);" style="padding: 2% 3%;border-radius: .4rem;background: transparent;border: 1px solid #A0A0A0">
+                                + 新增地址
+                        </button>
+                    </section>
+                </address>
+            </div>
+            <div class="divider"></div>
+            <div data-toggle-goods class="goods-num">
+                <span class="r">共<em>{{checkedGoodses.length}}</em>种<span class="arrow-right"></span></span>
+                <span>商品清单</span>
+            </div>
+            <!-- 商品清单 -->
+            <div class="order-goods animated">
+                <ul>
+                    <li data-ng-repeat="goods in checkedGoodses">
+                        <span class="ellipsis-one">{{goods.name}} {{goods.code}}</span>
+                        <span>
+                            <span ng-show="goods.specify">规格：<em trans-html html-text="goods.specify"></em></span> 
+                            <span ng-show="goods.color">颜色：<em trans-html html-text="goods.color"></em></span> 
+                        </span>
+                        <span>¥ {{goods.price}} * {{goods.num + '='}}
+                            {{goods.price*goods.num | currency: '¥ '}}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="divider"></div>
+            <div class="other" style="margin-bottom:0;">
+                <ul>
+                    <li data-toggle data-selector="div.send-type">配送方式<span class="r"><em ng-bind="selectSend.TypeName"></em><span class="arrow-right"></span></span></li>
+                    <li data-toggle data-selector="div.pay-type">支付方式<span class="r"><em ng-bind="selectPay.TypeName"></em><span class="arrow-right"></span></span></li>
+                    <li ng-show="deliveryTime=='B' || deliveryTime=='Y'" style="overflow: hidden;">交货时间
+                        <span class="arrow-right"></span>
+                        <input data-date-picker data-ctrl-min="true" class="li-input" type="text" ng-model="orderSubmit.deliveryTime" />
+                        <span class="r">
+                            <em ng-bind="orderSubmit.deliveryTime" style="vertical-align: middle;"></em>
+                        </span>
+                    </li>
+                    <!-- <input type="text" data-date-picker placeholder="交货时间" ng-model="orderSubmit.deliveryTime" /> -->
+                </ul>
+            </div>
+            <div class="message">
+                <textarea data-toggle data-selector="div.order-message" readonly="true" placeholder="我要留言：" ng-model="orderSubmit.orderRemark"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="order-message">
+        <div>
+            <h4>留言</h4>
+            <textarea ng-model="orderSubmit.orderRemark" placeholder="说点什么："></textarea>
+            <div class="btn-group" style="margin-top: -1.2rem;">
+                <a href="javascript:;" data-toggle data-selector="div.order-message">确定</a>
+                <a href="javascript:;" ng-click="orderSubmit.orderRemark=''">清空</a>
+            </div>
+        </div>
+    </div>
+    <!-- 收货地址 -->
+    <div class="animated fadeInDown select-address">
+        <div>
+            <h4>收货地址</h4>
+            <ul>
+                <li ng-click="setAddress($index);" ng-class="{'selected':addr.checked}" ng-repeat="addr in address">
+                    <span>{{addr.AddressContact}} {{addr.AddressPhone}}</span><em></em>
+                    <small data-toggle data-selector="div.add-addr" ng-click="addrs.setActionType(2,$index);" class="icon icon-trashcan address-act del"></small>
+                    <small data-toggle data-selector="div.add-addr" ng-click="addrs.setActionType(1,$index);" class="icon icon-pencil address-act edit"></small>
+                    <span ng-click="addrs.setDefault($index,$event);" ng-class="{'addr-default':addr.AddressFlag=='1'}" class="set-default"><!-- <span ng-class="{'addr-default':addr.AddressFlag=='1'}"></span> -->{{addr.defaultText}}</span>
+                    <p>{{addr.AddressCompany}}</p>
+                    <p>{{addr.AddressAddress}}</p>
+                </li>
+            </ul>
+            <div class="btn-group">
+                <a href="javascript:;" data-toggle data-selector="div.add-addr" ng-click="addrs.setActionType(0);">添加</a>
+                <a href="javascript:;" data-toggle data-selector="div.select-address">取消</a>
+            </div>
+        </div>
+    </div>
+    <!-- 配送方式 -->
+    <div class="send-type animated fadeIn">
+        <div>
+            <h4>配送方式</h4>
+            <ul>
+                <!-- + '(' + s_type.TypeAbout+ ')' -->
+                <li ng-click="setSendType($index);" ng-class="{'selected':s_type.checked}" ng-repeat="s_type in sendType">{{s_type.TypeName}}<em></em></li>
+            </ul>
+            <button class="btn" data-toggle data-selector="div.send-type">取消</button>
+        </div>
+    </div>
+    <!-- 支付方式 -->
+    <div class="pay-type animated fadeIn">
+        <div>
+            <h4>支付方式</h4>
+            <ul>
+                <!--  + '(' + p_type.TypeAbout+ ')' -->
+                <li ng-click="setPayType($index);" ng-class="{'selected':p_type.checked}" ng-repeat="p_type in payType">{{p_type.TypeName}}<em></em></li>
+            </ul>
+            <button class="btn" data-toggle data-selector="div.pay-type">取消</button>
+        </div>
+    </div>
+    <!-- 收货地址管理 -->
+    <form action="" name="addrManagerForm">
+        <div class="animated fadeIn add-addr addr-manager">
+            <div>
+                <h4>{{addrs.addrTitle}}</h4>
+                <ul ng-show="addrs.actionType!==2" class="order-date">
+                    <li>
+                        <input required ng-model="addrs.selectAddr.AddressCompany" type="text" placeholder="收货单位" />
+                    </li>
+                    <li>
+                        <input required ng-model="addrs.selectAddr.AddressContact" type="text" placeholder="联系人" />
+                    </li>
+                    <li>
+                        <input required ng-model="addrs.selectAddr.AddressPhone" type="text" placeholder="联系方式" />
+                    </li>
+                    <li>
+                        <input required ng-model="addrs.selectAddr.AddressAddress" type="text" placeholder="详细地址" />
+                    </li>
+                </ul>
+                <div class="btn-group">
+                    <a href="javascript:;" ng-click="addrs.setAddress(addrManagerForm.$valid);">确定</a>
+                    <a href="javascript:;" data-toggle data-selector="div.add-addr">取消</a>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- 是否去付款 -->
+    <!-- <div class="animated fadeIn go-pay addr-manager">
+        <div>
+            <h4>是否付款？</h4>
+            <div class="btn-group">
+                <a href="javascript:;" ng-click="goPay();">去付款</a>
+                <a href="javascript:;" onclick="window.history.back();">取消</a>
+            </div>
+        </div>
+    </div> -->
+    <footer>
+        <div class="l">共<em>{{checkedGoodses.length}}</em>种，合计<em>¥ {{totalAmount}}</em></div>
+        <div class="r" ng-click="submitOrder();">提交订单</div>
+    </footer>
+</div>
+

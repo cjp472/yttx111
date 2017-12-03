@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="format-detection" content="telephone=no, email=no" />
+        <!-- QQ强制全屏 -->
+        <meta name="x5-fullscreen" content="true">
+        <title>医统天下</title>
+        <script type="text/javascript" charset="utf-8">
+            window.location.href = 'login.html';
+            
+            var ua = navigator.userAgent.toLowerCase();
+            if(ua.match(/MicroMessenger/i) == "micromessenger") {
+                window.location.href = 'login.html';
+            }
+            
+            var version = '20150520';
+            if(window.localStorage['version'] !== version){
+                delete window.localStorage['sKey'];
+                delete window.localStorage['started'];
+            }
+            
+            if(window.localStorage['m_sKey']){
+                window.location.replace('bsmm/index.html');
+                
+            }
+            else if(window.localStorage['sKey']){
+                window.location.replace('html/index.html');
+                
+            }
+            else if(window.localStorage['started']){
+                window.location.replace('login.html');
+            }
+        </script>
+        <style>
+            *{padding:0;margin: 0;}
+            html{font-size: 62.5%;}
+            body{
+                font-size: 1.4rem; font: 1.4rem/2.8rem Microsoft YaHei,SimSun,Arial;
+            }
+            ul{list-style: none;}
+            .page{
+                position: absolute;
+                width: 100%;
+                height:100%;
+                top: 0;
+                left:0;
+                bottom: 0;
+                overflow: hidden;
+            }
+            .page ol{
+                width: 300%;
+                height: 100%;
+                display: table;
+                table-layout: fixed;
+                text-align: center;
+                -webkit-transition-duration: 300ms;
+                -webkit-transform: translate3d(0px, 0px, 0px);
+            }
+            .page ol li{
+                display: table-cell;
+            }
+            .page ol li:nth-child(1){
+                background: url(img/welcome1.jpg) center no-repeat;
+                background-size: cover;
+            }
+            .page ol li:nth-child(2){
+                background: url(img/welcome2.jpg) center no-repeat;
+                background-size: cover;
+            }
+            .page ol li:nth-child(3){
+                background: url(img/welcome3.jpg) center no-repeat;
+                background-size: cover;
+            }
+            .page ul{
+                position: absolute;
+                margin-top: -3.0rem;
+                margin-left: 50%;
+                z-index: 2;
+                width: 4.4rem;
+                -webkit-transform: translateX(-50%);
+            }
+            
+            .page ul li{
+                width: .8rem;
+                height: .8rem;
+                border-radius: 50%;
+                background: rgb(194, 179, 179);
+                float: left;
+                margin-left: 1.0rem;
+            }
+            .page ul li:first-child{
+                margin-left: 0;
+            }
+            .active{
+                background: #ff5c1e !important;
+            }
+            .page > div{
+                position: absolute;
+                bottom: 5.0rem;
+                width: 100%;
+                left: 0;
+                text-align: center;
+                display: none;
+            }
+            button{
+                width: 12.0rem;
+                height: 3.5rem;
+                font-size:1.6rem;
+                background: rgb(250,98,0);
+                color: #FFFFFF;
+                border-radius: .4rem;
+                border: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page">
+            <ol id="welcome">
+                <li></li>
+                <li></li>
+                <li></li>
+            </ol>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <div id="taste">
+                <button id="goLogin">立即体验</button>
+            </div>
+        </div>
+		<script type="text/javascript">
+		    
+		    // 窗口宽度
+		    var window_width = parseInt(window.getComputedStyle(document.querySelector('div.page'),null)['width']);
+		    // 小图标对象
+		    var obj = document.querySelectorAll('ul li');
+		    // 图片张数
+		    var imgLength = 3;
+		    // 轮播图片对象
+		    var ele  = document.querySelector('#welcome'),
+		    // 当前显示图片 对应下标
+		    currIndex = 0,initCss,
+            startX = 0,startL = 0,endX = 0;
+            
+            // 为当前小图标添加class active
+            setActive(obj);
+            
+            //
+            ele.addEventListener('touchstart',function(e){
+                e.preventDefault();
+                if(e.targetTouches.length == 1){
+                    startL = -window_width * currIndex;
+                    css(ele,'webkitTransitionDuration',0);
+                    var touch = e.targetTouches[0];
+                    startX = touch.pageX;
+                    initCss = ele.style.webkitTransform;
+                }
+            },false);
+            ele.addEventListener('touchmove',function(e){
+                e.preventDefault();
+                if(e.targetTouches.length == 1){
+                    var touch = e.targetTouches[0];
+                    endX = touch.pageX;
+                    var diff = endX - startX ;
+                    css(ele,'webkitTransform','translate3d(' + (diff + startL) +'px,0,0)'); 
+                }
+            },false);
+            ele.addEventListener('touchend',function(e){
+                css(ele,'webkitTransitionDuration','300ms');
+                // 向右滑动
+                if(endX - startX > 0){
+                    //滑动距离小于窗口宽度一半留着当前图片
+                    if(currIndex === 0 || Math.abs(endX - startX) < window_width/2){
+                        css(ele,'webkitTransform',initCss);
+                        return;
+                    }
+
+                    css(ele,'webkitTransform','translate3d(' + (startL + window_width) + 'px,0,0)'); 
+                    currIndex--;
+                    
+                }
+                // 向左滑动
+                if(endX - startX < 0){
+                    //滑动距离小于窗口宽度一半留着当前图片
+                    if(currIndex === 2 || Math.abs(endX - startX) < window_width/2){
+                        css(ele,'webkitTransform',initCss); 
+                        return;
+                    }
+                    
+                    css(ele,'webkitTransform','translate3d(' + (startL - window_width) + 'px,0,0)'); 
+                    currIndex++;
+                    
+                }
+                setActive(obj);
+            },false);
+            
+            //设置当前显示图片对应的小圆形图标
+            function setActive(obj){
+                if(currIndex == imgLength - 1){
+                    document.querySelector('#taste').style.display = 'block';
+                }else{
+                    document.querySelector('#taste').style.display = 'none';
+                }
+                for(var i = 0;i < obj.length; i++){
+                    if(i === currIndex){
+                        obj[i].className = 'active';
+                    }else{
+                        obj[i].className = '';
+                    }
+                }
+            }
+            
+            // 设置css
+            function css(ele,key,value){
+                ele.style[key] = value;
+            }
+            
+            document.getElementById('goLogin').onclick = function(){
+                window.localStorage['started']='true';
+                window.localStorage['version'] = version;
+                window.location.href="login.html";
+            };
+		</script>
+    </body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="format-detection"content="telephone=no, email=no" />
+        <!-- UC强制全屏 -->
+        <meta name="full-screen" content="yes">
+        <!-- QQ强制全屏 -->
+        <meta name="x5-fullscreen" content="true">
+		<title></title>
+		<script type="text/javascript" charset="utf-8">
+		    function is_weixin(){
+                var ua = navigator.userAgent.toLowerCase();
+                if(ua.match(/MicroMessenger/i) == "micromessenger") {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            
+            var isLoginOut = window.sessionStorage['loginOut'];
+            delete window.sessionStorage['loginOut'];
+		    
+		    var DHB = DHB || {};
+		    var zhengShiUrl = 'http://yy.yitong111.com/mobileApi/api.php';
+		    var tiYanUrl = 'http://wy.dhb.net.cn/mobileApi/api.php';
+		    DHB.openId = '';
+		    if(isLoginOut){
+		        DHB.openId = window.localStorage['openId'];
+		    }
+		    // 用户类型，正式的为true 体验用户为false
+		    DHB.userType = true;
+		    // 访问类型 微信 或者 app
+		    DHB.device = {
+                loginFrom: 'WeiXin',//Mobile,WeiXin,Ios,Andriod
+                weixin: true,
+                app: false
+            };
+            if(DHB.device.weixin && !is_weixin()){
+                DHB.device.loginFrom = 'Mobile';
+            }
+		    DHB.url = DHB.userType && DHB.device.weixin ? zhengShiUrl : tiYanUrl;
+		    if(DHB.device.weixin && is_weixin() && !isLoginOut){
+                if(window.location.search){
+                    var urlParams = window.location.search.substring(1).split('&');
+                    if(urlParams.length >= 1){
+                        var back = urlParams[0].split('=')[1];
+                        var cid = urlParams[1].split('=')[1];
+                        var obj;
+                        if(back){
+                           obj = JSON.parse(decodeURI(back)); 
+                           if(obj.rStatus == '100'){
+                               window.localStorage['m_sKey'] = obj.sKey;
+                               window.localStorage['openId'] = obj.openId;
+                               window.localStorage['url'] = obj.appUrl;
+                               
+                               var paramUrl = urlParams[2].split('=')[1];
+                               var go = {
+                                   index: 'bsmm/index.html', // 首页
+                                   product: 'bsmm/index.html#//goods-list', // 商品
+                                   order: 'bsmm/index.html#/order-list',  // 订单
+                                   client: 'bsmm/index.html#/customer' // 客户
+                               };
+                               window.location.href = go[paramUrl];
+                           }else if(obj.rStatus == '119'){
+                               alert('微信配置错误，请联系管理员!');
+                           }else{
+                               DHB.openId = obj.openId;
+                               if(obj.wid === 0){
+                                   obj.wid = '0';
+                               }
+                               DHB.wid = obj.wid || window.localStorage['wid'];
+                               window.localStorage['wid'] = DHB.wid;
+                               window.localStorage['cid'] = cid;
+                               DHB.CompanySigned = obj.rData.CompanySigned;
+                           }
+                        }
+                    }
+                }
+                else{
+                    //window.location.href = 'http://wy.dhb.net.cn/mobileApi/jumpurl.php';
+                    var prefix = 'mwxqyjumpurl.php?cid=' + window.localStorage['cid'];
+                    if(window.localStorage['wid']){
+                        prefix = 'mwxqyjumpurl.php?state=' + window.localStorage['wid'] + '&cid=' + window.localStorage['cid'];
+                    }
+                    window.location.href = DHB.userType ? zhengShiUrl.replace('api.php',prefix) : tiYanUrl.replace('api.php',prefix); 
+                }
+            }
+        </script>
+		<link href="css/login.css?20170106" rel="stylesheet" type="text/css" />
+	</head>
+	<body style="background: url(img/bsmm_login.jpg) no-repeat center;background-size: cover;">
+	    <div class="login-page">
+	    	<div class="logo" style="visibility: hidden;"></div>
+	    	<div>
+                <span><em></em></span>
+                <span>管理端</span>
+                <span><em></em></span>
+            </div>
+	    	<div class="login-form">
+	    	    <div>
+	    	        <span class="icon icon-user"></span>
+	    	        <input name="userName" type="text" placeholder="输入用户名" />
+	    	    </div>
+	    	    <div>
+	    	        <span class="icon icon-lock"></span>
+                    <input name="password" type="password" placeholder="输入登录密码" />
+	    	    </div>
+	    	    <div id="user-login">登 录</div>
+	    	    <section><button onclick="javascript:window.location.href='login_c.html';">切换到订货端 >></button></section>
+	    	</div>
+	    	<div id="msg">
+	    	    <div></div>
+	    	</div>
+	    	<footer>
+                <strong><a href="choice_trade.html">立即体验</a></strong>
+                <strong><a href="reg/supplier_reg.html">免费开通</a></strong>
+            </footer>
+	    </div>
+	    <script type="text/javascript" src="js/common/zepto.min.js"></script>
+	    <!-- <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script type="text/javascript" src="js/wxapi.js"></script> -->
+	    <script type="text/javascript">
+	        if(DHB.device.weixin && is_weixin() && DHB.openId){
+                $('#user-login').text('绑定微信');
+	        }
+	        if(DHB.CompanySigned || window.sessionStorage['signed']){
+                if(!DHB.CompanySigned){
+                    DHB.CompanySigned = window.sessionStorage['signed'];
+                }else{
+                    window.sessionStorage['signed'] = DHB.CompanySigned;
+                }
+                $('div.logo').css('background','none').addClass('replace-img').html('<span>' + DHB.CompanySigned + '</span>');
+            }
+            $('div.logo').css('visibility','visible');
+            document.title = DHB.CompanySigned || '医统天下 网上订货系统';
+            if(window.localStorage['m_userName']){
+                $('input[name=userName]').val(window.localStorage['m_userName']);
+            }
+            if(window.localStorage['m_password']){
+                $('input[name=password]').val(window.localStorage['m_password']);
+            }
+	        // app 监听安卓菜单键和返回键
+	        if(DHB.device.app){
+    	        window.uexOnload = function(){
+                    //uexWindow.setReportKey(0,1);监听返回键
+                    //uexWindow.setReportKey(1,1);监听menu键
+                    
+                    //监听Android返回键 退出程序
+                    uexWindow.onKeyPressed=function(keycode){
+                        if(keycode == 0){
+                            uexWidgetOne.exit();
+                        }else if(keycode == 1){
+                            uexWidgetOne.exit();
+                        }
+                    }
+                    uexWindow.setReportKey(0,1);
+                    uexWindow.setReportKey(1,1);
+                };
+            }
+	    
+	        // 用户登录
+	        $('#user-login').click(function(){
+	            $('#msg').show();
+	            $('#msg').first().text('正在登录!');
+	            userLogin();
+	        });
+	        
+	        // 登录操作
+	        function userLogin(){
+	            var userName = $('input[name=userName]').val(),
+	            password = $('input[name=password]').val();
+	            
+                DHB.url = zhengShiUrl;
+	            
+	            window.localStorage['url'] = DHB.url;
+	            if(userName == '' || password == ''){
+	                $('#msg').show();
+                    $('#msg').first().text('用户名密码不能为空!');
+	                return;
+	            }
+	            var param = {
+                    f: 'managerTokenValue',
+                    v: {
+                        loginFrom: DHB.device.loginFrom,
+                        Username: userName,
+                        weixin: 'qy',
+                        Password: password
+                    }
+                };
+                
+                // 微信客户端 并且存在openId
+                if(DHB.device.weixin && is_weixin() && DHB.openId){
+                    param.f = 'managerWeixinBindAccount';
+                    param.v.openId = DHB.openId;  
+                    param.v.wid = DHB.wid || window.localStorage['wid']; 
+                }
+                param.v = JSON.stringify(param.v);
+    			$.ajax({
+    			    url: DHB.url,
+    			    type: 'post',
+    			    dataType: 'json',
+    			    data: $.param(param),
+    			    success: function(data){
+    			        if(data && data.rStatus == '101'){
+    			            $('#msg').show();
+                            $('#msg').first().text(data.error);
+    			            return;
+    			        }
+    			        if(data.sKey){
+    			            delete window.sessionStorage['tradeId'];
+                            delete window.localStorage['cart'];
+                            window.localStorage['m_userName'] = userName;
+                            window.localStorage['m_password'] = password;
+    			            window.localStorage['openId'] = DHB.openId;
+    			            window.localStorage['m_sKey'] = data.sKey;
+                            window.location.href = 'bsmm/index.html';
+                            // window.location.href = 'bridge.html';
+    			        }else{
+    			            $('#msg').show();
+                            $('#msg').first().text(data.error);
+    			        }
+    			        
+    			    },
+    			    error: function(data){
+    			        $('#msg').show();
+                        $('#msg').first().text('请求发生错误!');
+    			    }
+    			});
+    	   }
+    	   
+    	   $('input').focusin(function(){
+               $('footer').hide();
+               $('div.login-page').css('-webkit-transform','translateY(-100px)');
+           }).focusout(function(){
+               $('div.login-page').css('-webkit-transform','translateY(0)');
+               $('footer').show();
+           });
+		
+		  </script>
+	</body>
+</html>

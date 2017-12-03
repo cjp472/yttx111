@@ -1,0 +1,88 @@
+<!-- 添加付款 -->
+<style type="text/css">
+    ul.pay-account{
+        border-bottom: 1px solid #efefef;
+        line-height: 4rem;
+    }
+    ul.pay-account em{
+        float: left;
+        width: 1.6rem;
+        height: 1.6rem;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+        margin-top: 1em;
+        margin-right: 1rem;
+    }
+    ul.pay-account li.selected em{
+        background-color: #ff4a00;
+    }
+    ul.pay-account li:first-child{
+        border-top: 1px solid #efefef;
+    }
+    /*div.pay-choice button{
+        background-color: #fff;
+        
+        border-radius: .4rem;
+        padding: .4rem .6rem;
+    }*/
+</style>
+<div data-ng-controller="choicePayController" class="page-add-pay page-order-confirm page-order-list page-goods-list" style="background-color:#f9f9f9;">
+    <!-- 标题 -->
+    <header class="common" style="border-bottom: 1px solid #DBDADA;">
+        <em data-back><a href="javascript:;" class="arrow-left"></a></em>
+        <p>选择支付方式</p>
+        <!-- <span class="icon icon-expand"></span> -->
+    </header>
+    <!-- 添加付款单 -->
+    <div data-iscroll class="iscroll" style="bottom: 5rem;top: 5.1rem;">
+        <div class="order-payway">
+            <ul>
+                <li ng-show="onlinePay.payAccount.length > 0" ng-click="payNext(1);" style="border-top: none;">
+                    <span class="pay-arrow"></span>
+                    <span class="payinfo-way">快捷支付</span>
+                </li>
+                <li ng-show="onlinePay.aliPay" ng-click="payNext(3);">
+                    <span class="pay-arrow"></span>
+                    <span class="payinfo-way">支付宝支付</span>
+                </li>  
+                <li ng-show="onlinePay.weiXinPay">
+                    <span class="pay-arrow"></span>
+                    <span class="payinfo-way">微信支付</span>
+                </li>  
+                <!-- 
+                <li ng-click="payNext(2);">
+                    <span class="pay-arrow"></span>
+                    <span class="payinfo-way">线下转账</span>
+                </li>  
+                 -->
+            </ul>
+        </div>
+        
+        <!-- <div style="padding: 0 5%;">
+            <div ng-click="payNext(1);" class="pay-choice" style="margin-bottom:0;">
+                <span></span>
+                <span>在线支付</span>
+                <span></span>
+            </div>
+            
+            <div ng-click="payNext(2);" class="pay-choice offline">
+                <span></span>
+                <span>线下转款</span>
+                <span></span>
+            </div>
+        </div> -->
+    </div>
+    <!-- 支付方式 -->
+    <div id="is-payreg" class="pay-type animated fadeIn">
+        <div>
+            <h4>提示</h4>
+            <ul class="pay-account" style="background-color: #fff;padding-left: 2rem;">
+                {{msgText}}
+            </ul>
+            <div class="btn-group">
+                <a ng-click="regOrAction();" data-toggle data-selector="#is-payreg" href="">确定</a>
+                <a data-toggle data-selector="#is-payreg" href="">取消</a>
+            </div>
+        </div>
+    </div>
+</div>

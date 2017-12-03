@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - 订货宝 网上订货系统</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="template/default/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/list.css?v=2012" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/showpage.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/css/jqzoom.css" rel="stylesheet" type="text/css" media="screen" />
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js" type="text/javascript"></script>
+<script src="template/js/cart.js?ver=2012" type="text/javascript"></script>
+<script src="template/js/jqzoom.pack.1.0.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$(function() {
+	$(".jqzoom").jqzoom();
+});
+</script>
+</head>
+
+<body>
+{template header}
+
+<div id="contentbody">
+	<div id="contentleft">
+
+
+		<div class="line margin_top">
+        	<div class="line"><img src="template/default/img/search_title.jpg" /></div>
+         	<div class="line bg639029">
+            	 <form name="searchform" id="searchform" action="search.php" method="get">
+				 <div class="search_line"><input name="kw" id="kw" type="text" class="inputsearch" onfocus="this.select();" value="{$enkw}" />&nbsp;<input name="searchbutton" value="搜索" type="submit" class="yellowbtn" />
+				 <div class="search_ism"><input type="checkbox" name="ism" id="ism" value="yes"  />模糊搜索</div>
+				 </div>
+				 </form>
+            </div>
+        	<div class="line"><img src="template/default/img/bottom_t_3.jpg" /></div>        
+        </div>
+
+
+        <div class="line" style="display:; margin-top:8px;">
+<b class="b1"></b><b class="b2 d1"></b><b class="b3 d1"></b><b class="b4 d1"></b>
+<div class="b d1" style="height:68px;">
+
+<div class="line">
+	<div class="cartimg" onclick="javascript:window.location.href='cart.php'"><div id="cartnumber" ><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></div></div>
+	<div class="carttext">
+		<div><a href="cart.php"><img src="template/default/img/view_order.jpg" border="0" title="查看我的当前订单" /></a></div>
+		<div align="right" class="white">您已预购 <span id="cartnumber_2"><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></span> 种商品！</div>
+	</div>
+</div>
+
+</div>
+<b class="b4b d1"></b><b class="b3b d1"></b><b class="b2b d1"></b><b class="b1b"></b>
+		</div>
+
+		<div class="line margin_top">
+        	<div class="sort_title" style="height:6px; overflow:hidden;">商品</div>
+         	<div class="sort_line">
+                	<dt><a href="list.php?m=spc&ty=1" > &#8250;&#8250; 推荐商品</a></dt>
+					<dt><a href="list.php?m=spc&ty=2" > &#8250;&#8250; 特价促销</a></dt>
+					<dt><a href="list.php?m=spc&ty=3" > &#8250;&#8250; 新款上架</a></dt>
+					<dt><a href="list.php?m=spc&ty=4" > &#8250;&#8250; 热销商品</a></dt>
+					<dt><a href="list.php?m=spc&ty=9" > &#8250;&#8250; 缺货商品</a></dt>
+            </div>
+        	<div class="line"><img src="template/default/img/sort_bottom.jpg" /></div>        
+        </div>
+
+
+		<div class="line margin_top">
+        	<div class="sort_title">商品分类</div>
+         	<div class="sort_line">
+				<!--{loop $listsite $skey $svar}-->
+                	<dt><a href="list.php?s={$svar['SiteID']}&t={$in['t']}" > &#8250;&#8250; {$svar[SiteName]}</a></dt>
+					<!--{loop $svar[son] $sonkey $sonvar}-->
+                 	<dd><a href="list.php?s={$sonvar['SiteID']}&t={$in['t']}" > &#8250;&#8250; {$sonvar[SiteName]}</a></dd>
+					 <!--{/loop}-->
+				<!--{/loop}-->
+            </div>
+        	<div class="line"><img src="template/default/img/sort_bottom.jpg" /></div>        
+        </div>
+	</div>
+    
+    
+    <div id="contentright">
+    	<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="list.php?t={$in[t]}">商品</a>
+			 &#8250;&#8250; <a href="#">{$titlemsg}</a>
+		</div>
+     	       
+		<div class="line margin_top">
+        	<div class="list_title">
+            	<div class="leftdiv line-height">商品列表：</div>
+                <form name="changetypeform" id="changetypeform" action="list.php" method="get">
+                <div class="rightdiv line-heightr">
+                 
+           <select id="o" name="o" onchange="javascript:submit()">
+                <optgroup label="- 排序条件 -">
+					<option value="0" <!--{if $in[o] == "0"}-->selected="selected"<!--{/if}--> >默认排序</option>
+                    <option value="4" <!--{if $in[o] == "4"}-->selected="selected"<!--{/if}--> >商品人气</option>
+                    <option value="1" <!--{if $in[o] == "1"}-->selected="selected"<!--{/if}--> >价格降序</option>
+                    <option value="2" <!--{if $in[o] == "2"}-->selected="selected"<!--{/if}--> >价格升序</option>
+                    <option value="3" <!--{if $in[o] == "3"}-->selected="selected"<!--{/if}--> >上架时间</option>
+                </optgroup>
+            </select>
+                </div>
+                
+				<div class="rightdiv line-heightr">
+            <select name="ps" id="ps" onchange="javascript:submit()">
+                <optgroup label="- 每页显示 -">
+                    <option value="18" <!--{if $in[ps] == "18"}-->selected="selected"<!--{/if}--> >18条</option>
+                    <option value="30" <!--{if $in[ps] == "30"}-->selected="selected"<!--{/if}--> >30条</option>
+                    <option value="50" <!--{if $in[ps] == "50"}-->selected="selected"<!--{/if}--> >50条</option>
+                </optgroup>
+            </select>
+            <input type="submit" value="GO" class="hide" />
+			<input type="hidden" name="t" id="t" value="{$in['t']}" />
+            <input type="hidden" name="s" id="s" value="{$in['s']}" />
+            <input type="hidden" name="m" id="m" value="{$in['m']}" />			
+
+                </div>
+                
+				<div class="rightdiv line-heightr">显示方式：<!--{if $in['t'] == "textlist"}--><a href="javascript:void(0)" onclick="change_show_type('imglist')"><img src="template/default/img/list_type_0.jpg" class="img" title="图文形式" id="imglist_imgid" onmouseover="change_img_over('1')" onmouseout="change_img_out('1')" /></a>&nbsp;&nbsp;&nbsp;<img src="template/default/img/list_type_3.jpg" class="img" title="列表形式" /><!--{else}--><img src="template/default/img/list_type_1.jpg" class="img" title="图文形式" />&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="change_show_type('textlist')"><img src="template/default/img/list_type_2.jpg" id="textlist_imgid" onmouseover="change_img_over('2')" onmouseout="change_img_out('2')" class="img" title="列表形式" /></a><!--{/if}--></div>                
+                </form>
+          </div>
+         	<div class="list_line">
+			<!--{if $goodslist[showpage]}-->
+			<div class="list_showpage">{$goodslist[showpage]}</div>
+			<!--{/if}-->
+			{template content_list_inc}
+			<div class="list_showpage">{$goodslist[showpage]}</div><br />&nbsp;
+            </div>
+        	<div class="line"><img src="template/default/img/list_bottom_1.jpg" /></div>        
+        </div> 
+              
+    </div> 
+</div>
+
+{template bottom}
+    <div id="windowForm">
+		<div id="windowContent">  </div>
+	</div>
+</body>
+</html>

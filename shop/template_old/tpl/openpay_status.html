@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - {SITE_NAME}</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="{CONF_PATH_IMG}css/base.css?v={VERID}" type="text/css" rel="stylesheet" />
+<link href="{CONF_PATH_IMG}css/showpage.css" rel="stylesheet" type="text/css">
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js?v={VERID}" type="text/javascript"></script>
+<script src="template/js/my.js?v={VERID}" type="text/javascript"></script>
+
+</head>
+
+<body>
+{template header}
+
+<div id="main">
+<div class="main_left">
+<div class="fenlei_bg_tit"><span>我的订货宝</span></div> 
+  <div class="news_info">
+    <!-- 载入菜单 -->
+  {template my_profile_menu}
+
+  </div>
+<div class="fenlei_bottom"><img src="{CONF_PATH_IMG}images/info_bottom.jpg" /></div>
+
+</div>
+
+<div class="main_right">
+<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="my.php?m=profile">我的订货宝</a> 
+</div>
+<div class="right_product_tit">
+	<div class="xs_0">提示信息:</div>
+</div>
+
+<div class="right_product_main">
+<div class="list_line">
+	<div class="return-table font14">
+		<img src="template/img/{$_SESSION['oci']['status']}.png" />
+		<br /><br />
+		{$_SESSION['oci']['message']}
+	</div>
+
+</div>		
+		<br />&nbsp;
+       </div>
+	</div>
+</div>
+</div>
+
+{template bottom}
+</body>
+</html>

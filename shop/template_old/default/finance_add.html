@@ -1,0 +1,359 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - 订货宝 网上订货系统</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="template/default/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/list.css" rel="stylesheet" type="text/css" media="screen" />
+<link type="text/css" href="plugin/jquery-ui/development-bundle/themes/base/ui.all.css" rel="stylesheet" />
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="plugin/jquery-ui/development-bundle/ui/ui.core.js"></script>
+<script type="text/javascript" src="plugin/jquery-ui/development-bundle/ui/ui.datepicker.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$("#data_FinanceToDate").datepicker();
+	});
+
+function accountadd()
+{	
+	$('#subfinance').attr("disabled","disabled");
+	if($("#data_FinanceToDate").val()=="" || $("#data_FinanceTotal").val()=="")
+	{
+		$.growlUI('转帐日期和金额不能为空!');	
+		$('#subfinance').attr("disabled","");
+	}else{
+		$.post("finance.php?m=guestadd",$("#formorder").serialize(),
+			function(data){		
+					if(data == "ok"){						
+						$.growlUI('提交成功，正在载入页面...');		
+						var jumpurl = 'finance.php';
+						document.location = jumpurl;
+					}else{
+						$.growlUI(data);
+						$('#subfinance').attr("disabled","");
+					}
+				}			
+			);
+	}
+}
+
+function upload_file(fildname)
+{
+	$('#windowContent').html('<iframe src="plugin/jqUploader/uploadfile.php" width="500" marginwidth="0" height="250" marginheight="0" align="middle" frameborder="0" scrolling="no"></iframe>');
+	$.blockUI({ 
+		message: $('#windowForm'),
+		css:{ 
+                width: '540px',height:'280px',top:'15%'
+            }			
+		});
+    $('#set_filename').val(fildname);
+	$('.blockOverlay').attr('title','点击返回').click($.unblockUI); 
+}
+
+function closewindowui()
+{
+	$.unblockUI();
+}
+
+function setinputfile(fpn)
+{
+	
+	var filevalue = $('#set_filename').val();
+	if(fpn!='' && fpn!=null)
+	{
+		$("#"+filevalue).val(fpn);
+		$("#"+filevalue+"_text").html('[<a href="{RESOURCE_PATH}'+fpn+'" target="_blank">预览图片</a>]');
+	}
+	
+	$.unblockUI();
+}
+
+var selectordertotal = 0;
+
+function selectyufuclick()
+{
+	if($("#FinanceYufu").attr('checked')==false)
+	{
+		$("#FinanceYufu").attr("checked",true);
+		$("#finaceorderselectid").hide();
+	}else{
+		$("#FinanceYufu").attr("checked",false);
+		$("#finaceorderselectid").show();
+	}
+}
+
+function selectorderline(foid)
+{
+	if($("#data_FinanceOrder_"+foid).attr('checked')==false){
+		$("#data_FinanceOrder_"+foid).attr("checked",true);
+		$("#selected_line_"+foid).css("background-color","#efefef");
+		if(foid!=1)
+		{
+			if($("#order_total_"+foid).val()=='')
+			{
+				var linetotal = 0;
+			}else{
+				var linetotal = parseFloat($("#order_total_"+foid).val());
+			}
+			selectordertotal = selectordertotal + linetotal;
+		}
+	}else{
+		$("#data_FinanceOrder_"+foid).attr("checked",false);
+		$("#selected_line_"+foid).css("background-color","#ffffff");
+		if(foid!=1)
+		{
+			if($("#order_total_"+foid).val()=='')
+			{
+				var linetotal = 0;
+			}else{
+				var linetotal = parseFloat($("#order_total_"+foid).val());
+			}
+			selectordertotal = selectordertotal - linetotal;			
+		}
+	}
+	if(selectordertotal < 0 ) selectordertotal = 0;
+	selectordertotal = Math.round(selectordertotal*100)/100;
+	$("#show_order_total").html(selectordertotal);
+}
+
+function selectorderlinefocus(foid)
+{
+	if($("#data_FinanceOrder_"+foid).attr('checked')==false){
+		$("#selected_line_"+foid).css("background-color","#efefef");
+		if(foid!=1)
+		{
+			if($("#order_total_"+foid).val()=='')
+			{
+				var linetotal = 0;
+			}else{
+				var linetotal = parseFloat($("#order_total_"+foid).val());
+			}
+			selectordertotal = selectordertotal + linetotal;
+		}
+	}else{
+		$("#selected_line_"+foid).css("background-color","#ffffff");
+		if(foid!=1)
+		{
+			if($("#order_total_"+foid).val()=='')
+			{
+				var linetotal = 0;
+			}else{
+				var linetotal = parseFloat($("#order_total_"+foid).val());
+			}
+			selectordertotal = selectordertotal - linetotal;			
+		}
+	}
+	if(selectordertotal < 0) selectordertotal = 0;
+	selectordertotal = Math.round(selectordertotal*100)/100;
+	$("#show_order_total").html(selectordertotal);
+}
+</script>
+</head>
+
+<body>
+{template header}
+
+<div id="contentbody">
+	<div id="contentleft">
+
+        <div class="line margin_top" >
+<b class="b1"></b><b class="b2 d1"></b><b class="b3 d1"></b><b class="b4 d1"></b>
+<div class="b d1" style="height:68px;">
+
+<div class="line">
+	<div class="cartimg" onclick="javascript:window.location.href='cart.php'"><div id="cartnumber" ><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></div></div>
+	<div class="carttext">
+		<div><a href="cart.php"><img src="template/default/img/view_order.jpg" border="0" title="查看我的当前订单" /></a></div>
+		<div align="right" class="white">您已预订 <span id="cartnumber_2"><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></span> 件商品！</div>
+	</div>
+</div>
+
+</div>
+<b class="b4b d1"></b><b class="b3b d1"></b><b class="b2b d1"></b><b class="b1b"></b>
+		</div>
+
+
+		<div class="line margin_top">
+        	<div class="sort_title">付款单管理</div>
+         	<div class="sort_line">
+                <dt><a href="finance.php" > &#8250;&#8250; 付款单查询</a></dt>
+				<!--{loop $finance_arr $skey $svar}-->
+					<dd><a href="finance.php?status={$skey}" > &#8250;&#8250; {$svar} - 付款单</a></dd>
+				<!--{/loop}-->
+				<dt><a href="finance.php?m=new" > &#8250;&#8250; 新增付款单</a></dt>
+            </div>
+        	<div class="line"><img src="template/default/img/sort_bottom.jpg" /></div>        
+        </div>
+	</div>    
+        
+    <div id="contentright">
+    	<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="finance.php">我的付款单</a> &#8250;&#8250; <a href="finance.php?m=new">新增付款单</a>
+		</div>     	
+       
+		<div class="line margin_top">
+        	<div class="list_title">
+            	<div class="leftdiv line-height">新增付款单：</div>
+          </div>
+         	<div class="list_line">
+				<div class="line">
+				<table width="98%" border="0" cellpadding="4" cellspacing="1" bgcolor="#FFFFFF" >
+				<form id="formorder" name="formorder" method="post" action="" >
+				<input type="hidden" name="set_filename" id="set_filename" value="" />				
+				<tr>
+                  <td width="16%" bgcolor="#F0F0F0"><div align="right">预付款：</div></td>
+                  <td bgcolor="#FFFFFF" onclick="selectyufuclick()"><div align="left">&nbsp;&nbsp;<input id="FinanceYufu" name="FinanceYufu" type="checkbox" onclick="selectyufuclick()" value="yufu" style="border:0; width:16px; height:16px;" /></div></td>
+                  <td width="20%" bgcolor="#FFFFFF">&nbsp;</td>
+                </tr>	
+				
+				<tr id="finaceorderselectid">
+                  <td width="16%" bgcolor="#F0F0F0"><div align="right">付款订单 ：</div></td>
+                  <td colspan="2" bgcolor="#FFFFFF">				  
+				  <div style="width:98%; height:250px; overflow:scroll;">
+				    <table width="96%" border="0" cellspacing="0" cellpadding="0">
+                      <tr id="selected_line_0">
+                        <td width="8%">&nbsp;</td>
+                        <td width="30%"><strong>&nbsp;订单号</strong></td>
+                        <td width="25%"><strong>&nbsp;订单金额</strong></td>
+						<td width="20%"><strong>&nbsp;已付金额</strong></td>
+                        <td ><strong>&nbsp;状态</strong></td>
+                      </tr>
+
+                      <!--{loop $ordlist $okey $ovar}-->
+                      <tr id="selected_line_{$ovar[OrderID]}">
+                        <td >&nbsp;<!--{if $in[osn] == $ovar[OrderSN]}--><input id="data_FinanceOrder_{$ovar[OrderID]}" name="data_FinanceOrder[]" type="checkbox" value="{$ovar[OrderSN]}"  checked="checked"  /><!--{else}--><input  id="data_FinanceOrder_{$ovar[OrderID]}" name="data_FinanceOrder[]" type="checkbox" onfocus="selectorderlinefocus('{$ovar[OrderID]}')" value="{$ovar[OrderSN]}" /><!--{/if}--></td>
+                        <td onclick="selectorderline('{$ovar[OrderID]}')" >&nbsp;{$ovar[OrderSN]}</td>
+                        <td onclick="selectorderline('{$ovar[OrderID]}')">&nbsp;¥ {$ovar[OrderTotal]}<input type="hidden" name="ordertotal[]" id="order_total_{$ovar[OrderID]}" value="<!--{echo $ovar[OrderTotal]-$ovar[OrderIntegral]}-->" /></td>
+						<td onclick="selectorderline('{$ovar[OrderID]}')">&nbsp;¥ {$ovar[OrderIntegral]}</td>
+                        <td onclick="selectorderline('{$ovar[OrderID]}')">&nbsp;{$order_status_arr[$ovar[OrderStatus]]}</td>
+                      </tr>
+                      <!--{/loop}-->
+                  </table>
+                  <div>
+                  </td>
+                  </tr>
+				
+				<tr>
+                  <td width="16%" bgcolor="#F0F0F0"><div align="right"><span class="red">*</span>转款日期 ：</div></td>
+                  <td bgcolor="#FFFFFF"><label>
+                    <input type="text" name="data_FinanceToDate" id="data_FinanceToDate" value="" class="input1" style="width:150px;" />
+                  </label></td>
+                  <td width="20%" bgcolor="#FFFFFF">&nbsp;</td>
+                </tr>
+
+                <tr>
+                  <td bgcolor="#F0F0F0"><div align="right"><span class="red">* </span>转款金额：</div></td>
+                  <td bgcolor="#FFFFFF"><label>
+                    <input type="text" name="data_FinanceTotal" id="data_FinanceTotal"  maxlength="12" onKeypress="if ((event.keyCode < 48 || event.keyCode > 57) && event.keyCode!=46) event.returnValue = false;" class="input1" style="width:150px;" />&nbsp;元
+                  </label> &nbsp;(您选择的订单金额为：¥ <span class="font12" id="show_order_total">0</span>)</td>
+                  <td bgcolor="#FFFFFF">&nbsp;</td>
+                </tr>
+
+                <tr>
+                  <td bgcolor="#F0F0F0"><div align="right"><span class="red">*</span>收款帐户：</div></td>
+                  <td bgcolor="#FFFFFF" colspan="2">
+				  <ol>
+                    <!--{loop $acclist $akey $avar}-->
+						<li>
+						<input name="data_FinanceAccounts" id="data_FinanceAccounts_{$avar[AccountsID]}" type="radio" value="{$avar[AccountsID]}" />
+						<strong>开户行：</strong>{$avar[AccountsBank]}
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>收款人：</strong>{$avar[AccountsName]}<br />
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>帐&nbsp;&nbsp; 号：</strong>{$avar[AccountsNO]}<br />
+						</li>
+					<!--{/loop}-->
+				  </ol>  </td>                  
+                </tr>
+
+                <tr>
+                  <td bgcolor="#F0F0F0"><div align="right">上传付款凭证：</div></td>
+                  <td bgcolor="#FFFFFF"><label>
+                    <input type="text" name="data_FinancePicture" id="data_FinancePicture"  class="input1" />
+					&nbsp;<input name="bt_Picture" type="button" class="button"  onClick="upload_file('data_FinancePicture');" value="..." title="上传" style="width:32px; font-size:12px;">
+                  </label>                  </td>
+                  <td bgcolor="#FFFFFF" id="data_FinancePicture_text">&nbsp;</td>
+                </tr>
+
+                <tr>
+                  <td valign="top" bgcolor="#F0F0F0"><div align="right">说 明：</div></td>
+                  <td bgcolor="#FFFFFF"><label>
+                    <textarea name="data_FinanceAbout" rows="4" id="data_FinanceAbout" class="input1"></textarea>
+                  </label></td>
+                  <td bgcolor="#FFFFFF">可注明转款原因，转款人等信息</td>
+                </tr>
+                <tr>
+                  <td valign="top" bgcolor="#F0F0F0">&nbsp;</td>
+                  <td bgcolor="#FFFFFF"><label>
+                    <input type="button" name="subfinance" id="subfinance" value="  保 存  " class="yellowbtn" onclick="accountadd();" />
+                  </label>&nbsp;&nbsp;&nbsp;&nbsp;
+				  <label>
+                    <input type="reset" name="resetfinance" id="resetfinance" value=" 重 置 " class="bluebtn" />
+                  </label>				  </td>
+                  <td bgcolor="#FFFFFF">&nbsp;</td>
+                </tr>
+				</form>
+               </table>
+
+<br />
+<div >
+				<table width="92%" border="0" cellpadding="4" cellspacing="1" bgcolor="#FFFFFF" align="center">
+				<tr><td>
+				<strong>网银支付：</strong>
+				</td></tr>	
+				<tr><td>
+
+               <table width="100%"  border="0" cellpadding="4" cellspacing="4" bgcolor="#FFFFFF" align="center">
+
+                 <tr>
+                   <td height="30"><a href="http://www.icbc.com.cn/icbc" target="_blank"><img src="template/img/bank/ICBC_OUT.gif" border="0"/></a></td>
+                   <td><a href="http://www.cmbchina.com/" target="_blank"><img src="template/img/bank/CMB_OUT.gif" border="0"/></a></td>
+                   <td><a href="http://www.ccb.com/cn/home/index.html" target="_blank"><img src="template/img/bank/CCB_OUT.gif" border="0"/></a></td>
+                   <td><a href="http://www.boc.cn/" target="_blank"><img src="template/img/bank/BOC_OUT.gif" border="0"/></a></td>
+                 </tr>
+                 <tr>
+                   <td height="30"><a href="http://www.abchina.com/cn/" target="_blank"><img src="template/img/bank/ABC_OUT.gif" border="0"/></a></td>
+                   <td><a href="http://www.bankcomm.com/BankCommSite/cn/index.html" target="_blank"><img src="template/img/bank/COMM_OUT.gif" border="0"/></td>
+                   <td><a href="http://www.spdb.com.cn/chpage/c1/" target="_blank"><img src="template/img/bank/SPDB_OUT.gif" border="0"/></td>
+                   <td><a href="http://www.cebbank.com/Site/ceb/cn" target="_blank"><img src="template/img/bank/CEB_OUT.gif" border="0"/></td>
+                 </tr>
+                 <tr>
+                   <td height="30"><a href="http://www.cib.com.cn/netbank/cn/index.html" target="_blank"><img src="template/img/bank/CIB_OUT.gif" border="0"/></a></td>
+                   <td><a href="http://bank.ecitic.com/" target="_blank"><img src="template/img/bank/CITIC_OUT.gif" border="0"/></td>
+                   <td><a href="http://www.cmbc.com.cn/" target="_blank"><img src="template/img/bank/CMBC_OUT.gif" border="0"/></td>
+                   <td><a href="http://www.sdb.com.cn/website/page" target="_blank"><img src="template/img/bank/SDB_OUT.gif" border="0"/></td>
+                 </tr>
+               </table>
+
+				</td></tr>	
+
+				</table>
+</div>
+
+              </div>	
+			<br />&nbsp;
+            </div>
+        	<div class="line"><img src="template/default/img/list_bottom_1.jpg" /></div>        
+        </div> 
+              
+    </div> 
+</div>
+
+{template bottom}
+    <div id="windowForm">
+		<div class="windowHeader">
+			<h3 id="windowtitle">上传图片</h3>
+			<div class="windowClose"><div class="close-form" onclick="closewindowui()" title="关闭" >x</div></div>
+		</div>
+		<div id="windowContent">
+        <iframe src="plugin/jqUploader/uploadfile.php" width="480" marginwidth="0" height="280" marginheight="0" align="middle" frameborder="0" scrolling="no"></iframe>        
+        </div>
+	</div>
+<iframe name="exe_iframe" style="width:0; height:0;" frameborder="0" scrolling="no"></iframe> 
+</body>
+</html>

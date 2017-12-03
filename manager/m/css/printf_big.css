@@ -1,0 +1,7 @@
+body, td, div, a{ margin:0; padding:0; font-size:16px;  font-family: "宋体",Arial, Helvetica, sans-serif; color:#000000;}
+.otitle{color:#000000; font-size:26px; line-height:28px; padding-top:10px; margin:0; font-weight:bold; text-align:center; }
+table{border-collapse:collapse; border-width:1px; border-style: solid; border-color: #000000;}
+td{border:solid 1px #000000; font-size:16px; padding:2px; line-height:160%;}
+thead td{font-weight:bold; }
+.noborder{border:solid 0 #fff;}
+.noborder td{border:solid 0 #fff;}

@@ -1,0 +1,19 @@
+	<div id="header2">	
+    	<div id="logo"><a href="order.shtml"><img src="img/logo2.jpg" alt="订货宝 网上订货系统 (DHB.HK)" title="订货宝 网上订货系统 (DHB.HK)" height="55" border="0" /></a></div>
+    	<ul>
+			<?php
+				foreach($menu_arr as $km=>$kv)
+				{
+					if($km == "deduct" && $_SESSION['us']['deduct_type']!="on") continue;
+					if($menu_flag == $km)
+					{ 
+						echo '<li class="current" style="width:105.87px;"><a href="'.$km.'.shtml">'.$kv.'</a></li>';
+					}else{
+						echo '<li style="width:105.87px;"><a href="'.$km.'.shtml">'.$kv.'</a></li>';
+					}			
+				}
+			?>
+			<li style="width:105.87px;"><a  href="change_pass.shtml">修改密码</a></li>
+			<li style="width:105.87px;"><a href="do_login.shtml?m=logout">安全退出</a></li>
+        </ul>
+    </div>

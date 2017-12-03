@@ -1,0 +1,222 @@
+<!-- 订单页  -->
+<div class="page-order-list page-goods-list" data-ng-controller="orderController">
+    <!-- 标题 -->
+    <header class="common">
+        <em data-back><a href="javascript:;" class="arrow-left"></a></em>
+        <p>全部订单</p>
+        <span data-toggle-layer data-class-name="fadeInRight">筛选</span>
+    </header>
+    <div class="order-list" data-load-more="orderes.loadMore();">
+        <ul>
+            <li ng-click="orderes.getOrderInfo($index,order.OrderID);" data-ng-repeat="order in orderes.orderList">
+                <div><span class="caret-list">{{$index + 1}}</span>订单号：{{order.OrderSN}}<span class="r bgcolor-sllide">{{order.OrderStatusName}}</span></div>
+                <div>
+                    <!-- <img src="../img/order01.jpg" width="100" height="100" alt="" /> -->
+                    <div>
+                        <span>配送方式：{{order.OrderSendType}} &nbsp;&nbsp;{{order.OrderSendStatusName}}</span>
+                        <span>付款方式：{{order.OrderPayType}} &nbsp;&nbsp;{{order.OrderPayStatusName}}</span>
+                        <span>下单时间：{{order.OrderDate | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                    </div>
+                </div>
+                <div>
+                                                         订单金额：<span class="red">¥ {{order.OrderTotal}}</span>
+                    <span ng-click="orderes.copyOrder($index,$event);" class="r" style="padding:0rem .6rem;border-radius: .4rem;border:1px solid#A0A0A0">
+                        <span class="icon icon-file"></span> 再次订购
+                    </span>
+                </div>
+                <div class="divider"></div>
+            </li>
+        </ul>
+        <!-- 无数据提示框 -->
+        <div class="no-data" ng-show="orderes.noData">
+            <div>
+                <p class="search-result"></p>
+                <p>对不起，没有数据显示</p>
+            </div>
+        </div>
+    </div>
+    <!-- 筛选框 -->
+    <div class="filter-layer animated default-apk layer">
+        <div class="filter">
+            <p>
+                <span data-toggle-layer data-class-name="fadeOutRight" class="l">取消</span>
+                筛选
+                <span class="r" ng-click="orderes.getOrderListByFilter(3,$event);">确定</span>
+            </p>
+            <ul>
+                <li data-toggle-operator data-toggle-id="order-status" data-is-show="true" ng-click="goodses.getBrand();">订单状态<span class="r"><span class="arrow-right"></span></span></li>
+                <li data-toggle-operator data-toggle-id="send-status" data-is-show="true" ng-click="goodses.getCommand();">订单发货状态<span class="r"><span class="arrow-right"></span></span></li>
+                <li data-toggle-operator data-toggle-id="pay-status" data-is-show="true" ng-click="goodses.getSite();">订单付款状态<span class="r"><span class="arrow-right"></span></span></li>
+                <div class="divider"></div>
+                <ul>
+                    <li style="overflow: hidden;">开始时间
+                        <span class="arrow-right"></span>
+                        <input class="li-input" data-date-picker type="text" placeholder="开始时间" ng-model="dateParam.beginDate" />
+                        <span class="r">
+                            <em ng-bind="dateParam.beginDate"></em>
+                        </span>
+                    </li>
+                    <li style="overflow: hidden;">结束时间
+                        <span class="arrow-right"></span>
+                        <input class="li-input" data-date-picker type="text" placeholder="结束时间" ng-model="dateParam.endDate"  />
+                        <span class="r">
+                            <em ng-bind="dateParam.endDate"></em>
+                        </span>
+                    </li>
+                </ul>
+                <div class="divider"></div>
+                <ul>
+                    <li>是否收藏<span ng-click="orderes.setIsCollect(this);" data-toggle-switch class="r switch"><em></em></span></li>
+                </ul>
+            </ul>
+        </div>
+        <div id="order-status" class="animated default-apk filter common">
+            <p>
+                <em data-toggle-operator data-toggle-id="order-status" data-is-show="false"><span class="l arrow-left"></span></em>订单状态
+            </p>
+            <ul ng-click="orderes.getOrderListByFilter(0,$event)">
+                <li data-orderstatus="5">已收款</li>
+                <li data-orderstatus="7">已完成</li>
+                <li data-orderstatus="8">客户端取消</li>
+                <li data-orderstatus="9">管理端取消</li>
+            </ul>
+        </div>
+        <div id="send-status" class="animated default-apk filter common">
+            <p>
+                <em data-toggle-operator data-toggle-id="send-status" data-is-show="false"><span class="l arrow-left"></span></em>订单发货状态
+            </p>
+            <ul ng-click="orderes.getOrderListByFilter(1,$event)">
+                <li data-sendstatus="0">待审核</li>
+                <li data-sendstatus="1">备货中</li>
+                <li data-sendstatus="2">已发货</li>
+                <li data-sendstatus="3">未发完</li>
+                <li data-sendstatus="4">已收货</li>
+            </ul>
+        </div>
+        <div id="pay-status" class="animated default-apk filter common">
+            <p>
+                <em data-toggle-operator data-toggle-id="pay-status" data-is-show="flase"><span class="l arrow-left"></span></em>订单收款状态
+            </p>
+            <ul ng-click="orderes.getOrderListByFilter(2,$event)">
+                <li data-paystatus="0">未付款</li>
+                <li data-paystatus="1">付款中</li>
+                <li data-paystatus="2">已付款</li>
+                <li data-paystatus="3">预付款</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="layer info-layer animated default-apk">
+        <div data-iscroll class="iscroll iscroll-top">
+            <!-- 订单信息 -->
+            <div class="order-info">
+                <div class="address">
+                    <p><span>订单编号：{{orderes.selectOrder.OrderSN}}</span></p>
+                    <address>
+                        <span>订单金额：<em class="red">¥ {{orderes.selectOrder.OrderTotal}}</em></span>
+                        <p>下单时间：{{orderes.selectOrder.OrderDate | date:'yyyy-MM-dd HH:mm:ss'}}</p>
+                        <p>订单状态：<em class="status">{{orderes.selectOrder.OrderStatusName}}</em></p>
+                    </address>
+                </div>
+                <div class="divider"></div>
+                <div class="address">
+                    <p><span>收货信息</span></p>
+                    <address>
+                        <span>{{orderes.selectOrder.OrderReceiveName}} {{orderes.selectOrder.OrderReceivePhone}}</span>
+                        <p>{{orderes.selectOrder.OrderReceiveCompany}}</p>
+                        <p>{{orderes.selectOrder.OrderReceiveAdd}}</p>
+                    </address>
+                </div>
+                <div class="divider"></div>
+                <div class="address">
+                    <p><span>支付及配送方式</span></p>
+                    <address>
+                        <span>配送方式：{{orderes.selectOrder.OrderSendType}}</span>
+                        <p>配送状态：<em class="status">{{orderes.selectOrder.OrderSendStatusName}}</em></p>
+                        <p>支付方式：{{orderes.selectOrder.OrderPayType}}</p>
+                        <p>支付状态：<em class="status">{{orderes.selectOrder.OrderPayStatusName}}</em></p>
+                        <p ng-show="orderes.selectOrder.DeliveryDate!='0000-00-00'">交货时间：{{orderes.selectOrder.DeliveryDate}}</p>
+                    </address>
+                </div>
+                <div class="divider"></div>
+                <div class="address" ng-show="orderes.selectOrder.OrderRemark">
+                    <p><span>备注</span></p>
+                    <address>
+                        <span data-trans-html html-text="orderes.selectOrder.OrderRemark"></span>
+                    </address>
+                    <section class="divider"></section>
+                </div>
+                <div data-toggle-goods class="goods-num">
+                    <span class="r">共<em>{{orderes.selectOrder.goodses.length}}</em>种<span class="arrow-right"></span></span>
+                    <span>商品清单</span>
+                </div>
+                <!-- 商品清单 -->
+                <div class="order-goods animated">
+                    <ul>
+                        <li data-ng-repeat="goods in orderes.selectOrder.goodses">
+                            <span class="ellipsis-one"><em ng-show="goods.conType=='g'" style="color:#ff5c1e;">[赠品] </em><em trans-html html-text="goods.Name"></em> {{goods.Coding}}</span>
+                            <span>
+                                <span ng-show="goods.ContentSpecification">规格：<em trans-html html-text="goods.ContentSpecification"></em></span> 
+                                <span ng-show="goods.ContentColor">颜色：<em trans-html html-text="goods.ContentColor"></em></span> 
+                            </span>
+                            <span>¥ {{goods.ContentPrice}} * {{goods.ContentNumber + ' ' + goods.Units}}
+                                <em ng-show="goods.conType=='c'">
+                                 * {{goods.ContentPercent + ' 折 ='}}
+                                {{goods.ContentPrice*goods.ContentNumber*goods.ContentPercent/10 | currency: '¥ '}}
+                                </em>
+                            </span>
+                        </li>
+                        <li class="copy-order"><button ng-click="orderes.copyOrder(orderes.index,$event);">再次订购</button></li>
+                    </ul>
+                </div>
+                <div class="divider"></div>
+                <div data-toggle-log class="goods-num">
+                    <span class="r">共<em>{{orderes.selectOrder.log.length}}</em>条<span class="arrow-right"></span></span>
+                    <span>操作日志 </span>
+                </div>
+                <!-- 操作日志 -->
+                <div class="order-goods order-log animated">
+                    <ul>
+                        <li data-ng-repeat="log in orderes.selectOrder.log">
+                            <span>{{log.Name}} <span>{{log.Date * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</span></span>
+                            <span>{{log.Status}}</span>
+                            <span>{{log.Content}}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="divider"></div>
+            </div>
+        </div>
+        <!-- 关闭按钮 -->
+        <div class="layer-footer">
+            <p ng-click="orderes.closeLayer();"><span class="arrow-left"></span></p>
+            <!-- <button ng-click="orderes.selectOrder.setOrder();">取消订单</button> -->
+            <div>
+                <button ng-show="orderes.selectOrder.OrderStatus < '6' && orderes.selectOrder.OrderPayStatus=='0' || orderes.selectOrder.OrderPayStatus=='3'" ng-click="orderPay();">付款</button>
+                <button style="padding:0 3%;border-radius:1.2rem;float:right;" data-toggle data-selector="div.order-message">我要留言</button>
+                <button style="padding:0 3%;border-radius:1.2rem;float:right;"  ng-show="orderes.selectOrder.OrderStatus=='0'" data-toggle data-selector="div.order-cancel">取消订单</button>
+            </div>
+        </div>
+        <div class="order-message">
+            <div>
+                <h4>订单留言</h4>
+                <textarea ng-model="orderes.orderMsg" placeholder="说点什么："></textarea>
+                <div class="btn-group" style="margin-top: -1.2rem;">
+                    <a href="javascript:;" data-toggle data-selector="div.order-message" ng-click="orderes.selectOrder.setOrder('guestbook',orderes.orderMsg,service,myInfo.ClientTrueName);">确定</a>
+                    <a href="javascript:;" data-toggle data-selector="div.order-message">取消</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 取消订单-->
+    <div class="animated fadeIn order-cancel addr-manager">
+        <div>
+            <h4>你确定取消该订单吗？</h4>
+            <div class="btn-group">
+                <a href="javascript:;" data-toggle data-selector="div.order-cancel" ng-click="orderes.selectOrder.setOrder('cancel',orderes.orderMsg,service);">确定</a>
+                <a href="javascript:;" data-toggle data-selector="div.order-cancel">取消</a>
+            </div>
+        </div>
+    </div>
+</div>
+

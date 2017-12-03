@@ -1,0 +1,19 @@
+<!-- 支付跳转 -->
+<div data-ng-controller="jumpController" class="page-add-pay page-order-confirm page-order-list page-goods-list" style="background-color:#f9f9f9;">
+    <!-- 标题 -->
+    <header class="common" style="border-bottom: 1px solid #DBDADA;display: none;">
+        <em data-back><a href="javascript:;" class="arrow-left"></a></em>
+        <p>在线支付</p>
+        <!-- <span class="icon icon-expand"></span> -->
+    </header>
+    <!-- 添加付款单 -->
+    <div class="iscroll" style="top: 0;">
+        <div style="height: 100%;-webkit-overflow-scrolling: touch;overflow-y: scroll;">
+            <!-- //wangd 2017-11-30 修改url-->
+            <form id="pay-form" action="http://bmb.yitong111.com/mobileApi/yijifuurl.php" method="post" target="jump">
+                <input type="hidden" name="v" id="pay-v" value="" />
+            </form>
+            <iframe style="width:100%;height:100%;border: none;overflow: auto;" name="jump" id="jump"></iframe>
+        </div>
+    </div>
+</div>

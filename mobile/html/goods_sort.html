@@ -1,0 +1,34 @@
+<!-- 商品类别 -->
+<div>
+    <div class="page-goods-type" data-ng-controller="goodsSortController">
+        <!-- 头部搜索和图片导航条 -->
+        <header>
+            <div class="search">
+                <div style="left: 1rem;">
+                    <span data-goods-search class="icon icon-search"></span>
+                    <input type="text" placeholder="商品搜索" />
+                </div>
+                <span ng-show="showScanner" data-start-scanner class="scanner"></span>
+            </div>
+        </header>  
+        <div class="goods-type">
+            <div data-iscroll class="type-left">
+                <ul id="sort" data-ng-click="nextSort($event)" style="padding-left: 0;">
+                    <li data-siteId="-1">全部商品</li>
+                    <li ng-class="{'type-active':$index==goodsSort.clickIndex-1}" data-ng-repeat="sort1 in goodsSort.firstSort" data-siteId="{{sort1.SiteID}}">{{sort1.SiteName}}</li>
+                </ul>
+            </div>
+            <div data-iscroll class="type-right">
+                <div>
+                    <ul style="padding-left: 0;">
+                        <li ng-click="changePath('/goods-list/'+goodsSort.defaultSite.SiteID)" style="font-weight: 800;">{{goodsSort.defaultSite.SiteName}} >></li>
+                    </ul>
+                    <ul style="padding-left: 0;" data-third-sort data-sort-list="goodsSort.sortList">
+                        <li data-ng-repeat="sort2 in goodsSort.secondSort" data-siteId="{{sort2.SiteID}}">{{sort2.SiteName}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>     
+    </div>
+</div>
+

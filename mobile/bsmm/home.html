@@ -1,0 +1,54 @@
+<div class="content" ng-controller="homeController">
+    <div class="today">
+        <ul>
+            <li>¥ <strong>{{homeInfo.today.orderTotal}}</strong><br/>今日销售额</li>
+            <li><strong>{{homeInfo.today.orderNumber}}</strong><br/>今日订单量</li>
+            <li>¥ <strong>{{homeInfo.today.financeTotal}}</strong><br/>今日已收款</li>
+        </ul>
+    </div>
+    <div class="yesterday">
+        <ul>
+            <li><p>昨日</p></li>
+            <li>¥ <strong>{{homeInfo.yestoday.orderTotal}}</strong><br/>销售额</li>
+            <li><strong>{{homeInfo.yestoday.orderNumber}}</strong><br/>订单量</li>
+        </ul>
+    </div>
+    <div class="month yesterday">
+        <ul>
+            <li><p>本月</p></li>
+            <li>¥ <strong>{{homeInfo.month.orderTotal}}</strong><br/>销售额</li>
+            <li><strong>{{homeInfo.month.orderNumber}}</strong><br/>订单量</li>
+        </ul>
+    </div>
+    <section class="operator">
+        <ul>
+            <li ng-click="changePath('/customer');">
+                <p>
+                    <span><em class="icon">&#xe015;</em></span>
+                    <span>代下订单</span>
+                </p>
+            </li>
+            <li ng-click="needProcessOrder();"><strong style="color: #ff7e5a;">{{homeInfo.auditOrder}}</strong><br/>待处理订单</li>
+        </ul>
+    </section>
+    <div class="icon-bar yesterday">
+        <ul>
+            <li ng-click="changePath('/sales')">
+                <p class="icon">&#xe0ec;</p>
+                <p>销量一览</p>
+            </li>
+            <li ng-click="changePath('/goods-hot')">
+                <p class="icon">&#xe008;</p>
+                <p>热销商品</p>
+            </li>
+            <li ng-click="changePath('/customer-count')">
+                <p class="icon">&#xe08b;</p>
+                <p>药店统计</p>
+            </li>
+            <li ng-click="changePath('/rece-money')">
+                <p class="icon">&#xe014;</p>
+                <p>应收款项</p>
+            </li>
+        </ul>
+    </div>
+</div>

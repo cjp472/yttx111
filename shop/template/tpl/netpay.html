@@ -1,0 +1,338 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - {SITE_NAME}</title>
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<style type="text/css">
+body {
+	background-color: #f7f7f7;
+	margin: 0;
+	padding: 0;
+}
+
+a,body,div,dl,dt,dd,ul,ol,li,h2,h3,,pre,form,fieldset,input,p,a,blockquote,th,table,td,tr,h1
+{
+    font-family: "微软雅黑", "宋体",Arial, Helvetica, sans-serif !important;
+    font-family: "宋体",Arial, Helvetica, sans-serif;
+	text-decoration: none;
+	font-size: 14px;
+	color: #757575;
+	margin: 0;
+}
+a:hover {
+	color: #FF0000
+}
+a{
+	cursor: pointer;
+	border: none;
+	text-decoration: none;
+    color: #333;
+}
+h2{font-size:16px;  text-align:left;font-family: "微软雅黑", "宋体", Arial, Helvetica, sans-serif !important; font-weight:normal; color:#6f6f6f; padding-left:20px; font-weight:bold}
+.header{ width:100%; min-width:1000px; border-bottom:1px solid #dadada; height:95px; background-color:#fff}
+.header_info{ width:1000px;  margin:0 auto;}
+.logo{ width:280px; height:90px; line-height:90px; float:left; overflow:hidden; }
+.header_right{width:700px;font-family: "微软雅黑", Arial, Helvetica, sans-serif !important;font-size: 14px;color: #757575; float:right;  text-align:right; line-height:40px;}
+
+.money{ width:994px; margin:0 auto; height:100px; border:3px solid #ececec; margin:0 auto; background-color:#fff; margin-top:20px;}
+.money_left{ width:700px; float:left; height:100px; margin-top:10px; overflow:hidden}
+.money_left span{font-size:14px; color:#acacac;font-family: "微软雅黑", Arial, Helvetica, sans-serif ; font-weight:normal; text-align:center; margin-bottom:10px; margin-left:20px;}
+.money_right{ width:250px; float:right; height:100px;font-size:14px; line-height:80px;color:#acacac;font-family: "微软雅黑", Arial, Helvetica, sans-serif ; font-weight:normal; float:right}
+.money_right span{ font-size:24px; color:#ff4a00;}
+.the_bank{ width:1000px; border:1px solid #dadada; margin:0 auto; margin-top:20px;background-color:#fff;}
+.the_bank_title{ width:980px; border-bottom:1px solid #dadada; height:50px; background-color:#f7f7f7; padding-left:20px;}
+.card_hover{ float:left; width:140px; margin-left:5px; height:35px; margin-top:15px;border:1px solid #dadada; border-bottom:none; display:block; text-align:center; line-height:35px; font-size:14px;color:#7f7f7f;font-family: "微软雅黑", Arial, Helvetica, sans-serif ; }
+.card_hover1{ float:left; width:140px; margin-left:5px; height:35px; margin-top:15px;border:1px solid #dadada; border-bottom:none; display:block; text-align:center; line-height:35px; font-size:14px;color:#7f7f7f;font-family: "微软雅黑", Arial, Helvetica, sans-serif ;border-bottom:1px solid #fff; background-color:#fff; color:#ff4a00; font-weight:bold }
+.card_hover:hover{ border-bottom:1px solid #fff; background-color:#fff; color:#ff4a00; font-weight:bold}
+.the_bank_info{ width:960px; padding:20px;}
+.the_bank_info span{ float:left;font-size:14px; color:#acacac;font-family: "微软雅黑", Arial, Helvetica, sans-serif ; font-weight:normal; text-align:center; margin-bottom:10px; margin-left:40px; margin-top:20px;}
+.the_bank_info ul{ width:800px; float:left; display:block;  list-style:none; margin-left:-30px;*margin-left:10px;}
+.the_bank_info ul li{ float:left; width:200px; height:40px; display:block ; margin-bottom:20px;}
+.the_bank_info ul li a{ width:180px; height:40px; display:block; background-image:url(template/img/bank.png); border:1px dashed #cfccc3}
+.bank_C{ float:left; margin-top:13px; margin-left:13px;}
+.the_bank_info ul li a:hover{ border:1px solid #ff4a00;}
+
+.bank_C1{ background-position:-175px 0;}
+.bank_C2{ background-position:-350px 0;}
+.bank_C3{ background-position:-525px 0;}
+.bank_C4{ background-position:-700px 0;}
+.bank_C5{ background-position:-0px -73px;}
+.bank_C6{ background-position:-175px -73px;}
+.bank_C7{ background-position:-350px -73px;}
+.bank_C8{ background-position:-525px -73px;}
+.bank_C9{ background-position:-700px -73px;}
+.bank_C10{ background-position:-0px -145px;}
+.bank_C11{ background-position:-175px -145px;}
+.bank_C12{ background-position:-350px -145px;}
+.bank_C13{ background-position:-525px -145px;}
+.bank_C14{ background-position:-700px -145px;}
+.bank_C10{ background-position:-0px -217px;}
+.bank_C15{ background-position:-175px -217px;}
+.bank_C16{ background-position:-350px -217px;}
+.bank_bottom{ width:1000px; height:50px; margin-bottom:30px;}
+.bank_bottom_left{ width:600px; height:50px;font-size:14px; line-height:50px;color:#acacac;font-family: "微软雅黑", Arial, Helvetica, sans-serif ; font-weight:normal; float:left; margin-left:50px;}
+.bank_bottom_left p{ float:left; line-height:50px; display:block; height:50px;}
+.bank_bottom_left span{ font-size:24px; color:#ff4a00;  margin-left:0px; line-height:50px;height:50px; margin-top:10px;}
+.bank_bottom_btn{ width:160px; height:50px; background-color:#ff4a00; color:#fff; border-radius:5px; border:0px; font-size:18px; float:right;font-family: "微软雅黑", Arial, Helvetica, sans-serif ;  margin-right:80px; cursor: pointer;}
+.bank_bottom_btn:hover{ background-color:#e3581f;}
+.footer{ width:1000px; margin:0 auto; text-align:center;font-family: "微软雅黑", Arial, Helvetica, sans-serif !important;
+	text-decoration: none;
+	font-size: 12px;
+	color: #757575; margin-top:20px; margin-bottom:20px;}
+</style>
+
+<script type="text/javascript">
+ 
+$(window).load(function(){	
+    //设置银行
+    $('.the_bank_info ul li a').click(function(){
+		var alla = $(this).parent().parent().parent().find("a").css("border","1px dashed #cfccc3");
+		$(this).css("border","2px solid #ff4a00");
+		$(this).find("input[type=radio]").attr("checked",true);
+        $("#issuerId").val($(this).find("input[type=radio]").val());
+	});
+
+    $('.the_bank_info ul li a').mouseover(function(){
+		if($(this).find("input[type=radio]").attr('checked')==false) $(this).css("border","1px solid #ff4a00");
+	});
+    $('.the_bank_info ul li a').mouseout(function(){		
+		if($(this).find("input[type=radio]").attr('checked')==false) $(this).css("border","1px dashed #cfccc3");
+	});
+
+});
+
+//选择支付类型
+function set_pay_type(ty){
+    
+    $('.the_bank_title').find("a").attr("class","card_hover");
+    $('.the_bank').find(".the_bank_info").css("display","none");  
+    $("#payType").val(ty);
+    js_sxf();
+    switch(ty)
+    {
+        case 1:
+          $("#select_person_cart").addClass("card_hover1");
+          $("#select_person_cart_div").css("display","block");
+          break;
+        case 4:
+          $("#select_company_cart").addClass("card_hover1");
+          $("#select_company_cart_div").css("display","block");
+          break;
+        case 11:
+          $("#select_credit_cart").addClass("card_hover1");
+          $("#select_credit_cart_div").css("display","block");
+          break;         
+    }
+
+}
+
+function js_sxf(){
+    var feetype = "{$accinfo['Fee']}";
+    var sxf = 0;
+    var jte = 0;
+    var ty = $("#payType").val();
+
+    if(feetype == "Pay"){
+        if(ty == "4"){
+              sxf = 20;
+        }else{
+              sxf = $("#orderAmount").val() * 0.005;
+        }
+            jte = parseFloat($("#orderAmount").val()) + sxf;
+            jte = parseFloat(jte).toFixed(2);
+            sxf = parseFloat(sxf).toFixed(2);
+            $("#show_total_money").html(''+jte+'&nbsp;元');
+            $("#show_top_pay_money").html('付款金额：<span >'+jte+'</span> 元');
+            $("#show_jia_moeny").html('&nbsp;&nbsp;(订单金额：￥ '+$("#orderAmount").val()+' + 手续费：￥ '+sxf+')');   
+    }
+}
+
+    //提交
+    function to_netpay(){
+
+        if($("#orderAmount").val() <= 0){
+            alert('请输入您要支付的金额！');
+            return false;
+        }else if($("#issuerId").val() == ""){
+            alert('请选择您的支付银行！');
+            return false;
+		}else if($("#payType").val() == "4" && $("#orderAmount").val() < 1000){
+            alert('B2B支付金额需大于1000元！');
+            return false;
+        }else{
+            document.form_netpay.submit();
+        }
+    }
+    
+</script>
+
+</head>
+
+<body>
+	<div class="header">
+		<div class="header_info">
+			<div class="logo"><a href="home.php"><!--{if empty($_SESSION['ucc']['CompanyLogo'])}--><img src="template/img/logo.jpg" alt="{$_SESSION['ucc']['CompanyName']} - 医统天下BMB系统" border="0" /><!--{else}--><img src="{RESOURCE_PATH}{$_SESSION['ucc']['CompanyLogo']}" alt="{$_SESSION['ucc']['CompanyName']} - 医统天下BMB系统" border="0" /><!--{/if}--></a>
+			</div>
+			<div class="header_right">欢迎 <span class="test_1">{$_SESSION['cc']['ccompanyname']}</span> 光临  <span class="test_1">{$_SESSION['ucc']['CompanySigned']}</span> 网上订货系统!   &nbsp;&nbsp; <span class="test_1"> [ <a href="login.php?m=logout">退出</a> ]</span>  &nbsp;&nbsp; <span class="test_1">[ <a href="http://help.dhb.net.cn/client.php?skey=<!--{echo think_encrypt(HELP_URL,ENCODE_KEY)}-->">帮助?</a> ]</span>
+			</div>
+		</div>
+    </div>
+
+    <div class="money">
+    	<div class="money_left">
+        <h2>
+            收款方：{$_SESSION['ucc']['CompanyName']}
+        </h2>
+            <span><strong> <!--{if empty($oinfo[OrderSN])}-->预付款<!--{else}-->订单：{$oinfo[OrderSN]}<!--{/if}--></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!--{echo date("Y-m-d H:i:s");}--></span>
+        </div>
+        <div class="money_right" id="show_top_pay_money">
+        	<!--{if $show_money > 0}-->付款金额：<span >{$show_money}</span> 元<!--{/if}-->
+        </div>
+    </div>
+
+
+    <div class="the_bank">
+    	<div class="the_bank_title">
+        	<a id="select_person_cart" class="card_hover1" onclick="set_pay_type(1)">储 蓄 卡</a>
+			<a id="select_credit_cart" class="card_hover" onclick="set_pay_type(11)">信 用 卡</a>
+            <!--{if $accinfo['B2B'] == 'T'}--><a id="select_company_cart" class="card_hover" onclick="set_pay_type(4)">企业网银</a> <!--{/if}-->           
+        </div>
+        <div id="select_person_cart_div" class="the_bank_info">
+        	<span>推荐银行：</span>
+            <ul>
+            	<li ><a ><input name="sbank" type="radio" value="icbc"  class="bank_C"  /></a></li>
+				<li><a class="bank_C3"><input name="sbank" type="radio" value="ccb"  class="bank_C"/></a></li>
+                <li><a class="bank_C1"><input name="sbank" type="radio" value="abc"  class="bank_C"/></a></li>
+                <li><a class="bank_C2"><input name="sbank" type="radio" value="boc"  class="bank_C"/></a></li>
+                
+            </ul>
+            <span>其他银行：</span>
+            <ul>
+            	<li><a class="bank_C4"><input name="sbank" type="radio" value="comm"  class="bank_C"/></a></li>
+                <li><a class="bank_C5"><input name="sbank" type="radio" value="cmb"  class="bank_C"/></a></li>
+                <li><a class="bank_C6"><input name="sbank" type="radio" value="spdb"  class="bank_C"/></a></li>
+                <li><a class="bank_C7"><input name="sbank" type="radio" value="cmbc"  class="bank_C"/></a></li>
+                <li><a class="bank_C8"><input name="sbank" type="radio" value="cib"  class="bank_C"/></a></li>
+                <li><a class="bank_C9"><input name="sbank" type="radio" value="ceb"  class="bank_C"/></a></li>
+                <li><a class="bank_C10"><input name="sbank" type="radio" value="psbc"  class="bank_C"/></a></li>
+                <li><a class="bank_C11"><input name="sbank" type="radio" value="bos"  class="bank_C"/></a></li>
+                 <li><a class="bank_C12"><input name="sbank" type="radio" value="citic"  class="bank_C"/></a></li>
+                <li><a class="bank_C13"><input name="sbank" type="radio" value="hxb"  class="bank_C"/></a></li>
+                <li><a class="bank_C14"><input name="sbank" type="radio" value="cgb"  class="bank_C"/></a></li>
+            </ul>
+            <div style=" clear:both"></div>
+            
+        </div>
+
+
+        <div id="select_company_cart_div" style="display:none;" class="the_bank_info">
+        	<span>选择银行：</span>
+            <ul>
+            	<li><a ><input name="sbank" type="radio" value="icbc"  class="bank_C"/></a></li>
+				<li><a class="bank_C3"><input name="sbank" type="radio" value="ccb"  class="bank_C"/></a></li>
+                <li><a class="bank_C1"><input name="sbank" type="radio" value="abc"  class="bank_C"/></a></li>
+                <li><a class="bank_C2"><input name="sbank" type="radio" value="boc"  class="bank_C"/></a></li>
+                
+            
+            	<li><a class="bank_C4"><input name="sbank" type="radio" value="comm"  class="bank_C"/></a></li>
+                <li><a class="bank_C5"><input name="sbank" type="radio" value="cmb"  class="bank_C"/></a></li>
+                <li><a class="bank_C6"><input name="sbank" type="radio" value="spdb"  class="bank_C"/></a></li>
+                <li><a class="bank_C9"><input name="sbank" type="radio" value="ceb"  class="bank_C"/></a></li>                
+            </ul>
+            <div style=" clear:both"></div>
+            
+        </div>
+
+        <div id="select_credit_cart_div" style="display:none;" class="the_bank_info">
+        	<span>推荐银行：</span>
+            <ul>
+                <li ><a ><input name="sbank" type="radio" value="icbc"  class="bank_C"  /></a></li>
+				<li><a class="bank_C3"><input name="sbank" type="radio" value="ccb"  class="bank_C"/></a></li>
+                <li><a class="bank_C1"><input name="sbank" type="radio" value="abc"  class="bank_C"/></a></li>
+                <li><a class="bank_C2"><input name="sbank" type="radio" value="boc"  class="bank_C"/></a></li>
+                
+            </ul>
+            <span>其他银行：</span>
+            <ul>
+                <li><a class="bank_C4"><input name="sbank" type="radio" value="comm"  class="bank_C"/></a></li>
+                <li><a class="bank_C5"><input name="sbank" type="radio" value="cmb"  class="bank_C"/></a></li>
+                <li><a class="bank_C6"><input name="sbank" type="radio" value="spdb"  class="bank_C"/></a></li>
+                <li><a class="bank_C7"><input name="sbank" type="radio" value="cmbc"  class="bank_C"/></a></li>
+                <li><a class="bank_C8"><input name="sbank" type="radio" value="cib"  class="bank_C"/></a></li>
+                <li><a class="bank_C9"><input name="sbank" type="radio" value="ceb"  class="bank_C"/></a></li>
+                <li><a class="bank_C10"><input name="sbank" type="radio" value="psbc"  class="bank_C"/></a></li>
+                <li><a class="bank_C11"><input name="sbank" type="radio" value="bos"  class="bank_C"/></a></li>
+                 <li><a class="bank_C12"><input name="sbank" type="radio" value="citic"  class="bank_C"/></a></li>
+                <li><a class="bank_C13"><input name="sbank" type="radio" value="hxb"  class="bank_C"/></a></li>
+                <li><a class="bank_C14"><input name="sbank" type="radio" value="cgb"  class="bank_C"/></a></li>
+            </ul>
+            <div style=" clear:both"></div>
+            
+        </div>
+        <div class="bank_bottom">
+
+        <form name="form_netpay" action="finance.php?m=to_netpay" method="post" >
+            	<div class="bank_bottom_left">
+                  <p>付款金额：￥
+                <!--{if $oinfo[OrderTotal] <= 0}-->
+                  <input type="text" name="orderAmount" id="orderAmount"  maxlength="12"  style="width:80px; height:28px; font-size:14px; font-weight:bold; color:#666; " value="{$oinfo[OrderTotal]}" onBlur="js_sxf();" /><font id="show_jia_moeny"></font>
+                <!--{else}-->
+                    <span id="show_total_money">{$show_money}&nbsp;元</span>
+                    <!--{if $accinfo['Fee'] == 'Pay'}-->
+                    <font id="show_jia_moeny">&nbsp;&nbsp;(订单金额：￥ {$oinfo[OrderTotal]} + 手续费：￥ {$sxf})</font>                    
+                    <!--{/if}-->
+                    <input type="hidden" name="orderAmount" id="orderAmount" value="{$oinfo[OrderTotal]}" />
+                <!--{/if}-->
+                  </p>
+                </div>
+
+        <input name="sbank" type="button" class="bank_bottom_btn" value="立即支付" onclick="to_netpay();" />
+        <span style="float:right; margin-right:30px; padding-top:22px; color:#666;font-size:12px;"><a href="javascript:void(0)" onclick="history.go(-1)" style="color: #757575;">返回 >></a></span>
+        <input type="hidden" name="serverUrl" id="serverUrl" value="{$serviceUrl}" />
+        <input type="hidden" name="payType" id="payType" value="1" />
+        <input type="hidden" name="issuerId" id="issuerId" value="" />
+
+        <input type="hidden" name="inputCharset" id="inputCharset" value="1" />
+        <input type="hidden" name="pickupUrl" id="pickupUrl" value="{$pickupUrl}"/>
+        <input type="hidden" name="receiveUrl" id="receiveUrl" value="{$receiveUrl}" />
+        <input type="hidden" name="version" id="version" value="v1.0"/>
+        <input type="hidden" name="language" id="language" value="1" />
+        <input type="hidden" name="signType" id="signType" value="1"/>
+        <input type="hidden" name="merchantId" id="merchantId" value="{$merchantId}" />
+        <input type="hidden" name="payerName" id="payerName" value=""/>
+        <input type="hidden" name="payerEmail" id="payerEmail" value="" />
+        <input type="hidden" name="payerTelephone" id="payerTelephone" value="" />
+        <input type="hidden" name="payerIDCard" id="payerIDCard" value="" />
+        <input type="hidden" name="pid" id="pid" value=""/>
+        <input type="hidden" name="orderNo" id="orderNo" value="{$paysn}" />
+
+        <input type="hidden" name="orderCurrency" id="orderCurrency" value="0" />
+        <input type="hidden" name="orderDatetime" id="orderDatetime" value="<!--{echo date('Ymdhis');}-->" />
+        <input type="hidden" name="orderExpireDatetime" id="orderExpireDatetime" value="0"/>
+        <input type="hidden" name="productName" id="productName" value="医统天下BMB系统-付款单" />
+        <input type="hidden" name="productPrice" id="productPrice" value="" />
+        <input type="hidden" name="productNum" id="productNum" value=""/>
+        <input type="hidden" name="productId" id="productId" value="" />
+        <input type="hidden" name="productDesc" id="productDesc" value="" />
+        <input type="hidden" name="ext1" id="ext1" value="" />
+        <input type="hidden" name="ext2" id="ext2" value="{$oinfo[OrderSN]}" />
+        <input type="hidden" name="extTL" id="extTL" value="" />
+        
+        <input type="hidden" name="pan" value="" />
+        <input type="hidden" name="tradeNature" value="GOODS" />
+
+</form>
+            </div>
+        
+    </div>
+
+
+
+
+    <div class="footer">
+    	<div class="clear" style="display:none;"><!--{echo count($bdata = commondata::getcommonclass());}--></div>
+		{$bdata[binfo]}
+    </div>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!-- 客户详情 -->
+<div class="customer-info common-style" style="background-color: white;top: 0;">
+    <header>
+        <span data-back class="icon">&#x34;</span>
+        <h4>药店详情</h4>
+    </header>
+    <div data-iscroll class="list">
+        <ul>
+            <li>
+                <div class="list-head" ng-click="toggle.toggleLogininfo();">
+                    <strong>
+                        <em class="icon" style="font-size: 2.2rem;vertical-align: -.4rem;">&#x68;</em>
+                        <em>登录信息</em>
+                        <span class="icon f_right" style="margin-top: .5rem;font-size: 2rem;">&#x33;</span>
+                    </strong>
+                </div>
+                <div ng-show="toggle.logininfoShow" ng-class="{'fadeInDown':toggle.logininfo===2,'fadeOutUp':toggle.logininfo===1}" class="animated list-body">
+                    <p>
+                        <span class="f_left">状态</span>
+                        <span class="f_right">{{customers.selectCustomer.flagText2}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">账号</span>
+                        <span class="f_right">{{customers.selectCustomer.ClientName}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">密码</span>
+                        <span class="f_right">{{customers.selectCustomer.ClientPassword}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">手机</span>
+                        <span class="f_right">{{customers.selectCustomer.ClientMobile}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">最近登录IP</span>
+                        <span class="f_right">{{customers.selectCustomer.LoginIP}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">最近登录时间</span>
+                        <span class="f_right" ng-show="customers.selectCustomer.LoginDate!=='0'">{{customers.selectCustomer.LoginDate*1000 | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">登录次数</span>
+                        <span class="f_right">{{customers.selectCustomer.LoginCount}}</span>
+                    </p>
+                </div>
+                <div class="divider"></div>
+            </li>
+            <li>
+                <div class="list-head" ng-click="toggle.toggleBaseinfo();">
+                    <strong>
+                        <em class="icon" style="font-size: 2.6rem;vertical-align: -.4rem;">&#xe107;</em>
+                        <em>基本信息</em>
+                        <span class="icon f_right" style="margin-top: .5rem;font-size: 2rem;">&#x33;</span>
+                    </strong>
+                </div>
+                <div ng-show="toggle.baseinfoShow" ng-class="{'fadeInDown':toggle.baseinfo===2,'fadeOutUp':toggle.baseinfo===1}" class="animated list-body">
+                    <p>
+                        <span class="f_left">名称</span>
+                        <span class="f_right">{{customers.selectCustomer.ClientCompanyName}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">地区</span>
+                        <span class="f_right">{{customers.selectCustomer.AreaName}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">编号</span>
+                        <span class="f_right">{{customers.selectCustomer.ClientNO}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">联系人</span>
+                        <span class="f_right">{{customers.selectCustomer.ClientTrueName}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">电话</span>
+                        <span class="f_right">{{customers.selectCustomer.ClientPhone}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">传真</span>
+                        <span class="f_right">{{customers.selectCustomer.ClientFax}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">邮箱</span>
+                        <span class="f_right">{{customers.selectCustomer.ClientEmail}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">地址</span>
+                        <span class="f_right">{{customers.selectCustomer.ClientAdd}}</span>
+                    </p>
+                </div>
+                <div class="divider"></div>
+            </li>
+            <li>
+                <div ng-click="toggle.toggleOther();" class="list-head">
+                    <strong>
+                        <em class="icon" style="font-size: 2.6rem;vertical-align: -.4rem;">&#xe0ef;</em>
+                        <em>财务信息</em>
+                        <span class="icon f_right" style="margin-top: .5rem;font-size: 2rem;">&#x33;</span>
+                    </strong>
+                </div>
+                <div ng-show="toggle.otherShow" ng-class="{'fadeInDown':toggle.other===2,'fadeOutUp':toggle.other===1}" class="animated list-body">
+                    <p>
+                        <span class="f_left">开户名称</span>
+                        <span class="f_right">{{customers.selectCustomer.AccountName}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">开户银行</span>
+                        <span class="f_right">{{customers.selectCustomer.BankName}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">银行账号</span>
+                        <span class="f_right">{{customers.selectCustomer.BankAccount}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">开票抬头</span>
+                        <span class="f_right">{{customers.selectCustomer.InvoiceHeader}}</span>
+                    </p>
+                    <p>
+                        <span class="f_left">纳税人识别号</span>
+                        <span class="f_right">{{customers.selectCustomer.TaxpayerNumber}}</span>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- 删除 -->
+    <div class="animated fadeIn sure-delete common-model">
+        <div>
+            <h4>确定删除</h4>
+            <ul>
+                <li>确定删除该药店?</li>
+            </ul>
+            <div class="btn-group">
+                <button ng-click="customerManager.deleteCustomer(customers.selectCustomer.ClientID);">确定</button>
+                <button data-toggle data-selector="div.sure-delete">取消</button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div ng-click="customerManager.gotoEdit(customers.selectCustomer.ClientID);">
+            <span class="icon" style="color: #ff7e5a;">&#x6c;</span>
+            <span>编辑</span>
+        </div>
+        <div data-toggle data-selector="div.sure-delete">
+            <span class="icon" style="color: #ff7e5a;">&#x51;</span>
+            <span>删除</span>
+        </div>
+        <div ng-click="customers.insteadSubmitOrder();" ng-show="customers.selectCustomer.ClientFlag!=='9'">
+            <span class="icon" style="color: #68c8ef;">&#x68;</span>
+            <span>代下订单</span>
+        </div>
+    </footer>
+</div>

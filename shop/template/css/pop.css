@@ -1,0 +1,64 @@
+/*字体图标样式*/
+*{padding: 0;margin: 0;}
+.icon {width: 24px; height: 30px;fill: currentColor;overflow: hidden; color: #bebebe;margin-top: 5px;}
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { color: #d2d2d2; font-size: 14px;} 
+input:-moz-placeholder, textarea:-moz-placeholder { color: #d2d2d2; font-size: 14px;} 
+input::-moz-placeholder, textarea::-moz-placeholder { color: #d2d2d2; font-size: 14px;} 
+input:-ms-input-placeholder, textarea:-ms-input-placeholder { color: #d2d2d2; font-size: 14px;}
+.layui-layer{border-radius: 8px;}
+
+/*关闭按钮*/
+.close{position: absolute;width: 25px;height: 25px;top: 6px;right: 5px;cursor: pointer;color: #bbb;font-size: 24px !important;}
+
+/*设置密码样式*/
+.layer{width: 376px;height: 420px;background: #f1f1f1;border-radius: 8px;padding-top: 0.1px;position: relative;}
+.layer>button,.layer>p{width: 303px;height: 38px;line-height: 38px;margin: 0 auto;border: 1px solid #eee;}
+.layer>p{background: #fff;}
+.layer>.layer_title{width: 100%;height: auto;background: #f1f1f1;margin-top: 30px;margin-bottom: 24px;border: none;text-align: center;color: #04A057;font-size: 18px;font-weight: bold;background: #f1f1f1;}
+.layer>p>i{float: left;}
+
+.layer span{float: left;width: 42px;height: 38px;text-align: center;line-height: 38px;}
+.layer .layer_title>span{display: block;width: 100% !important;	}
+.layer input{float: left;width: 260px;height: 30px;line-height: 30px;padding: 4px 0;border: none;outline: none;border-left: 1px solid #eee;color: #999;font-size: 14px;text-indent: 16px;}
+.layer .layer_tel{clear: both;}
+	/*验证码*/
+.layer .layer_number{height: 40px;width: 306px;margin: 18px auto;}
+.layer .layer_number>p{float: left;width: 195px;border: 1px solid #eee;background: #fff;margin-right: 5px;}
+.layer .layer_number span{width: 42px;height: 38px;}
+.layer .layer_number>p input{width: 152px;}
+	/*验证码按钮*/
+.layer input.getNum{float: left;width: 102px !important;height: 40px !important;margin-top: 0 !important;padding: 0;background: #f49400;text-indent: 0 !important;color: #fff;cursor: pointer;font-size: 14px;}
+	/*点击后样式*/
+.dianji{
+	background: #cdcdcd;
+	color: #000;
+}
+	/*设置密码*/
+p.set{margin: 18px auto 0 auto;}
+
+/*付款输入密码样式设置*/
+.content_wrap{width: 376px;height: 270px;background: #f1f1f1;border-radius: 8px;position: relative;padding-top: 0.1px;}
+.content_wrap .content_title{height: auto !important;font-size: 18px !important;font-weight: bold;color: #01a157;text-align: center;padding: 0;border-radius: 8px;border-bottom: 0;margin-top: 30px;margin-bottom: 24px;background: #f1f1f1;}
+.content_wrap>p{width: 303px;height: 38px;line-height: 38px;background: #fff;border: 1px solid #eee;margin: 0 auto;}
+.content_wrap>a{display: block;width: 80px;text-align: right;margin: 0 auto;color: #666;font-size: 14px;margin-top: 10px;margin-right: 40px;}
+
+/*设置弹窗与输入密码弹窗相同icon样式*/
+i.icon-yanzhengma{font-size: 28px;margin-top: 8px;}
+.sameIcon{float: left;width: 42px;height: 30px;text-align: center;font-size: 25px;vertical-align: middle;color: #cdcdcd;}
+.pay_key>input{width: 260px;height: 38px;line-height: 38px;border: none;outline: none;border-left: 1px solid #eee;vertical-align: top;text-indent: 16px;font-size: 14px !important;color: #999;}
+
+/*设置密码与输密码共有*/
+p.notice{width: 374px !important;background: transparent !important;color: #ee2222;font-size: 14px;margin-left: -33px;border: none !important;text-align: center;}
+/*设置密码弹窗*/
+.setpassPop{position: absolute;top: 310px;left: 35px;}
+.passPop{position: absolute;top: 152px;left: 35px;}
+/*支付弹窗*/
+input.button_sure,p.button_sure{width: 305px !important;height: 40px !important;line-height: 40px !important;background: #01a157 !important;color: #fff;font-size: 18px !important;cursor: pointer;display: block !important;text-align: center;margin: 40px 0 30px 35px !important;clear: both;border: none !important;}
+/*获取验证码点击样式*/
+.global-gray{color:#999 !important;background: #dedee0 !important;}
+
+/*设置密码重置密码眼睛*/
+.icon-wodezhangdan{width: 38px;height: 38px;text-align: center;font-size: 18px;color: #cdcdcd;position: absolute;right: 0;top: 0;cursor: pointer;}
+	.pay_key,.set_key,.set{position: relative;}
+	.icon-yanjing{display: none;width: 38px;height: 38px;text-align: centerfont-size: 20px;color: #cdcdcd;position: absolute;right: 0;top: 0;cursor: pointer;}
+

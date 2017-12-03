@@ -1,0 +1,22 @@
+      <!--{if $brandlist}-->    
+        <div class="leibie">
+          <div class="leibie_left">
+          品牌：       
+          </div>
+          <div class="leibie_right" id="leibei_id" style="height:55px;">
+            <dl>
+              <dd><a href="list.php?m={$in['m']}&s={$SiteID}&ty={$in['ty']}" <!--{if empty($in['b'])}--> class="a_hover"<!--{/if}--> >不限</a></dd>
+                    <!--{loop $brandlist $bkey $bvar}-->
+                        <dd title="{$bvar['BrandName']}"  ><a href="list.php?m={$in['m']}&s={$SiteID}&ty={$in['ty']}&b={$bvar['BrandID']}" <!--{if $in['b']==$bvar['BrandID']}--> class="a_hover"<!--{/if}-->  >{$bvar['BrandName']}</a></dd>
+                    <!--{/loop}-->
+            </dl>
+          </div>
+        </div>
+        <!--{if count($brandlist) > 11}-->
+            <div style="position: absolute; z-index:99; ">
+            <div id="allbutton" style="position: absolute; z-index:99; top:-10px; background:url(./template/img/20130415i.png) -125px 0 no-repeat; text-align:center; left:680px; width:55px; height:26px; line-height:25px; cursor: pointer;" >
+                 <span onclick="show_all('ALL');">展开 ∨ </span>
+            </div>
+            </div>
+        <!--{/if}-->
+    <!--{/if}-->

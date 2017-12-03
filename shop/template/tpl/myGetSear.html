@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - {SITE_NAME}</title>
+<meta name='robots' content='noindex,nofollow' />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="{CONF_PATH_IMG}css/base.css?v={VERID}" type="text/css" rel="stylesheet" />
+<link href="{CONF_PATH_IMG}css/showpage.css" rel="stylesheet" type="text/css">
+<link href="template/css/pagination.css" rel="stylesheet" type="text/css">
+<link href="plugin/jquery-ui/development-bundle/themes/base/ui.all.css" type="text/css" rel="stylesheet" />
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js?v={VERID}" type="text/javascript"></script>
+<script src="template/js/my.js?v={VERID}" type="text/javascript"></script>
+<script src="template/js/jquery.pagination.js?v={VERID}" type="text/javascript"></script>
+<script src="plugin/jquery-ui/development-bundle/ui/ui.datepicker.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function(){
+	$("input[name='sdate'],input[name='edate']").datepicker();
+	
+	//初始化载入
+	getPayWithdraw();
+	
+	//点击载入
+	$("#to-show-draw").bind('click', function(){
+		getPayWithdraw();
+	});
+	
+});
+</script>
+</head>
+
+<body>
+{template header}
+
+<div id="main">
+<div class="main_left">
+<div class="fenlei_bg_tit"><span>我的医药账户</span></div> 
+  <div class="news_info">
+    <!-- 载入菜单 -->
+  {template my_profile_menu}
+
+  </div>
+<div class="fenlei_bottom"><img src="{CONF_PATH_IMG}images/info_bottom.jpg" /></div>
+
+</div>
+
+<div class="main_right">
+<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="my.php?m=profile">我的医药账户</a> 
+</div>
+<div class="right_product_tit">
+	<div class="xs_0">我的对账记录:</div>
+</div>
+
+<div class="right_product_main">
+
+<div class="list_line">
+ <table class="searchtable" align="right">
+    <tr>
+        <td style="border:none;"><b>查询日期:</b> &nbsp;&nbsp;&nbsp;&nbsp;从</td>
+        <td style="border:none;">
+            <input type="text" name="sdate" style="width:100px;" value="{$startDate}" />
+        </td>
+        <td style="border:none;">到</td>
+        <td style="border:none;">
+            <input type="text" name="edate" style="width:100px;" value="{$endtDate}" />
+        </td>
+        <td style="border:none;">
+            <input type="button" class="button_3" style="margin-top:0px;" value="查看" id="to-show-draw" />
+        </td>
+    </tr>
+</table>
+<div class="clear"></div>
+<div class="clear draw-load" id="draw-load">
+数据载入中，请稍等...<br />
+<img src="template/img/loading3.gif" />
+</div>
+
+<!-- 记录头显示 -->   
+<table border="0" width="98%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="80">总记录数：</td>
+		<td width="264">总计 <span id="total-count">-</span> 笔交易</td>
+		<td width="80">本金总金额：</td>
+		<td>¥：<span id="total-amounts">-</span></td>
+	</tr>
+	<tr>
+		<td>总金额：</td>
+		<td>¥：<span id="total-amountsIn">-</span></td>
+		<td>总手续费：</td>
+		<td>¥：<span id="total-charges">-</span></td>
+	</tr>
+</table> 
+<br />
+<!-- 记录体显示 -->   
+<table border="0" width="98%" cellpadding="0" cellspacing="0">
+	<tbody id="log-draw">
+	
+	</tbody>
+</table> 
+
+<!-- 分页 -->
+<p class="pagination yopenapi-page" id="yopenapi-page"></p>
+
+</div>		
+
+		<br />&nbsp;
+       </div>
+	</div>
+</div>
+</div>
+
+{template bottom}
+</body>
+</html>

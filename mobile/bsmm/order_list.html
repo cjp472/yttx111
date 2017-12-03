@@ -1,0 +1,72 @@
+<!-- 订单列表 -->
+<div ng-style="toggleHead" class="order-list common-style" ng-controller="orderController">
+    <div data-load-more="orderes.loadMore();" class="list">
+        <ul>
+            <li ng-click="orderes.getOrderInfo($index,order.OrderID);" ng-repeat="order in orderes.orderList">
+                <div class="list-head">
+                    <strong>订单号：{{order.OrderSN}}</strong>
+                    <span class="state state-green">{{order.OrderStatusName}}</span>&emsp;
+                    <span ng-show="!order.OrderSalerStatusName" class="state state-blue">{{order.OrderPayStatusName}}</span>
+                    <span ng-show="order.OrderSalerStatusName" class="state state-blue">{{order.OrderSalerStatusName}}</span>
+                </div>
+                <div class="list-body">
+                    <span class="ellipsis-one">{{order.ClientCompanyName + ' - ' + order.ClientTrueName}}</span>
+                    <span>付款方式：{{order.OrderPayType}}</span>
+                    <span>下单时间：{{order.OrderDate * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                </div>
+                <div class="list-footer" data-stop-bubble>
+                    <span>订单金额：<em class="color-red">¥ {{order.OrderTotal}}</em></span>
+                     <!-- ng-hide="order.OrderSalerStatusName==='已初审'&&myInfo.UserType==='S'" -->
+                    <span ng-click="orderes.setChioceOrder($index);" data-toggle data-selector="div.order-audit" ng-show="order.OrderStatus==='0'&&order.showAuditBtn" class="state f_right"><em class="icon">&#x6c;</em>&nbsp;<em>审核</em></span>
+                    <span ng-click="orderes.setChioceOrder($index);" data-toggle data-selector="div.order-rAudit" ng-show="order.OrderStatus==='1'&&order.showAuditBtn" class="state state-grey f_right"><em class="icon">&#x4a;</em>&nbsp;<em>反审核</em></span>
+                </div>
+                <div class="divider"></div>
+            </li>
+        </ul>
+        <!-- 无数据提示框 -->
+        <div class="no-data" ng-show="orderes.noData">
+            <div>
+                <p class="search-result"></p>
+                <p>对不起，没有数据显示</p>
+            </div>
+        </div>
+    </div>
+    <!-- 订单审核 -->
+    <div class="animated fadeIn order-audit common-model">
+        <div>
+            <h4>订单审核</h4>
+            <ul>
+                <li>确认审核通过该订单？</li>
+            </ul>
+            <div class="btn-group">
+                <button ng-click="orderes.orderOperator('audit');" data-toggle data-selector="div.order-audit">确定</button>
+                <button data-toggle data-selector="div.order-audit">取消</button>
+            </div>
+        </div>
+    </div>
+    <!-- 订单反审核 -->
+    <div class="animated fadeIn order-rAudit common-model">
+        <div>
+            <h4>订单反审核</h4>
+            <ul>
+                <li>确认反审核该订单？</li>
+            </ul>
+            <div class="btn-group">
+                <button ng-click="orderes.orderOperator('unaudit');" data-toggle data-selector="div.order-rAudit">确定</button>
+                <button data-toggle data-selector="div.order-rAudit">取消</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div ng-click="orderes.getListByStatus(0);">
+            <span>未审核</span>
+            <span class="color-red">({{orderes.countAudit}})</span>
+        </div>
+        <div ng-click="orderes.getListByStatus(1);">
+            <span>未付款</span>
+            <span class="color-red">({{orderes.countPay}})</span>
+        </div>
+    </footer>
+    <div ui-view class="animated fadeIn"></div>
+</div>

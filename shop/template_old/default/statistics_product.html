@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - 订货宝 网上订货系统</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link href="template/default/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/list.css" rel="stylesheet" type="text/css" media="screen" />
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js" type="text/javascript"></script>
+<script language="javascript">AC_FL_RunContent = 0;</script> 
+<script language="javascript">DetectFlashVer = 0; </script> 
+<script src="plugin/charts/AC_RunActiveContent.js" language="javascript"></script> 
+<script language="JavaScript" type="text/javascript"> 
+<!--
+var requiredMajorVersion = 10;
+var requiredMinorVersion = 0;
+var requiredRevision = 45;
+-->
+</script>
+<link type="text/css" href="plugin/jquery-ui/development-bundle/themes/base/ui.all.css" rel="stylesheet" />
+<script type="text/javascript" src="plugin/jquery-ui/development-bundle/ui/ui.core.js"></script>
+<script type="text/javascript" src="plugin/jquery-ui/development-bundle/ui/ui.datepicker.js"></script>
+<script type="text/javascript">
+	
+$(function(){
+	$("#begindate").datepicker();
+	$("#enddate").datepicker();
+});
+
+function show_stat_data()
+{
+	document.MainForm.action = 'statistics.php?m=product';
+	document.MainForm.target = '_self';
+	document.MainForm.submit();
+}
+
+function closewindowui()
+{
+	$.unblockUI();
+}
+
+</script>
+</head>
+
+<body>
+{template header}
+
+<div id="contentbody">
+	<div id="contentleft">
+
+        <div class="line margin_top" >
+<b class="b1"></b><b class="b2 d1"></b><b class="b3 d1"></b><b class="b4 d1"></b>
+<div class="b d1" style="height:68px;">
+
+<div class="line">
+	<div class="cartimg" onclick="javascript:window.location.href='cart.php'"><div id="cartnumber" ><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></div></div>
+	<div class="carttext">
+		<div><a href="cart.php"><img src="template/default/img/view_order.jpg" border="0" title="查看我的当前订单" /></a></div>
+		<div align="right" class="white">您已预订 <span id="cartnumber_2"><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></span> 件商品！</div>
+	</div>
+</div>
+
+</div>
+<b class="b4b d1"></b><b class="b3b d1"></b><b class="b2b d1"></b><b class="b1b"></b>
+		</div>
+
+
+		<div class="line margin_top">
+        	<div class="sort_title">数据统计</div>
+         	<div class="sort_line">
+				<dt><a href="statistics.php" > &#8250;&#8250; 订单统计</a></dt>
+                <dd><a href="statistics.php?m=year" > &#8250;&#8250; 年订单统计</a></dd>
+                <dd><a href="statistics.php?m=month" > &#8250;&#8250; 月订单统计</a></dd>
+                <dd><a href="statistics.php?m=day" > &#8250;&#8250; 日订单统计</a></dd>
+				<dt><a href="statistics.php?m=return" > &#8250;&#8250; 退货单统计</a></dt>
+				<dt><a href="statistics.php?m=finance" > &#8250;&#8250; 款项统计</a></dt>
+				<dt><a href="reconciliation.php" > &#8250;&#8250; 往来对帐</a></dt>
+				<dt><a href="statistics.php?m=product" > &#8250;&#8250; 订购产品统计</a></dt>
+            </div>
+        	<div class="line"><img src="template/default/img/sort_bottom.jpg" /></div>        
+        </div>
+	</div>  
+      
+    <div id="contentright">
+    	<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="statistics.php?m=product">订购产品统计</a></div>
+     	
+		  <div class="line margin_top">
+        	<div class="list_title">
+            	<div class="leftdiv line-height">订单产品统计：</div>
+          </div>
+         	<div class="list_line">
+			<form id="MainForm" name="MainForm" method="post" action="statistics.php"  >
+             <table width="98%" align="center" border="0" cellspacing="0" cellpadding="0">
+     			 <tr>
+       				 <td height="30" >&nbsp;<strong>日期:</strong>&nbsp;&nbsp;从<input name="begindate" type="text" id="begindate"   maxlength="12" onfocus="this.select();" value="{$in['begindate']}"   />&nbsp;到&nbsp;<input name="enddate" type="text" id="enddate" maxlength="12" onfocus="this.select();" value="{$in['enddate']}"   />&nbsp;<input type="button" name="newbutton" id="newbutton" value=" 查 看 " class="bluebtn" onclick="show_stat_data()"/>&nbsp;&nbsp;</td>
+     			 </tr>
+				 <!--{if !empty($rmsg)}-->{$rmsg}<!--{else}-->
+				 <!--{if !empty($statdata)}-->
+     			 
+     			 <tr>
+       				 <td height="30" bgcolor="#efefef" >&nbsp;&nbsp;&nbsp;&nbsp; <strong>从 {$in['begindate']} 到 {$in['enddate']} 订单产品数据</strong></td>
+     			 </tr>
+     			 <tr>
+       				 <td >
+
+        	  <table width="100%" border="0" cellspacing="0" cellpadding="0">               
+               <thead>
+                <tr>
+                  <td width="2%" class="bottomlinebold"><label>&nbsp; </label></td>
+                  <td width="14%" class="bottomlinebold">商品编号</td>
+				  <td class="bottomlinebold">商品名称</td>
+                  <td width="10%" class="bottomlinebold">订购数量</td>
+				  <td width="10%" class="bottomlinebold">退货数量</td>
+				  <td width="10%" class="bottomlinebold">实际数量</td>
+				  <td width="12%" class="bottomlinebold">属性统计</td>
+                </tr>
+     		   </thead>
+			 
+			 <tbody>
+			 <!--{loop $statdata $skey $var}-->			 
+			 <tr class="bottomline" onmouseover="inStyle(this)"  onmouseout="outStyle(this)">
+                  <td>&nbsp;</td>
+				  <td ><a href="content.php?id={$var['ContentID']}" target="_blank">{$var['ContentID']}</a></td>
+				  <td ><a href="statistics.php?m=productall&ID={$var['ContentID']}&begindate={$in['begindate']}&enddate={$in['enddate']}" target="_blank" >{$var['ContentName']}</a></td>
+                  <td >{$var['onum']}</td>
+				  <td >{$var['rnum']}</td>
+				  <td >{$var['cnum']}</td>
+				  <td ><a href="statistics.php?m=productcs&stype=color&ID={$var['ContentID']}&begindate={$in['begindate']}&enddate={$in['enddate']}" target="_blank">颜色</a>&nbsp;|&nbsp;<a href="statistics.php?m=productcs&stype=spec&ID={$var['ContentID']}&begindate={$in['begindate']}&enddate={$in['enddate']}" target="_blank">规格</a></td>
+			 </tr>
+			 <!--{/loop}-->
+			 <tr class="bottomline" onmouseover="inStyle(this)"  onmouseout="outStyle(this)">
+                  <td>&nbsp;</td>
+				  <td ><strong>合计：</strong></td>
+				  <td ><strong>&nbsp;<!--{echo count($statdata)}-->个</strong></td>
+				  <td ><strong>{$totalm}件</strong></td>
+				  <td ><strong>{$totalr}件</strong></td>
+                  <td ><strong>{$total}件</strong></td>
+				  <td>&nbsp;</td>
+			 </tr>
+			 </tbody>
+			</table>
+
+					 </td>
+     			 </tr>
+			<!--{else}-->
+     			 <tr>
+       				 <td height="130" bgcolor="#ffffff" align="center">&nbsp; 暂无符合条件的数据!</td>
+     			 </tr>
+			<!--{/if}-->
+			<!--{/if}-->
+              </table>
+			  </form>
+			<br />&nbsp;
+            </div>
+        	<div class="line"><img src="template/default/img/list_bottom_1.jpg" /></div>        
+        </div> 
+              
+    </div> 
+</div>
+
+{template bottom}
+    <div id="windowForm">
+		<div class="windowHeader">
+			<h3 id="windowtitle">订单列表：</h3>
+			<div class="windowClose"><div class="close-form" onclick="closewindowui()" title="关闭" >x</div></div>
+		</div>
+		<div id="windowContentList" >
+        数据载入中...       
+        </div>
+	</div>
+</body>
+</html>

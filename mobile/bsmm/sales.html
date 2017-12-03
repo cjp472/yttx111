@@ -1,0 +1,28 @@
+<!-- 销量一览 -->
+<div ng-controller="salesController" class="sales common-style" style="background-color: white;top: 0;">
+    <header>
+        <span data-back class="icon">&#x34;</span>
+        <h4>销量一览</h4>
+    </header>
+    <div data-iscroll class="list" style="top: 5rem;">
+        <ul>
+            <li data-toggle-day data-month="{{sale.ODate}}" ng-repeat="sale in sales.list">
+                <p><strong>{{sale.sDate}}月</strong></p>
+                <p>
+                    <span class="color-red">¥ {{sale.CountTotal}}</span>
+                    <span>{{sale.CountNumber}}笔</span>
+                </p>
+                <p>
+                    <span class="icon">&#x33;</span>
+                </p>
+            </li>
+        </ul>
+        <!-- 无数据提示框 -->
+        <div class="no-data" ng-show="sales.noData">
+            <div>
+                <p class="search-result"></p>
+                <p>对不起，没有数据显示</p>
+            </div>
+        </div>
+    </div>
+</div>

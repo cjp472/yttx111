@@ -1,0 +1,71 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    background: white;
+    color: #5e5e5e;
+    font-size: 1.4em;
+    font: 1.4em/2.8em Microsoft YaHei,SimSun,Arial;
+}
+.content{
+    width: 998px;
+    margin: auto;
+    height: auto;
+    text-align: center;
+    background: #fffdfd;
+    border: 1px solid #ffdbd3;
+    border-top: none;
+    padding-bottom: 100px;
+}
+.main {
+    text-align: center;
+}
+.user-title{
+    font-size: 30px;
+    padding-top: 100px;
+    color: #111111;
+}
+.weixin{
+    width: 190px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+.input-box{
+    width: 220px;
+    height: 50px;
+    border: 1px solid #eb4902;
+    border-radius: 4px 0px 0px 4px;
+    font-size: 18px;
+    padding-left: 20px;
+}
+.user-info{
+    color: #717171;
+    font-size: 14px;
+    line-height: 25px;
+}
+.user-info span{
+    color: #f57154;
+}
+
+.input-btn{
+    background:#eb4902;
+    outline: none;
+    border: none;
+    height: 52px;
+    width: 125px;
+    border-radius:0px 4px 4px 0px;
+    margin-left: -8px;
+    font-size: 18px;
+    color: #ffffff;
+    cursor: pointer;
+}
+.input{
+    margin-top: 50px;
+}
+.err_msg {
+    text-align: left;
+    color: #eb4902;
+    font-size: 16px;
+    margin-left: 20px;
+}

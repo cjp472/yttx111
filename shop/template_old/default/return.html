@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - 订货宝 网上订货系统</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="template/default/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/list.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/showpage.css" rel="stylesheet" type="text/css" media="screen" />
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+function do_order_status(oid)
+{	
+	if(confirm('你确认已收到货物了吗? 此操作不可逆!'))
+	{
+		$.post("myorder.php",
+			{m:"confirmincept", ID: oid, Content: $('#data_OrderContent').val()},
+			function(data){		
+					if(data == "ok"){						
+						$.growlUI("提交成功，正在载入页面...");
+						window.location.reload();
+					}else{
+						$("#tip").html(data);
+					}
+				}			
+			);
+		window.setTimeout("hideshow('tip')",20000);
+	}	
+}
+</script>
+</head>
+
+<body>
+{template header}
+
+<div id="contentbody">
+	<div id="contentleft">
+
+        <div class="line margin_top" >
+<b class="b1"></b><b class="b2 d1"></b><b class="b3 d1"></b><b class="b4 d1"></b>
+<div class="b d1" style="height:68px;">
+
+<div class="line">
+	<div class="cartimg" onclick="javascript:window.location.href='cart.php'"><div id="cartnumber" ><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></div></div>
+	<div class="carttext">
+		<div><a href="cart.php"><img src="template/default/img/view_order.jpg" border="0" title="查看我的当前订单" /></a></div>
+		<div align="right" class="white">您已预订 <span id="cartnumber_2"><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></span> 件商品！</div>
+	</div>
+</div>
+
+</div>
+<b class="b4b d1"></b><b class="b3b d1"></b><b class="b2b d1"></b><b class="b1b"></b>
+		</div>
+
+		<div class="line margin_top">
+        	<div class="sort_title">退货管理</div>
+         	<div class="sort_line">
+                <dt><a href="return.php?m=returnadd" > &#8250;&#8250; 退货申请</a></dt>
+				<dt><a href="return.php" > &#8250;&#8250; 退货单查询</a></dt>
+				<!--{loop $return_status_arr $skey $svar}-->
+					<!--{if $skey==$in[status] && isset($in[status])}-->
+						<dd><a href="return.php?status={$skey}" ><strong> &#8250;&#8250; {$svar}</strong></a></dd>
+					<!--{else}-->
+						<dd><a href="return.php?status={$skey}" > &#8250;&#8250; {$svar}</a></dd>
+					<!--{/if}-->
+				<!--{/loop}-->
+				<dt><a href="myorder.php?m=product" > &#8250;&#8250; 我订过的商品</a></dt>
+
+            </div>
+        	<div class="line"><img src="template/default/img/sort_bottom.jpg" /></div>        
+        </div>
+	</div>  
+      
+    <div id="contentright">
+    	<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="return.php">退货管理</a> </div>
+     	
+		<div class="line margin_top">
+        	<div class="list_title">
+            	<div class="leftdiv line-height">我的退货单：</div>
+				<div class="rightdiv line-heightr"><input type="button" name="linkaddfinace" id="linkaddfinace" value="退货申请" class="yellowbtn" onclick="javascript:window.location.href='return.php?m=returnadd'" style="margin-top:4px;" /></div>
+            </div>
+         	<div class="list_line">
+
+            <table width="96%" border="0" cellspacing="0" cellpadding="0" align="center" class="ordertd">
+            <thead>
+  <tr>
+    <td width="22%" height="28">退单号</td>
+    <td>退货商品</td>
+    <td width="25%">配送/外观/包装</td>
+    <td width="25%">原因说明</td>
+  </tr>
+   </thead>
+   <tbody>
+<!--{loop $orderlist[list] $gkey $gvar}-->
+  <tr  onmouseover="inStyle(this)"  onmouseout="outStyle(this)" >
+    <td height="98">
+		<!--{if $gvar[ReturnType]=="C"}-->
+		<span title="客户端下单" class="font12h">&nbsp;C</span><br />
+		<!--{else}-->
+		<span title="管理端代下单" class="font12h">&nbsp;M</span><br />
+		<!--{/if}-->
+		<span><a href="return.php?m=showreturn&id={$gvar[ReturnID]}" >&nbsp;{$gvar[ReturnSN]}</a></span><br />		
+		<span class="font12" title="订单金额">&nbsp;¥ {$gvar[ReturnTotal]}</span><br />
+		<span title="订单状态" class="font12h">&nbsp;{$return_status_arr[$gvar[ReturnStatus]]}</span><br />
+	</td>
+    <td>
+			<!--{loop $gvar[goods] $lkey $lvar}-->
+			<div style="width:200px; height:20px; line-height:20px; overflow:hidden;"><a href="content.php?id={$lvar[ContentID]}" target="_blank">{$lvar[ContentName]}</a></div>
+			<!--{/loop}-->
+			<div><a href="return.php?m=showreturn&id={$gvar[ReturnID]}" >......</a></div>
+	</td>
+    <td>
+		<div class="font12" title="{$gvar[ReturnSendAbout]}" >{$gvar[ReturnSendType]}</div>
+		<span title="产品外观"> {$gvar[ReturnProductW]}</span><br />
+		<span title="包装情况">{$gvar[ReturnProductB]}</span><br />
+	</td>
+    <td>
+		<span > {$gvar[ReturnAbout]}</span>
+	</td>
+
+  </tr>
+   <!--{/loop}--> 
+   </tbody>
+</table>
+
+			<div class="list_showpage">{$orderlist[showpage]}</div><br />&nbsp;
+            </div>
+        	<div class="line"><img src="template/default/img/list_bottom_1.jpg" /></div>        
+        </div> 
+              
+    </div> 
+</div>
+
+{template bottom}
+</body>
+</html>

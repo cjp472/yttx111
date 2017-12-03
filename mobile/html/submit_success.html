@@ -1,0 +1,113 @@
+<!-- 订单提交成功 -->
+<div class="page-submit-success page-order-confirm">
+    <!-- 标题 -->
+    <header class="common">
+        <p style="text-indent: 0;overflow: hidden">提交成功</p>
+    </header>
+    <div class="content iscroll" data-iscroll>
+        <div style="padding: 1px 0 2rem;">
+            <div class="success-img"></div>
+            <p class="success-prompt">恭喜您，订单提交成功！</p>
+            <p class="orderinfo-box">
+                <span>订单编号：<span class="ordermum">{{newOrderSN}}</span></span>,
+                <span>应付金额：<span class="paymoney">￥{{totalAmount2}}</span></span>
+            </p>
+            <div class="payway-box"><span class="payway-img"></span><span class="payway-tit">支付金额与支付方式</span></div>
+            <div>
+                <div class="order-paymoney">
+                    <p><span>支付金额</span><input type="text" placeholder="请输入支付金额" ng-model="payObj.userInputMoney" id="payMoney"/></p>
+                </div>
+                <div class="order-payway">
+                    <h3>支付方式</h3>
+                    <ul>
+                        <li  ng-click="setPayType2(1);">
+                            <span ng-class="{'checked-radio':onLine}" class="unchecked"></span>
+                            <span class="payinfo-way">快捷支付<em ng-if="yijifuStatus.certifyStatus==='T'" style="padding: 0 2%;margin-left: 3%;border-radius: .4rem;color: #fff;background-color: #2ACC63;">已认证</em></span>
+                        </li>
+                        <li ng-show="onlinePay.aliPay" ng-click="setPayType2(3);">
+                            <span ng-class="{'checked-radio':c_aliPay}" class="unchecked"></span>
+                            <span class="payinfo-way">支付宝支付</span>
+                        </li>  
+                        <li ng-show="onlinePay.weiXinPay" ng-click="setPayType2(4);">
+                            <span ng-class="{'checked-radio':c_weiXinPay}" class="unchecked"></span>
+                            <span class="payinfo-way">微信支付</span>
+                        </li>  
+                        <!-- 
+                        <li ng-click="setPayType2(2);">
+                            <span ng-class="{'checked-radio':offLine}" class="unchecked"></span>
+                            <span class="payinfo-way">线下转账</span>
+                        </li>  
+                         -->
+                    </ul>
+                    <!-- <p>
+                        <span>支付方式</span>
+                        <em ng-show="isQuickPay" ng-click="setPayType2(0);">
+                            <span ng-class="{'checkedRadio':onLine}" class="unchecked"></span>
+                            <span class="payInfoWay">快捷支付</span>
+                        </em>
+                        <em ng-click="setPayType2(1);">
+                            <span ng-class="{'checkedRadio':offLine}" class="unchecked"></span>
+                            <span class="payInfoWay">线下转账</span>
+                        </em>
+                    </p> -->
+                </div>
+            </div>
+            <div id="pay-to-alipay-form"></div>
+            <div class="btn-box">
+                <div class="Btn clearfix">
+                    <div ng-click="lookOrder();" class="select-order">查看订单</div>
+                    <div ng-click="goPay();">去付款</div>
+                </div>
+                <div ng-if="onLine && myInfo.yijifuMessage"><em style="color:#ff4a00;">温馨提示：</em>{{myInfo.yijifuMessage}}</div>
+            </div>
+        </div>
+    </div>
+    <div id="reg-action" class="pay-type animated fadeIn">
+        <div>
+            <h4>提示</h4>
+            <ul class="pay-account" style="background-color: #fff;padding-left: 2rem;">
+                {{msgText}}
+            </ul>
+            <div class="btn-group">
+                <a ng-click="regOrAction();" data-toggle data-selector="#reg-action" href="">确定</a>
+                <a data-toggle data-selector="#reg-action" href="">取消</a>
+            </div>
+        </div>
+    </div>
+	 <div id="bank-notice" class="pay-type animated fadeIn">
+        <div>
+            <h4>{{BankNoticeTitle}}</h4>
+            <div class="pay-account" style="background-color: #fff;padding-left: 2rem;border:1px solid #efefef;">
+               {{BankNoticeContent}}
+            </div>
+            <div class="btn-group">
+                <a ng-click="yjf_goPay();" data-toggle data-selector="#bank-notice" href="">确定</a>
+            </div>
+        </div>
+    </div>
+	
+	
+	<div class="animated fadeIn add-addr addr-manager" id="edit_phone" >
+		<div>
+			<h4 class="ng-binding">确认手机号码</h4>
+			<ul  class="order-date">			
+				<li>
+					<input required="true" id="new_phones"  type="text" value="{{phone}}"  placeholder="联系方式" class="ng-valid ng-valid-required ng-dirty">
+				</li>			
+			</ul>
+			<div class="btn-group">
+				<a href="javascript:;" ng-click="yjf_add_accounts();">确定</a>
+				
+			</div>
+		</div>
+	</div>
+	
+	
+    <!-- <div class="payonline-info addr-manager animated fadeIn" style="display: block;">
+        <div>
+            <h4>支付提示</h4>
+            <div style="padding: 3%;">据央行最新规定，未通过实名认证的用户30天内累计支付额不能超过25000元，为了使您的支付更便捷，请尽快去电脑端完成实名认证。</div>
+            <button class="btn" data-toggle data-selector="div.payonline-info">关闭</button>
+        </div>
+    </div> -->
+</div>

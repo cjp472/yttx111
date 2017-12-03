@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="format-detection" content="telephone=no, email=no" />
+        <!-- UC强制全屏
+        <meta name="full-screen" content="yes"> -->
+        <!-- QQ强制全屏 -->
+        <meta name="x5-fullscreen" content="true">
+        <title>医统天下 网上订货系统</title>
+        <link href="../css/DHBmobile.css?v=20160106" rel="stylesheet" type="text/css" />
+        <link href="../css/animate.css" rel="stylesheet" type="text/css" />
+        <link href="../css/mobiscroll.custom-2.15.1.min.css" rel="stylesheet" type="text/css" />
+        <style>
+            /*img{display: none;}*/
+            .dhb-app > div:nth-child(1),.dhb-app > div:nth-child(2){
+                  width: 100%;
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  bottom: 5.0rem;
+                  overflow: hidden;
+            }
+            .instead-back{
+                position: absolute;
+                width: 4rem;
+                height: 4rem;
+                -webkit-border-radius: 50%;
+                border-radius: 50%;
+                background: rgba(0,0,0,.4);
+                right: 0;
+                bottom: 10rem;
+                line-height: 4rem;
+                text-align: center;
+                z-index: 8888;
+                color: #FFFFFF;
+                font-size: 1.4rem;
+            }
+            .switch-type{
+                left: 0;
+            }
+            
+            .tiyan-info{
+                display: none;
+                position: absolute;
+                width: 100%;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                z-index: 2223;
+                background-color: rgba(0,0,0,.5);
+            }
+            .tiyan-content{
+                width: 80%;
+                padding: 2rem 5%;
+                margin: 5rem auto;
+                text-align: center;
+                background-color: #fff;
+                color: #8C8C8C;
+                border-radius: .8rem;
+            }
+            .tiyan-content h3{
+                color: #F36545;
+                font-size: 2.2rem;
+                margin-bottom: .8rem;
+            }
+            .tiyan-content p{
+                font-size: 1.4rem;
+                line-height: 1.8rem;
+            }
+            .tiyan-reg{
+                margin-top: 1.5rem;
+                line-height: 4rem;
+                color: #fff;
+                font-size: 1.8rem;
+                background-color: #F88268;
+                border-radius: .4rem;
+            }
+            .tiyan-form{
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+                border: 1px solid #DEDADA;
+                border-radius: .4rem;
+                margin-top: 1.4rem;
+            }
+            .tiyan-form span,.tiyan-form input{
+                display: table-cell;width: 100%;
+            }
+            .tiyan-form span{
+                width: 7.4rem;
+            }
+            .tiyan-content input{border: none; border-radius: .4rem;}
+
+        </style>
+    </head>
+    <body>
+	    <div data-ng-app="DHBApp" onclick="" class="dhb-app" ng-controller="indexController">
+	        <!-- 视图显示 -->
+	        <div id="view" ng-show="toggleView">
+	            <div data-ui-view class="animated fadeIn"></div>
+	        </div>
+	        <!-- 加载home.html -->
+	        <div id="index" ng-show="!toggleView" ng-include="'home.html'"></div>
+	        <!-- loading块 -->
+	        <div class="loading">
+	            <!-- <img src="../img/loading.gif" alt="" /> -->
+	        </div>
+	        <!-- 业务员下单返回按钮 -->
+	        <div ng-click="insteadBack();" ng-show="instead" data-instead-back class="instead-back">返回</div>
+	        <!-- 体验用户切换 -->
+	        <div ng-click="switchType();" ng-show="isTiYan" data-instead-back class="instead-back switch-type">切换</div>
+	        <!-- 信息提示 -->
+	        <div class="msg" id="global">
+                提示信息
+            </div>
+            <!-- 体验提交信息
+            <div ng-show="regTiyan.notRegTiyan" id="tiyan" class="tiyan-info">
+                <div class="tiyan-content">
+                    <h3>欢迎使用医统天下！</h3>
+                    <p>为了更好的帮助您体验系统，我们为您安排了一位服务专员，请留下您的联系信息以便她与您联系。</p>
+                    <div class="tiyan-form tiyan-no">
+                        <span>手机号：</span>
+                        <input type="text" ng-model="regTiyan.mobile" placeholder="请输入您的手机号码" />
+                    </div>
+                    <div class="tiyan-form tiyan-name">
+                        <span>联系人：</span>
+                        <input type="text" ng-model="regTiyan.name" placeholder="请填写联系人" />
+                    </div>
+                    <div class="tiyan-reg" data-ng-click="regTiyan.regTiyanInfo();">
+                        提交资料
+                    </div>
+                </div>
+            </div>
+             -->
+	        <!-- 底部导航 -->
+            <nav class="animated" id="menu">
+                <ul data-menu-active>
+                    <li> <!-- ui-sref="empty" -->
+                        <a href="#" class="active"><!-- &#xe600; -->
+                            <p class="icon icon-home-outline"></p><p>首页</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" ng-click="changePath('/goods-sort');">
+                            <p class="icon icon-list"></p><p>分类</p>
+                        </a>
+                    </li>
+                    <li style="position: relative;">
+                        <a href="javascript:;" ng-click="changePath('/my-cart');">
+                            <p class="icon icon-cart"></p><p>购物车</p>
+                            <span ng-show="cartGoods.length!=0" class="caret caret-index"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" ng-click="changePath('/find');">
+                            <p class="icon icon-star"></p><p>客服</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" ng-click="changePath('/my-home');">
+                            <p class="icon icon-head"></p><p>我的</p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <script type="text/javascript" src="../js/common/fastclick.min.js"></script>
+        <script type="text/javascript" src="../js/common/zepto.min.js"></script>
+        <script type="text/javascript" src="../js/common/DHB.js?v=20161228"></script>
+        <script type="text/javascript">
+            
+            // 解决移动端 点击延迟 以及点击穿透
+            $(function() {
+                FastClick.attach(document.body);
+            });
+            
+            DHB.neteType;
+            // 是否加载图片
+            DHB.isLoadImg = true;
+            DHB.setLoadImg = function(obj){
+                if($(this).hasClass('yes') && DHB.neteType !=0){
+                    DHB.isLoadImg = false;
+                    return;
+                }
+                DHB.isLoadImg = true;
+            };
+            // 如果是微信访问 则加载微信js-sdk
+            if(DHB.device.WeiXin && is_weixin()){
+                document.write('<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"><\/script>');
+                document.write('<script type="text/javascript" src="../js/wxapi.js?v=20150820"><\/script>');
+            }else{
+                var ScannerSuccessCallBack = function(opCode, dataType, data) {
+                    var obj = JSON.parse(data);
+                    DHB.scannResult = obj.code;
+                    if(location.href.split('#') && location.href.split('#')[1]){
+                        if(location.href.split('#')[1]=='/goods-list/0'){
+                            location.replace('#/goods-list/00');
+                            return;
+                        }else if(location.href.split('#')[1]=='/goods-list/00'){
+                            location.replace('#/goods-list/0');
+                            return;
+                        }
+                    }
+                    location.href = '#/goods-list/0';
+                };
+                DHB.checkUpdate = function(fn){
+                    // f=getVersion&v={"source":"Ios"} Ios,Android
+                    var source;
+                    if(DHB.device.Ios){
+                        source = 'Ios';
+                    }
+                    else if(DHB.device.Android){
+                        source = 'Android';
+                    }
+                    var params = {
+                        f: 'getVersion',
+                        v: JSON.stringify({
+                            source: source
+                        })
+                    };
+                    $.ajax({
+                        url: window.localStorage['url'],
+                        type: 'post',
+                        dataType: 'json',
+                        data: $.param(params),
+                        success: function(data){
+                            if(fn){
+                                fn(data);
+                            }
+                        }
+                    });
+                };
+                window.uexOnload = function(){
+                    var inOpCode = parseInt(window.localStorage['inOpCode']) || 1;
+                    window.localStorage['inOpCode'] = inOpCode + 1;
+                    var platform = uexWidgetOne.getPlatform()
+                    //下载状态监听方法
+                    uexDownloaderMgr.onStatus = function(opCode, fileSize, percent, status){
+                        switch (status) {
+                            case 0://下载过程中
+                                $('#global').text('下载中...' + percent + '%');
+                                break;
+                            case 1://下载完成
+                                $('#global').hide();
+                                uexDownloaderMgr.closeDownloader(opCode);//下载完成要关闭下载对象
+                                //Android 调用uexWidget.installApp(inAppPath)进行apk安装
+                                uexWidget.installApp(DHB.savePath)
+                                break;
+                            case 2://下载失败
+                                alert("下载失败");
+                                uexDownloaderMgr.closeDownloader(opCode);//下载失败要关闭下载对象
+                                break;
+                        }
+                    };
+                    //创建下载对象的回调方法
+                    uexDownloaderMgr.cbCreateDownloader = function(opCode, dataType, data){
+                        if (dataType == 2 && data == 0) {
+                            uexDownloaderMgr.download(inOpCode, DHB.downloadUrl, DHB.savePath, '1');
+                            $('#global').show();
+                        }
+                    }
+                    // 获取系统版本
+                    uexWidgetOne.cbGetCurrentWidgetInfo = cbGetCurrentWidgetInfo;
+                    if(window.localStorage['hintCount'] && window.localStorage['hintCount'] == '0'){
+                        window.localStorage['hintCount'] = '1';
+                        uexWidgetOne.getCurrentWidgetInfo();
+                    }
+                    // 获取系统版本
+                    function cbGetCurrentWidgetInfo(opId,dataType,data){
+                        var currVersion = JSON.parse(data).version;
+                        DHB.checkUpdate(function(data){
+                            // version notice
+                            if(data && data.rStatus == 100){
+                                // 版本号相同 不更新
+                                if(currVersion == data.version) return;
+                                
+                                // ios 需要判断版本号 和审核状态
+                                if(platform == 0){
+                                    if(data.inAudit == 'F'){ //Ｔ：审核中，Ｆ：审核通过了
+                                        //iOS的话，直接调用safari浏览器加载apple appstore的url
+                                        uexWidget.loadApp(DHB.appStore);
+                                    }
+                                }
+                                // android 直接下载更新
+                                else{
+                                    if(window.confirm('当前有新版本，'+ data.notice + '是否更新？')){
+                                        uexDownloaderMgr.createDownloader(inOpCode);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    // 二维码扫描回调函数
+                    uexScanner.cbOpen = ScannerSuccessCallBack;
+                    uexDevice.cbGetInfo = function(opCode,dataType,data){
+                        var obj = JSON.parse(data);
+                        DHB.neteType = obj.connectStatus;
+                        if(obj.connectStatus == -1){
+                            DHB.showMsg('当前网络不可用!')
+                        }else if(obj.connectStatus != 0){
+                            //DHB.isLoadImg = false;
+                            //DHB.showMsg('当前为非wifi网络,需要加载图片请到我的菜单项关闭默认设置!',5000)
+                        }/*else if(obj.connectStatus == 1){
+                            alert('当前网络环境:3g网络')
+                        }else if(obj.connectStatus == 2){
+                            alert('当前网络环境:2g网络')
+                        }else if(obj.connectStatus == 3){
+                            alert('当前网络环境:4g网络')
+                        }*/
+                    };
+                    uexDevice.getInfo(13);
+                    //uexWindow.setReportKey(0,1);监听返回键
+                    //uexWindow.setReportKey(1,1);监听menu键
+                    
+                    //监听Android返回键 退出程序
+                    uexWindow.onKeyPressed=function(keyCode){
+                        if(keyCode == 0){
+                            if(!location.href.split('#')[1] || location.href.split('#')[1].length < 2){
+                                uexWidgetOne.exit();
+                            }
+                            else{
+                                window.history.back();
+                            }
+                        }else if(keyCode == 1){
+                            uexWidgetOne.exit();
+                        }
+                    }
+                    uexWindow.setReportKey(0,1);
+                    uexWindow.setReportKey(1,1);
+                };
+            }
+        </script>
+        <script type="text/javascript" src="../js/common/iscroll.js"></script>
+        <script type="text/javascript" src="../js/common/md5-min.js"></script>
+        <script type="text/javascript" src="../js/common/angular.min.js"></script>
+        <script type="text/javascript" src="../js/common/angular-ui-router.min.js"></script>
+        <script type="text/javascript" src="../js/common/mobiscroll.custom-2.15.1.min.js"></script>
+        
+        <script type="text/javascript" src="../js/model.js"></script>
+        <script type="text/javascript" src="../js/DHBApp.js?v=20170106"></script>
+        <script type="text/javascript" src="../js/directives.js?v=20170106"></script>
+        <script type="text/javascript" src="../js/services.js"></script>
+        <script type="text/javascript" src="../js/controllers.js?v=2017010606"></script>
+
+    </body>
+</html>

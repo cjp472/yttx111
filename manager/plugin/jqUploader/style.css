@@ -1,0 +1,81 @@
+
+body{
+padding:10px;
+color: #000;
+
+font:12px arial;
+}
+
+
+.right{border-bottom:4px solid #6495ED;margin:10px;clear:right;}
+
+p,span,input,textearea,li,optionf,th,td,h1,h2,h3,h4,h5,dd,dt{
+font:12px arial;
+line-height:1.6em;
+}
+
+.jquploader{
+background:#333333;
+}
+
+a:link,a:visited{
+padding:0 5px;
+color:#FF00FF;
+background:transparent;
+text-decoration:none;
+border-left:0px dotted #6495ED;
+border-bottom:1px dotted #FF00FF;
+}
+a:hover,a:active, a.current{
+
+color:#FFF;
+background:#FF00FF;
+}
+pre{
+border:1px dotted #DDDDDD;
+padding:10px;
+color:#666666;
+
+}
+
+form{
+border:0px solid #DDD;
+padding:20px;
+background:#FFF;
+}
+.highlight{
+	background:#FFDDFE;
+	border:1px dotted #FF00FF;
+	padding:1em;
+	margin:1em;
+}
+p.highlight{ font-size:110%; font-weight:bold;}
+
+a.downloadLink{
+background:transparent url(_img/arrow_down.png) right bottom no-repeat;
+padding:2px 17px 0px 0px;
+color:#FF00FF;
+font-style:normal;
+
+border-bottom-width:2px;
+}
+a.downloadLink:hover{
+color:#FF00FF;
+text-decoration: none;
+font-size:110%;
+}
+
+fieldset{
+	border:1px solid #33a676;
+}
+div.code{
+border:1px dotted #DDD;
+padding:20px;
+}
+
+form.a_form{
+background:#c1e4d6;
+}
+.a_form ol, .a_form ul{
+list-style:none;
+}

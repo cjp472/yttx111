@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html data-ng-app="bsmmApp">
+	<head>
+		<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="format-detection" content="telephone=no, email=no" />
+        <!-- UC强制全屏
+        <meta name="full-screen" content="yes"> -->
+        <!-- QQ强制全屏 -->
+        <meta name="x5-fullscreen" content="true">
+        <title>医统天下 网上订货系统</title>
+        <link href="../css/bsmm.css?v=20170106" rel="stylesheet" type="text/css" />
+        <link href="../css/animate.css?v=20170106" rel="stylesheet" type="text/css" />
+        <link href="../css/mobiscroll.custom-2.15.1.min.css" rel="stylesheet" type="text/css" />
+        <style type="text/css">
+            .switch-type{
+                position: absolute;
+                width: 4rem;
+                height: 4rem;
+                -webkit-border-radius: 50%;
+                border-radius: 50%;
+                background: rgba(0,0,0,.4);
+                left: 0;
+                bottom: 10rem;
+                line-height: 4rem;
+                text-align: center;
+                z-index: 8888;
+                color: #FFFFFF;
+                font-size: 1.4rem;
+            }
+            .tiyan-info{
+                display: none;
+                position: absolute;
+                width: 100%;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                z-index: 3;
+                background-color: rgba(0,0,0,.5);
+            }
+            .tiyan-content{
+                width: 90%;
+                padding: 2rem 5%;
+                margin: 5rem auto;
+                text-align: center;
+                background-color: #fff;
+                color: #8C8C8C;
+                border-radius: .8rem;
+            }
+            .tiyan-content h3{
+                color: #F36545;
+                font-size: 2.2rem;
+                margin-bottom: .8rem;
+            }
+            .tiyan-content p{
+                font-size: 1.4rem;
+                line-height: 1.8rem;
+            }
+            .tiyan-reg{
+                margin-top: 1.5rem;
+                line-height: 4rem;
+                color: #fff;
+                font-size: 1.8rem;
+                background-color: #F88268;
+                border-radius: .4rem;
+            }
+            .tiyan-form{
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+                border: 1px solid #DEDADA;
+                border-radius: .4rem;
+                margin-top: 1.4rem;
+            }
+            .tiyan-form span,.tiyan-form input{
+                display: table-cell;width: 100%;
+            }
+            .tiyan-form span{
+                width: 7.4rem;
+            }
+            .tiyan-content input{border: none; border-radius: .4rem;}
+        </style>
+	</head>
+	<body>
+	    <div class="page-bsmm" ng-controller="indexController">
+	        <!-- loading块 -->
+            <div class="loading">
+                <!-- <img src="../img/loading.gif" alt="" /> -->
+            </div>
+            <!-- 体验用户切换 -->
+            <div ng-click="switchType();" ng-show="isTiYan" data-instead-back class="instead-back switch-type">切换</div>
+            <!-- 信息提示 -->
+            <div class="msg" id="global">                              
+            </div>
+            <!-- 体验提交信息 
+            <div ng-show="regTiyan.notRegTiyan" id="tiyan" class="tiyan-info">
+                <div class="tiyan-content">
+                    <h3>欢迎使用医统天下！</h3>
+                    <p>为了更好的帮助您体验系统，我们为您安排了一位服务专员，请留下您的联系信息以便她与您联系。</p>
+                    <div class="tiyan-form tiyan-no">
+                        <span>手机号：</span>
+                        <input type="text" ng-model="regTiyan.mobile" placeholder="请输入您的手机号码" />
+                    </div>
+                    <div class="tiyan-form tiyan-name">
+                        <span>联系人：</span>
+                        <input type="text" ng-model="regTiyan.name" placeholder="请填写联系人" />
+                    </div>
+                    <div class="tiyan-reg" data-ng-click="regTiyan.regTiyanInfo();">
+                        提交资料
+                    </div>
+                </div>
+            </div>
+            -->
+	        <div id="navbar" class="navbar">
+                <div class="index-head common">
+                    <h4 ng-bind="myInfo.CompanyName"></h4><span ng-click="changePath('/my-home')" class="icon">&#xe037;</span>
+                </div>
+                <div class="order-head common-head hidden">
+                    <h4>
+                        <div>
+                            <input ng-model="orderSearch.kw" ng-keyup="listSearch.search(0,$event);" type="text" placeholder="请输入单号、名称或联系人" />
+                            <span ng-click="listSearch.search(0,$event);" class="icon">&#x55;</span>
+                        </div>
+                    </h4>
+                    <span ng-click="layerManager.toggleLayer(0)">筛选</span>
+                </div>
+                <div class="money-head common-head hidden">
+                    <h4>
+                        <div>
+                            <input ng-model="moneySearch.kw" ng-keyup="listSearch.search(1,$event);" type="text" placeholder="请输入单号、名称或联系人" />
+                            <span ng-click="listSearch.search(1,$event);" class="icon">&#x55;</span>
+                        </div>
+                    </h4>
+                    <span ng-click="layerManager.toggleLayer(1)">筛选</span>
+                </div>
+                <div class="customer-head common-head hidden">
+                    <h4>
+                        <div>
+                            <input ng-model="customerSearch.kw" ng-keyup="listSearch.search(2,$event);" type="text" placeholder="请输入名称、联系人、手机" />
+                            <span ng-click="listSearch.search(2,$event);" class="icon">&#x55;</span>
+                        </div>
+                    </h4>
+                    <span ng-click="layerManager.toggleLayer(2)">筛选</span>
+                </div>
+                <div class="goods-head common-head hidden">
+                    <h4>
+                        <div>
+                            <input ng-model="goodsSearch.kw" ng-keyup="listSearch.search(3,$event);" type="text" placeholder="请输入名称、编号、条码" />
+                            <span ng-click="listSearch.search(3,$event);" class="icon">&#x55;</span>
+                        </div>
+                    </h4>
+                    <span ng-click="layerManager.toggleLayer(3)">筛选</span>
+                </div>
+	            <!-- 底部导航 -->
+                <nav class="animated" id="menu">
+                    <ul bsmm-menu-active>
+                        <li id="active" ng-click="changePath('/home');" class="menu-active"> <!-- ui-sref="empty" -->
+                            <span>首页</span>
+                        </li>
+                        <li ng-click="changePath('/order-list');">
+                            <span>订单</span>
+                        </li>
+                        <li ng-click="changePath('/order-money');">
+                            <span>款项</span>
+                        </li>
+                        <li ng-click="changePath('/customer');">
+                            <span>药店</span>
+                        </li>
+                        <li ng-click="changePath('/goods-list');">
+                            <span>商品</span>
+                        </li>
+                    </ul>
+                    <div class="point-line"></div>
+                </nav>
+	        </div>
+	        <!-- 订单筛选 -->
+	        <div ng-click="layerManager.toggleLayer(0)" ng-class="{'slideInRight':layerManager.orderLayer==1,'slideOutRight':layerManager.orderLayer==2}" class="animated layer">
+	            <div data-stop-bubble>
+	                <h4>
+	                    <span ng-click="layerManager.toggleLayer(0)" class="cancel f_left">取消</span>
+	                    <span>筛选</span>
+	                    <span ng-click="listSearch.search(0);" class="sure f_right">确定</span>
+	                </h4>
+	                <div data-iscroll class="layer-iscroll">
+	                    <ul>
+							<li>
+							    <span class="block-span">订单状态</span>
+							    <div ng-click="orderSearch.setStatus($event,0);">
+							        <span ng-class="{'filter-active':orderSearch.status==='0'}" data-status="0">待审核</span>
+							        <span ng-class="{'filter-active':orderSearch.status==='7'}" data-status="7">已完结</span>
+							        <span ng-class="{'filter-active':orderSearch.status==='9'}" data-status="9">已取消</span>
+							    </div>
+							</li>
+							<li>
+							    <span class="block-span">支付状态</span>
+                                <div ng-click="orderSearch.setStatus($event,1);">
+                                    <span ng-class="{'filter-active':orderSearch.payStatus==='0'}" data-status="0">未付款</span>
+                                    <span ng-class="{'filter-active':orderSearch.payStatus==='2'}" data-status="2">已付款</span>
+                                    <span ng-class="{'filter-active':orderSearch.payStatus==='3'}" data-status="3">预付款</span>
+                                    <span ng-class="{'filter-active':orderSearch.payStatus==='1'}" data-status="1">付款中</span>
+                                </div>
+							</li>
+							<li>
+							    <span class="block-span">发货状态</span>
+                                <div ng-click="orderSearch.setStatus($event,2);">
+                                    <span ng-class="{'filter-active':orderSearch.sendStatus==='1'}" data-status="1">待发货</span>
+                                    <span ng-class="{'filter-active':orderSearch.sendStatus==='2'}" data-status="2">已发货</span>
+                                    <span ng-class="{'filter-active':orderSearch.sendStatus==='3'}" data-status="3">未发货</span>
+                                    <span ng-class="{'filter-active':orderSearch.sendStatus==='4'}" data-status="4">已收货</span>
+                                </div>
+							</li>
+							<div class="divider"></div>
+							<li class="left-right">
+							    <span>开始日期</span>
+							    <input class="li-input" data-date-picker type="text" ng-model="orderSearch.beginDate" />
+							    <span class="f_right"><span ng-bind="orderSearch.beginDate"></span><em class="icon f_right">&#x35;</em></span>
+							</li>
+							<li class="left-right">
+							    <span>结束日期</span>
+							    <input class="li-input" data-date-picker type="text" ng-model="orderSearch.endDate" />
+							    <span class="f_right">
+							        <span ng-bind="orderSearch.endDate"></span><em class="icon f_right">&#x35;</em>
+							    </span>
+							</li>
+							<!-- <li class="left-right" data-toggle-operator data-toggle-id="order-customer" data-is-show="true">
+							    <span>药店</span>
+							    <span class="f_right">
+							        <span class="ellipsis-li">药店药店药店药店</span><em class="icon f_right">&#x35;</em>
+							    </span>
+							</li> -->
+							<div class="clear-filter"><button ng-click="orderSearch.clearFilter();">清除选项</button></div>
+						</ul>
+	                </div>
+	            </div>
+	            <!-- <div id="order-customer" class="animated second-layer" data-stop-bubble>
+	                <h4>
+                        <span data-toggle-operator data-toggle-id="order-customer" data-is-show="false" class="icon f_left">&#x34;</span>
+                        <span>药店</span>
+                    </h4>
+	                <div data-toggle-operator data-toggle-id="order-customer" data-is-show="false" data-iscroll class="layer-iscroll">
+                        <ul>
+                            <li>药店1</li>
+                            <li>药店2</li>
+                            <li>药店3</li>
+                            <li>药店4</li>
+                        </ul>
+                    </div>
+	            </div> -->
+	        </div>
+	        <!-- 款项筛选 -->
+	        <div ng-click="layerManager.toggleLayer(1)" ng-class="{'slideInRight':layerManager.moneyLayer==1,'slideOutRight':layerManager.moneyLayer==2}" class="animated layer">
+	            <div data-stop-bubble>
+	                <h4>
+                        <span ng-click="layerManager.toggleLayer(1)" class="cancel f_left">取消</span>
+                        <span>筛选</span>
+                        <span ng-click="listSearch.search(1);" class="sure f_right">确定</span>
+                    </h4>
+                    <div data-iscroll class="layer-iscroll">
+                        <ul>
+                            <li>
+                                <span class="block-span">款项状态</span>
+                                <div ng-click="moneySearch.setStatus($event);">
+                                    <span ng-class="{'filter-active':moneySearch.status==='-1'}" data-status="-1">全部</span>
+                                    <span ng-class="{'filter-active':moneySearch.status==='0'}" data-status="0">在途</span>
+                                    <span ng-class="{'filter-active':moneySearch.status==='2'}" data-status="2">已到账</span>
+                                </div>
+                            </li>
+                            <div class="divider"></div>
+                            <li class="left-right">
+                                <span>付款日期</span>
+                                <input class="li-input" data-date-picker type="text" ng-model="moneySearch.beginDate" />
+                                <span class="f_right"><span ng-bind="moneySearch.beginDate"></span><em class="icon f_right">&#x35;</em></span>
+                            </li>
+                            <li class="left-right">
+                                <span>至</span>
+                                <input class="li-input" data-date-picker type="text" ng-model="moneySearch.endDate" />
+                                <span class="f_right">
+                                    <span ng-bind="moneySearch.endDate"></span><em class="icon f_right">&#x35;</em>
+                                </span>
+                            </li>
+                            <!-- <li class="left-right" data-toggle-operator data-toggle-id="money-customer" data-is-show="true">
+                                <span>药店</span>
+                                <span class="f_right">
+                                    <span class="ellipsis-li">药店药店药店药店</span><em class="icon f_right">&#x35;</em>
+                                </span>
+                            </li> -->
+                            <li ng-click="layerManager.getAccounts();" class="left-right" data-toggle-operator data-toggle-id="account" data-is-show="true">
+                                <span>收款账号</span>
+                                <span class="f_right">
+                                    <span class="ellipsis-li" ng-bind="moneySearch.accountName"></span><em class="icon f_right">&#x35;</em>
+                                </span>
+                            </li>
+                            <div class="clear-filter"><button ng-click="moneySearch.clearFilter();">清除选项</button></div>
+                        </ul>
+                    </div>
+	            </div>
+	            <div id="account" class="animated second-layer" data-stop-bubble>
+                    <h4>
+                        <span data-toggle-operator data-toggle-id="account" data-is-show="false" class="icon f_left">&#x34;</span>
+                        <span>收款账户</span>
+                    </h4>
+                    <div data-toggle-operator data-toggle-id="account" data-is-show="false" data-iscroll class="layer-iscroll">
+                        <ul ng-click="moneySearch.setAccount($event);">
+                            <li data-index="{{$index}}" ng-repeat="account in layerManager.accounts">{{account.AccountsName}}</li>
+                        </ul>
+                    </div>
+                </div>
+	        </div>
+	        <!-- 客户筛选 -->
+	        <div ng-click="layerManager.toggleLayer(2)" ng-class="{'slideInRight':layerManager.customerLayer==1,'slideOutRight':layerManager.customerLayer==2}" class="animated layer customer-filter">
+	            <div data-stop-bubble>
+	                <h4>
+                        <span ng-click="layerManager.toggleLayer(2)" class="cancel f_left">取消</span>
+                        <span>所在地区</span>
+                        <!-- <span ng-click="listSearch.search(2);" class="sure f_right">确定</span> -->
+                    </h4>
+                    <div data-iscroll class="layer-iscroll">
+                        <ul ng-click="customerSearch.setArea($event,2);">
+                            <li data-areaid="{{area.AreaID}}" data-parentid="{{area.ParentID}}" ng-repeat="area in layerManager.firstLevel">
+                                {{area.AreaName}}
+                                <span class="icon">&#x35;</span>
+                            </li>
+                        </ul>
+                    </div>
+	            </div>
+	            <div id="area" class="animated second-layer" data-stop-bubble>
+                    <h4>
+                        <span ng-click="customerSearch.backLeave();" class="icon f_left">&#x34;</span>
+                        <span>所在地区</span>
+                    </h4>
+                    <div data-iscroll class="layer-iscroll">
+                        <ul ng-click="customerSearch.setArea($event,2);">
+                            <li data-areaid="{{s_area.AreaID}}" data-parentid="{{s_area.ParentID}}" ng-repeat="s_area in layerManager.secondLevel">
+                                {{s_area.AreaName}}
+                                <span class="icon">&#x35;</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+	        </div>
+	        <!-- 商品筛选 -->
+	        <div ng-click="layerManager.toggleLayer(3)" ng-class="{'slideInRight':layerManager.goodsLayer==1,'slideOutRight':layerManager.goodsLayer==2}" class="animated layer goods-filter">
+	            <div data-stop-bubble>
+	                <h4>
+                        <span ng-click="layerManager.toggleLayer(3)" class="cancel f_left">取消</span>
+                        <span>分类</span>
+                        <!-- <span ng-click="listSearch.search(3);" class="sure f_right">确定</span> -->
+                    </h4>
+                    <div data-iscroll class="layer-iscroll">
+                        <ul ng-click="goodsSearch.setSite($event,3);">
+                            <!-- <li class="left-right" data-toggle-operator data-toggle-id="goods-customer" data-is-show="true">
+                                <span>药店</span>
+                                <span class="f_right">
+                                    <span class="ellipsis-li">药店药店药店药店</span><em class="icon f_right">&#x35;</em>
+                                </span>
+                            </li> -->
+                            <li data-siteid="{{site.SiteID}}" data-parentid="{{site.ParentID}}" ng-repeat="site in layerManager.g_firstLevel">
+                                {{site.SiteName}}
+                                <span class="icon">&#x35;</span>
+                            </li>
+                        </ul>
+                    </div>
+	            </div>
+	            <div id="goods" class="animated second-layer" data-stop-bubble>
+                    <h4>
+                        <span ng-click="goodsSearch.backLeave();" class="icon f_left">&#x34;</span>
+                        <span>分类</span>
+                    </h4>
+                    <div data-iscroll class="layer-iscroll">
+                        <ul ng-click="goodsSearch.setSite($event,3);">
+                            <li data-siteid="{{s_site.SiteID}}" data-parentid="{{s_site.ParentID}}" ng-repeat="s_site in layerManager.secondLevel">
+                                {{s_site.SiteName}}
+                                <span class="icon">&#x35;</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+	        </div>
+	        <div class="animated fadeIn" data-ui-view></div>
+	    </div>
+	</body>
+	    
+        <script type="text/javascript" src="../js/common/fastclick.min.js"></script>
+        <script type="text/javascript" src="../js/common/zepto.min.js"></script>
+        <script type="text/javascript" src="../js/common/DHB.js"></script>    
+        <script>
+            // 解决移动端 点击延迟 以及点击穿透
+            $(function() {
+                FastClick.attach(document.body);
+            });
+            DHB.checkUpdate = function(fn){
+                // f=getVersion&v={"source":"Ios"} Ios,Android
+                var source;
+                if(DHB.device.Ios){
+                    source = 'Ios';
+                }
+                else if(DHB.device.Android){
+                    source = 'Android';
+                }
+                var params = {
+                    f: 'getVersion',
+                    v: JSON.stringify({
+                        source: source
+                    })
+                };
+                $.ajax({
+                    url: window.localStorage['url'],
+                    type: 'post',
+                    dataType: 'json',
+                    data: $.param(params),
+                    success: function(data){
+                        if(fn){
+                            fn(data);
+                        }
+                    }
+                });
+            };
+            if(!DHB.device.WeiXin){
+                window.uexOnload = function(){
+                    if(/index.html$/.test(window.location.href)){
+                       $('#active').trigger('click'); 
+                    }
+                    
+                    var inOpCode = parseInt(window.localStorage['inOpCode']) || 1;
+                    window.localStorage['inOpCode'] = inOpCode + 1;
+                    var platform = uexWidgetOne.getPlatform()
+                    //下载状态监听方法
+                    uexDownloaderMgr.onStatus = function(opCode, fileSize, percent, status){
+                        switch (status) {
+                            case 0://下载过程中
+                                $('#global').text('下载中...' + percent + '%');
+                                break;
+                            case 1://下载完成
+                                $('#global').hide();
+                                uexDownloaderMgr.closeDownloader(opCode);//下载完成要关闭下载对象
+                                //Android 调用uexWidget.installApp(inAppPath)进行apk安装
+                                uexWidget.installApp(DHB.savePath)
+                                break;
+                            case 2://下载失败
+                                alert("下载失败");
+                                uexDownloaderMgr.closeDownloader(opCode);//下载失败要关闭下载对象
+                                break;
+                        }
+                    };
+                    //创建下载对象的回调方法
+                    uexDownloaderMgr.cbCreateDownloader = function(opCode, dataType, data){
+                        if (dataType == 2 && data == 0) {
+                            uexDownloaderMgr.download(inOpCode, DHB.downloadUrl, DHB.savePath, '1');
+                            $('#global').show();
+                        }
+                    }
+                    // 获取系统版本
+                    uexWidgetOne.cbGetCurrentWidgetInfo = cbGetCurrentWidgetInfo;
+                    uexWidgetOne.getCurrentWidgetInfo();
+                    // 获取系统版本
+                    function cbGetCurrentWidgetInfo(opId,dataType,data){
+                        var currVersion = JSON.parse(data).version;
+                        DHB.checkUpdate(function(data){
+                            // version notice
+                            if(data && data.rStatus == 100){
+                                // 版本号相同 不更新
+                                if(currVersion == data.version) return;
+                                
+                                // ios 需要判断版本号 和审核状态
+                                if(platform == 0){
+                                    if(data.inAudit == 'F'){ //Ｔ：审核中，Ｆ：审核通过了
+                                        //iOS的话，直接调用safari浏览器加载apple appstore的url
+                                        uexWidget.loadApp(DHB.appStore);
+                                    }
+                                }
+                                // android 直接下载更新
+                                else{
+                                    if(window.confirm('当前有新版本，'+ data.notice + '是否更新？')){
+                                        uexDownloaderMgr.createDownloader(inOpCode);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    //uexWindow.setReportKey(0,1);监听返回键
+                    //uexWindow.setReportKey(1,1);监听menu键
+                    
+                    //监听Android返回键 退出程序
+                    uexWindow.onKeyPressed=function(keyCode){
+                        if(keyCode == 0){
+                            var reg = /(home|customer|order-list|order-money|goods-list)$/;
+                            if(reg.test(window.location.href.split('#')[1])){
+                                uexWidgetOne.exit();
+                            }
+                            else{
+                                window.history.back();
+                            }
+                        }else if(keyCode == 1){
+                            uexWidgetOne.exit();
+                        }
+                    }
+                    uexWindow.setReportKey(0,1);
+                    uexWindow.setReportKey(1,1);
+                };
+            }
+        </script>
+        
+        <script type="text/javascript" src="../js/common/iscroll.js"></script>
+        <script type="text/javascript" src="../js/common/angular.min.js"></script>
+        <script type="text/javascript" src="../js/common/angular-ui-router.min.js"></script>
+        <script type="text/javascript" src="../js/common/mobiscroll.custom-2.15.1.min.js"></script>
+        
+        <script type="text/javascript" src="../js/BSMMApp.js?v=20170106"></script>
+        <script type="text/javascript" src="../js/directives.js?v=20170106"></script>
+        <script type="text/javascript" src="../js/services.js"></script>
+        <script type="text/javascript" src="../js/bsmm_controllers.js?v=20170106"></script>
+</html>

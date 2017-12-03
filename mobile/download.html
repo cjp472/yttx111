@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="format-detection"content="telephone=no, email=no" />
+        <!-- UC强制全屏 -->
+        <meta name="full-screen" content="yes">
+        <!-- QQ强制全屏 -->
+        <meta name="x5-fullscreen" content="true">
+		<title>医统天下 网上订货系统</title>
+		<style>
+		    html{font-size: 62.5%;height: 100%;}
+		    body{
+		        margin: 0;
+		        height: 100%;
+		        font-size:100%;
+		        font-family: microsoft yahei;
+		        background-color: rgb(247, 248, 243);
+		    }
+		    .download{
+		        height: 100%;
+		    }
+		    .download .wx{
+		        height: 100%;
+		        display: none;
+		        /*background: url(img/hint02.jpg) center no-repeat;
+		        background-position: 0 0;
+		        -o-background-size: 100% auto;
+		        -webkit-background-size: contain;
+		        background-size: contain;*/
+		    }
+		    .download .wx img{
+		        width: 100%;
+		    }
+		    .download .ios-wx p{
+		        text-align: center;
+		        font-size: 2rem;
+		        line-height: 3rem;
+		        color: #FF5C1E;
+		    }
+		</style>
+		<script type="text/javascript" charset="utf-8">
+		    var ua = navigator.userAgent.toLowerCase();
+            var sys = {
+                weixin: false,
+                android: false,
+                ios: false,
+                wp: false
+            };
+
+
+
+            // weixin
+            if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+                sys.weixin = true;
+            }
+            // Android
+            if(ua.match(/Android/i) == 'android'){
+                sys.android = true;
+            }
+            // iPhone
+            else if(ua.match(/iPhone/i) == 'iphone'){
+                sys.ios = true;
+            }
+            // Windows Phone
+            else if(ua.match(/Windows Phone/i) == 'windows phone'){
+                sys.wp = true;
+            }
+            function download(){
+                var ele;
+                if(sys.weixin){
+                    if(sys.android){
+                        ele =  document.querySelector('div.android-wx img');
+                        if(ele){
+                            ele.src = 'img/hint01.jpg';
+                            document.querySelector('div.android-wx').style.display = 'block';
+                        }
+                    }
+                    else if(sys.ios){
+                        //审核当中 hint05.jpg 正式 hint02.jpg
+                        ele =  document.querySelector('div.ios-wx img');
+                        if(ele){
+                            ele.src = 'img/hint02.jpg';
+                            document.querySelector('div.ios-wx').style.display = 'block';
+                        }
+                    }
+                    else{
+                        ele =  document.querySelector('div.winphone img');
+                        if(ele){
+                            ele.src = 'img/hint04.jpg';
+                            document.querySelector('div.winphone').style.display = 'block';
+                        }
+                    }
+                    return;
+                }
+                if(sys.android){
+                    window.location.href = 'download.php';
+                }
+                if(sys.ios){
+                    
+                    //审核当中 
+                    /*ele =  document.querySelector('div.ios-wx img');
+                    if(ele){
+                        ele.src = 'img/hint05.jpg';
+                        document.querySelector('div.ios-wx').style.display = 'block';
+                    }*/
+                    
+                    
+                    window.location.href = 'https://itunes.apple.com/cn/app/id992365711';
+                    
+                }
+                else{
+                    ele =  document.querySelector('div.winphone img');
+                    if(ele){
+                        ele.src = 'img/hint03.jpg';
+                        document.querySelector('div.winphone').style.display = 'block';
+                    }
+                }
+            }
+            window.onload = function(){
+                download();
+            };
+		</script>
+	</head>
+	<body>
+	    <div class="download">
+	        <div class="wx android-wx">
+	            <img src="" alt="" />
+	        </div>
+	        <div class="wx ios-wx">
+	            <img src="" alt="" />
+	        </div>
+	        <div class="wx winphone">
+	            <img src="" alt="" />
+	        </div>
+	    </div>
+	</body>
+</html>

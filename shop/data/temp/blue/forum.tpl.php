@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$_SESSION['ucc']['CompanyName']?> - <?=SITE_NAME?></title>
+<meta name='robots' content='noindex,nofollow' />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="<?=CONF_PATH_IMG?>css/base.css?v=<?=VERID?>" type="text/css" rel="stylesheet" />
+<link href="<?=CONF_PATH_IMG?>css/showpage.css" rel="stylesheet" type="text/css">
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js?v=<?=VERID?>" type="text/javascript"></script>
+<script src="template/js/forum.js?v=<?=VERID?>" type="text/javascript"></script>
+
+</head>
+
+<body>
+<? include template('header'); ?>
+<div id="main">
+<div id="location">当前位置： <a href="home.php">首页</a> / <a href="forum.php">在线客服</a></div>
+<div class="main_left">
+<div class="fenlei_bg_tit"><span class="iconfont icon-wenjian" style="font-size: 15px;color: white;margin-left: 10px"></span>   在线客服</div>
+  <div class="news_info">
+  <ul>
+                <li><a href="forum.php" ><span class="ali-small-circle iconfont icon-next-s"></span>留言咨询</a>
+<dd><a href="forum.php" ><span class="ali-small-sanjiao iconfont icon-icon-copy-copy1"></span>所有留言</a></dd>
+<dd><a href="forum.php?ty=replyed" ><span class="ali-small-sanjiao iconfont icon-icon-copy-copy1"></span>已回复留言</a></dd>
+<dd><a href="forum.php?ty=noreply" ><span class="ali-small-sanjiao iconfont icon-icon-copy-copy1"></span>未回复留言</a></dd>
+</li>
+
+<li>	<a href="#" onclick="showpostforum()"><span class="ali-small-circle iconfont icon-next-s"></span>我要留言</a></li>
+  </ul>
+
+  </div>
+<div class="fenlei_bottom" style="width: 223px;height: 9px;border-left: 1px solid #D6D6D6;border-right: 1px solid #D6D6D6;border-bottom: 1px solid #D6D6D6"></div>
+<? if($tools) { ?>
+  <div class="fenlei_lx"><img src="<?=CONF_PATH_IMG?>images/kh_bg.jpg" /></div>
+  <div class="fenlei_kh">
+  <ul>
+<? if(is_array($tools)) { foreach($tools as $skey => $svar) { if($svar['ToolType']=="QQ") { ?>
+<li  title="<?=$svar['ToolType']?>" style="padding-left:12px;"><a target="blank" href="tencent://message/?uin=<?=$svar['ToolNO']?>&amp;Site=qq&amp;Menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=1:<?=$svar['ToolNO']?>:4" alt="点击发送消息给对方" />&nbsp;&nbsp;<?=$svar['ToolName']?>: <?=$svar['ToolNO']?></a> </li>
+<? } else { ?>
+<li  title="<?=$svar['ToolType']?>" style="padding-left:12px;"> &#8250;&#8250; <?=$svar['ToolName']?>: <?=$svar['ToolNO']?></li>
+<? } } } ?>
+  </ul>  
+  </div>
+  <div class="fenlei_lxd"><img src="<?=CONF_PATH_IMG?>images/contact2.jpg" /></div>
+<? } if($contact) { ?>
+<div class="fenlei_lx"><img src="<?=CONF_PATH_IMG?>images/contact.jpg" /></div>
+<div class="fenlei_lxc">
+   <ul>
+<? if(is_array($contact)) { foreach($contact as $ckey => $cvar) { ?>
+<li  title="<?=$cvar['ContactName']?>" style="padding-left:12px;">  <?=$cvar['ContactName']?>: <?=$cvar['ContactValue']?></li>
+<? } } ?>
+   </ul>
+</div>
+<div class="fenlei_lxd"><img src="<?=CONF_PATH_IMG?>images/contact2.jpg" /></div>
+<? } ?>
+</div>
+
+<div class="main_right">
+
+<div class="right_product_tit1">
+<div class="xs_0"><span class="iconfont icon-changfangxing" style="color: #FFB135;font-size:16px;margin-left: -10px;"></span>   留言咨询</div>
+<span class="notic_b"><input type="button" name="linkaddfinace" id="linkaddfinace" value="发表留言" class="button_3" onclick="showpostforum()" /></span>
+</div>
+
+<div class="right_product_main">
+<div class="list_line">
+
+
+        
+<? if(!empty($infomation['list'])) { ?>
+        
+<? if(is_array($infomation['list'])) { foreach($infomation['list'] as $key => $var) { ?>
+<div class="line94">
+<div class="line" >
+<span class="leftdiv">
+<img src="template/img/icon_arrow_down.gif" border="0" />&nbsp;
+<span class="font14"><?=$var['Title']?><a name="linename_<?=$var['ID']?>"></a></span>
+</span>
+<span class="rightdiv">
+<span class="bold"><?=$var['Name']?></span>&nbsp;|&nbsp;<span><? echo date("Y-m-d H:i",$var['Date']); ?></span>&nbsp;&nbsp;<span>[<a href="#linename_<?=$var['ID']?>" onclick="showreply('<?=$var['ID']?>');">回复</a>]</span>
+</span>
+</div>
+        <div class="line" style="margin-left:10px; line-height:180%; padding:8px; font-size:14px;" >
+        <? echo nl2br($var['Content']); ?></div>
+</div>
+        
+        
+<? if(!empty($var['Reply'])) { ?>
+        
+<? if(is_array($var['re'])) { foreach($var['re'] as $rkey => $rvar) { if(!empty($rvar['Flag'])) { ?>
+<div class="listr2" title="管理员回复">
+<? } else { ?>
+            <div class="listr" >
+<? } ?>
+            	<div class="line"><img src="template/img/icon_arrow_down.gif" border="0" />&nbsp;<span class="bold"><?=$rvar['Name']?></span>&nbsp;|&nbsp;<span><? echo date("Y-m-d H:i",$rvar['Date']); ?></span></div>
+                <div class="line" style="margin-left:10px; line-height:180%; padding:8px; font-size:14px;"><? echo nl2br($rvar['Content']); ?></div>        	
+</div>
+        
+<? } } } ?>
+<div class="listr" id="replyinput_<?=$var['ID']?>" style="display:none;" />
+
+</div>
+<div class="line" id="allertidtext">&nbsp;</div>
+        
+<? } } } ?>
+<div id="replayinputtext">
+<form id="PostForm" name="PostForm" method="post" action="" >
+<input name="replypid" id="replypid" type="hidden" value="" />
+        	<div class="line94"><span class="font12">我要回应：</span><br /><textarea id="replycontent" name="replycontent" cols="50" rows="4" style="width:100%;border:1px solid #ABADB3;padding-left: 10px;"></textarea></div>
+            <div class="line94"><span class="spanleft">姓名：
+<input name="replyname" id="replyname" type="text" value="
+<? if(!empty($_SESSION['cc']['ctruename'])) { ?>
+<?=$_SESSION['cc']['ctruename']?>
+<? } ?>
+" onfocus="this.select();" />&nbsp;&nbsp;</span>
+<span class="rightdiv"><input name="replybuttom" id="replybuttom" value="发表我的回应" type="button" class="button_4" onclick="SubmitReply()" />&nbsp;&nbsp;<input name="cancelreplybuttom" id="cancelreplybuttom" value=" 取 消 " type="button" class="button_7" onclick="CancelReply()" /></span><br />&nbsp;
+</div>
+</form><br />&nbsp;
+</div>
+
+<div class="list_showpage"><?=$infomation['showpage']?></div>
+
+<br />&nbsp;
+
+
+</div>
+
+</div>
+</div>
+</div>
+<? include template('bottom'); ?>
+    <div id="windowForm">
+<div class="windowHeader">
+<h3 id="windowtitle">发表留言：</h3>
+<div class="windowClose"><div class="close-form" onclick="closewindowui()" title="关闭" >x</div></div>
+</div>
+<div id="windowContent">
+<ul>
+<form id="NewPostForm" name="NewPostForm" method="post" action="" >
+<li id="showtext" style="display:none; color:red; width:90%; text-align:center; margin:4px; border-top:1px solid #cc0000; border-bottom:1px solid #cc0000"></li>
+<li>如果您在订货过程中有什么疑问，欢迎 在此留言。我们会在尽快给予回复。
+如果您有其他问题，也可以来电咨询（详见联系方式）谢谢! 
+</li>
+<li><strong>姓名：</strong><input name="forumname" id="forumname" type="text" style="padding:3px 5px;width:354px;border: 1px solid #ABADB3;height: 20px;" size="30" value="
+<? if(!empty($_SESSION['cc']['ctruename'])) { ?>
+<?=$_SESSION['cc']['ctruename']?>
+<? } ?>
+" maxlength="50" /></li>
+<li><strong>标题：</strong><input name="forumtitle" id="forumtitle" type="text" size="30" style="width:354px;border: 1px solid #ABADB3;height: 20px;padding:3px 5px;" /></li>
+<li><strong style="vertical-align: top;">内容：</strong><textarea name="froumcontent" id="froumcontent" cols="40" rows="6" style="width:354px;border:1px solid #ABADB3;padding:3px 5px;"></textarea></li>
+<li>
+<div style="text-align: center; ">
+<input name="submitbtn" type="button" value=" 提交留言 " class="button_3" onclick="SubmitForum()" />&nbsp;&nbsp;
+<input name="cancelbtn" type="button" value="取消" class="button_7" onclick="closewindowui();" />
+</div>
+<li>
+
+</form>
+        </ul>
+        </div>
+</div>
+</body>
+</html>

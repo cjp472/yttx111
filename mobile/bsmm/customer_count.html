@@ -1,0 +1,42 @@
+<!-- 客户统计 -->
+<div ng-controller="countCustomerController" class="customer-count common-style" style="background-color: white;top: 0;">
+    <header>
+        <span data-back class="icon">&#x34;</span>
+        <h4>药店统计</h4>
+    </header>
+    <section class="set-date">
+        <span ng-click="countCustomers.preMonth();" class="icon">&#x38;</span>
+        <p><span>{{countCustomers.beginDate}}</span>~<span>{{countCustomers.endDate}}</span></p>
+        <span ng-click="countCustomers.nextMonth();" class="icon">&#x39;</span>
+    </section>
+    <div data-load-more="countCustomers.loadMore();" class="list" style="top: 10rem;">
+        <ul>
+            <li ng-repeat="customer in countCustomers.list">
+                <span ng-class="{'one':$index===0,'two':$index===1,'three':$index===2,'other':$index>3}">{{$index + 1}}</span>
+                <div>
+                    <p class="ellipsis-one"><strong>{{customer.ClientCompanyName}}</strong><span> - {{customer.ClientTrueName}}</span></p>
+                    <p>
+                        <span>订单量：</span><em>{{customer.CountNumber}}</em>
+                        <span class="f_right" style="width: 60%;">订单额：<em class="color-red">¥ {{customer.CountTotal | number:2}}</em></span>
+                    </p>
+                </div>
+            </li>
+        </ul>
+        <!-- 无数据提示框 -->
+        <div class="no-data" ng-show="countCustomers.noData">
+            <div>
+                <p class="search-result"></p>
+                <p>抱歉,没有符合条件的数据</p>
+            </div>
+        </div>
+    </div>
+    <!-- <footer>
+        <div>
+            <span>合计：</span>
+            <span class="color-red">¥ 1800</span>
+        </div>
+        65c2b0
+        8f9fdb
+        ababab
+    </footer> -->
+</div>

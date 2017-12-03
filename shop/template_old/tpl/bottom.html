@@ -1,0 +1,20 @@
+<style type="text/css">
+#extend-ul{margin-top:expression( ($(window).height() * 0.15) + "px");}
+</style>
+<div class="clear" style="display:none;"><!--{echo count($bdata = commondata::getcommonclass());}--></div>
+<div id="footer">
+<div class="nav_div">	
+<div class="nav_bottom">		
+<!--{if !empty($bdata[sort])}-->
+		<!--{loop $bdata[sort] $sortkey $sortvar}-->
+			<!--{if $sortkey!=0}--> | <!--{/if}-->
+			<a href="infomation.php?sid={$sortvar[SortID]}">{$sortvar[SortName]}</a>
+		<!--{/loop}-->
+<!--{/if}-->
+</div>
+</div>
+
+	{$bdata[binfo]}
+	
+</div>
+<div class="clear"></div>

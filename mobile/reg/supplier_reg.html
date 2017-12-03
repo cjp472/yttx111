@@ -1,0 +1,847 @@
+<!DOCreg html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no,maximum-scale=1.0,minimum-scale=1.0" />
+        <title>医统天下 网上订货系统</title>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="format-detection"content="telephone=no, email=no" />
+        <!-- UC强制全屏 
+        <meta name="full-screen" content="yes">-->
+        <!-- QQ强制全屏 -->
+        <meta name="x5-fullscreen" content="true">
+        <style reg="text/css">
+            *{padding: 0;margin: 0;}
+            html{
+                height: 100%;font-size: 62.5%;
+            }
+            p{
+                font-size: 1.4rem;
+            }
+            body{
+                height: 100%;
+                background: #FFFFFF; 
+                color:#525252;
+                font-size: 1.4rem;
+                font: 1.4rem/2.8rem Microsoft YaHei,SimSun,Arial;
+                overflow: hidden;
+            }
+            em{font-style: normal;}
+            .clearfix:after{content:'\0020';display:block;height:0;clear:both;visibility:hidden;}
+            .float-left{float: left;}
+            .float-right{float: right;}
+            .layer{
+                position: absolute;
+                width: 100%;
+                top: 0;
+                left: 100%;
+                bottom: 0;
+                background: rgba(0,0,0,.5);
+                z-index: 100;
+                -webkit-transition: -webkit-transform .45s;
+                transition: transform .45s;
+                /*-webkit-transform: translateX(100%);
+                transform: translateX(100%);*/
+            }
+            .layer > div{
+                width: 80%;
+                height: 100%;
+                margin-left: 20%;
+                background-color: #FFFFFF;
+                
+            }
+            .layer > div > h4{
+                text-align: center;
+                line-height: 5rem;
+                font-size: 1.8rem;
+                padding: 0 4%;
+                border-bottom: 1px solid #EDE6E6;
+                color: rgb(187, 168, 168);
+                font-weight: normal;
+            }
+            .layer > div > div ul > li{
+                padding: 0 4%;
+                border-bottom: 1px solid #EDE6E6;
+                min-height: 5rem;
+            }
+            .layer > div > div ul > li > div span{
+                padding: 0 1.2rem;
+                border: 1px solid #ddd;
+                margin-right: 1.0rem;
+                display: inline-block;
+                margin-bottom: .6rem;
+                -webkit-border-radius: .4rem;
+                border-radius: .4rem;
+            }
+            .layer .second-layer{
+                -webkit-transform: translateX(100%);
+                position: absolute;
+                top: 0;
+                left: 20%;
+                margin-left: 0;
+                z-index: 2;
+            }
+            .layer .second-layer ul > li{
+                height: 4rem;
+                min-height: 4rem;
+                line-height: 4rem;
+            }
+            .layer .second-layer .layer-iscroll{
+                width: 100%;
+                left: 0;
+            }
+            .layer.customer-filter ul > li,.layer.goods-filter ul > li{
+                min-height: 4.0rem;
+                line-height: 4.0rem;
+            }
+            .layer.customer-filter ul > li > span,.layer.goods-filter ul > li > span{
+                font-size: 2.4rem;
+                float: right;
+                line-height: 4rem;
+                color: rgb(190, 186, 186);
+            }
+            .layer-iscroll{
+                position: absolute;
+                width: 80%;
+                top:5.0rem;left:20%;bottom:0;
+                overflow: hidden;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                -webkit-text-size-adjust: none;
+                -moz-text-size-adjust: none;
+                -ms-text-size-adjust: none;
+                -o-text-size-adjust: none;
+                text-size-adjust: none;
+            }
+            input{
+                height: 3.3rem;
+                border: none;
+                background-color: #FFFFFF;
+                outline: none;
+                font-size: 1.4rem;
+                font-family: '微软雅黑';
+            }
+            #reg{
+                position: absolute;
+                width: 100%;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                background-color: #f6f6f6;
+            }
+            #reg > header{
+                width: 100%;
+                height: 5rem;
+                line-height: 5rem;
+                background-color: #f9f9f9;
+                display: table;
+                table-layout: fixed;
+                text-align: center;
+                box-shadow: 0 .2rem .2rem 0 #E2E2E2;
+            }
+            #reg > header > span{
+                display: table-cell;
+            }
+            #reg > header > span:first-child{
+                width: 15%;
+            }
+            #reg > header > span:first-child > em{
+                display: inline-block;
+                width: 1rem;
+                height: 1rem;
+                border-left: .2rem solid #c2c2c2;
+                border-bottom: .2rem solid #c2c2c2;
+                -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+            }
+            #reg > header > span:nth-child(2){
+                font-size: 2.0rem;
+                color: #2e2e2e;
+                text-indent: -15%;
+            }
+            #reg > div:nth-of-reg(1){
+                height: 15rem;
+                background: url(img/reg.jpg) no-repeat;
+                background-size: cover;
+            }
+            #reg > section{
+                position: absolute;
+                padding: 4% 3%;
+                width: 94%;
+                top: 5rem;
+                left: 0;
+                bottom: 0;
+                color: #525252;
+                overflow: auto;
+            }
+            #reg > section  .user-input{
+                display: table;
+                table-layout: fixed;
+                text-align: center;
+                width: 100%;
+                height: 3.4rem;
+                line-height: 3.4rem;
+                border-radius: .4rem;
+                background-color: #FFFFFF;
+                margin-top: 1.6rem;
+                font-size: 1.6rem;
+            }
+            #reg > section #first-form  .user-input{height: 4rem;line-height: 4rem;}
+            #reg > section #first-form  .user-input input{
+                height: 4rem;
+            }
+            #reg > section  .user-input:nth-child(1){
+                margin-top: 0;
+            }
+            #reg > section  .user-input > span{
+                display: table-cell;border-radius: .4rem;
+            }
+            #reg > section  .user-input > span:nth-child(1){width: 30%;text-align: left;text-indent: .8rem;}
+            #reg > section  .user-input.btn > span:nth-child(1){width: 100%;background-color: #e9e9e9;}
+            #reg > section  .user-input.next-step > span:nth-child(1){width: 100%;background-color: #f78268;color: #FFFFFF;}
+            #reg > section  .user-input.go-login > span:nth-child(1){width: 100%;background-color: #68c8ef;color: #FFFFFF;}
+            #reg > section  .user-input > span:only-child{text-align: center;text-indent: 0;}
+            #reg > section  .user-input > span:nth-child(2) > input{width: 100%;}
+            .hint{
+                margin-top: 3rem;
+                text-align: center;
+                color: #8b8b8b;
+                line-height: 2.2rem;
+            }
+            .hint em,#last > div:nth-child(2) em{
+                font-size: 1.8rem;
+                color: #f78268;
+            }
+            section#last{
+                background: #FFFFFF;
+                top: 0;
+            }
+            #last > div:first-child{
+                height: 15rem;
+                background: url(../img/third_step.jpg) no-repeat;
+                background-size: cover;
+                margin: -4% -3%;
+            }
+            #last > div:nth-child(2){
+                padding: 14% 3% 0;
+                text-align: center;
+                line-height: 2.2rem;
+            }
+            #last > div:nth-child(2) > p{
+                text-align: justify;
+            }
+            #last .success > div{
+                display: table;
+                table-layout: fixed;
+                width: 100%;
+                padding-top: 2rem;
+                line-height: 2.2rem;
+            }
+            #last .success > div > span{
+                display: table-cell;
+                color: #f78268;
+                vertical-align: middle;
+            }
+            #last .success > div > span:nth-child(1){
+                width: 30%;
+                text-align: right;
+            }
+            #last .success > div > span:nth-child(2) > em{
+                font-size: 2.0rem;
+            }
+            #last .success > div > span:nth-child(1) em{
+                width: 5rem;
+                height: 5rem;
+                background-color: #f78268;
+                border-radius: 50%;
+                display: inline-block;
+                margin-right: 1rem;
+                position: relative;
+            }
+            #last .success > div > span:nth-child(1) em > span{
+                content: '';
+                position: absolute;
+                width: 2.5rem;
+                height: 1.5rem;
+                top: 1rem;
+                left: 1rem;
+                border-left: .6rem solid #FFFFFF;
+                border-bottom: .6rem solid #FFFFFF;
+                -webkit-transform: rotate(315deg);
+                transform: rotate(315deg);
+            }
+            #last .success > div:nth-child(2){
+                text-align: center;
+            }
+            #last .success > div:nth-child(2) > p{
+                display: table;
+                table-layout: fixed;
+                text-align: center;
+                width: 100%;
+            }
+            #last .success > div:nth-child(2) > p > span,#last .success > div:nth-child(2) > p > em{
+                display: table-cell;
+            }
+            #last .success > div:nth-child(2) > p > span{
+                text-align: right;
+            }
+            em.under-line1{
+                color: #5cb9a1;
+                text-align: left;
+                width: 60%;
+            }
+            em.under-line2{
+                color: #68c8ef;
+                text-align: left;
+                width: 60%;
+            }
+            #msg{
+                min-width: 10rem;
+                max-width: 80%;
+                text-align: center;
+                border-radius: .5rem;
+                background-color: rgba(0,0,0,.5);
+                color: #FFFFFF;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+                position: absolute;
+                z-index: 1000;
+                top: 50%;
+                left: 50%;
+                transform: translate3d(-50%,-50%,0);
+                -webkit-transform: translate3d(-50%,-50%,0);
+                padding: .4rem 1rem;
+                display: none;
+            }
+            .hint2{
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                background-color: rgba(0,0,0,.5);
+                color: #666;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+                position: absolute;
+                z-index: 1000;
+                top: 0%;
+                left: 0%;
+                padding: 40% 1rem 0;
+                /*display: none;*/
+            }
+            .hint2 > div{
+                border-radius: .5rem;
+                background-color: #fff;
+                padding: 1.4rem 1rem;
+            }
+            .hint2 > div h2{
+                border-bottom: 1px solid #f78268;
+                font-size: 2rem;
+                font-weight: normal;
+            }
+            .hint2 > div p{
+                margin: 1rem 0;
+            }
+            .hint2 button{
+                width: 80%;
+                background-color: transparent;
+                border: 1px solid #f78268;
+                color: #f78268;
+                height: 3.6rem;
+                border-radius: .5rem;
+                font-size: 1.6rem;
+                font-family: Microsoft YaHei,SimSun,Arial;
+            }
+            div.trade{
+                position:absolute;top: 0;width:100%;bottom:0rem;left:0;background-color:rgba(0,0,0,.5);
+                overflow: hidden;
+                padding:4rem 8%;
+                display: none;
+            }
+            div.trade > div{
+                width: 84%;background-color: #fff;
+                height: 100%;border-radius: .4rem;
+                position: relative;
+            }
+            div.trade > div > h4{
+                text-align: center;
+                line-height: 4rem;
+                font-size: 1.8rem;
+                color: #887C7C;
+                border-bottom: 1px solid #efefef;
+                border-radius: .4rem;
+            }
+            div.trade > div > div{
+                position: absolute;
+                left:10%;
+                bottom:1rem;
+                text-align: center;
+                border: 1px solid #f78268;
+                width: 80%;
+                border-radius: .4rem;
+                line-height: 4rem;
+                color: #f78268;
+            }
+            div.trade ul{
+                padding: 0 3%;
+                position: absolute;
+                width: 94%;
+                left: 0;
+                top: 4rem;
+                bottom: 6rem;
+                overflow-y: auto;
+            }
+            div.trade ul > li{
+                line-height: 3.5rem;
+            }
+            div.trade ul > li{
+                border-bottom: 1px solid #efefef;
+            }
+        </style>
+        <script type='text/javascript'>
+
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function() {
+                _vds.push(['setAccountId', 'b9c76468acc54288bfd0292976a2514d']);
+                (function() {
+                    var vds = document.createElement('script');
+                    vds.type = 'text/javascript';
+                    vds.async = true;
+                    vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+                    var s = document.getElementsByTagName('script')[0];
+                    s.parentNode.insertBefore(vds, s);
+                })();
+            })();
+        </script>
+    </head>
+    <body>
+        <div id="reg">
+            <header>
+                <span id="back" onclick="reg.goBack();"><em></em></span>
+                <span id="title">安全验证</span>
+            </header>
+            <section id="first">
+            <div style="margin-top:0;background-color:rgb(255,253,237);border:1px solid rgb(255,195,130);border-radius:3px;color:rgb(255,114,0);text-align:center;margin-bottom:5px;padding: 3px 5px;line-height:23px;">
+                医统天下暂不支持开放订购<br />如您想获取订货帐号，请联系您的供应商
+                <div style="clear:both;"></div>
+            </div>
+                <form id="first-form" action="">
+                    <div class="user-input">
+                        <span>手机号码</span>
+                        <span><input name="phoneNum" type="text" placeholder="保护您的账户安全" /></span>
+                    </div>
+                    <div class="user-input btn">
+                        <span style="border: 1px solid #ddd;" id="sms-code">获取短信校验码</span>
+                    </div>
+                    <div class="user-input">
+                        <span>校验码</span>
+                        <span><input name="code" type="text" placeholder="请输入短信校验码" /></span>
+                    </div>
+                    <div onclick="reg.checkCode();" class="user-input next-step">
+                        <span>下一步</span>
+                    </div>
+                    <div class="hint">
+                        <p>无法收到验证短信？请致电 028-84191729，联系客服获取校验码 </p>
+                    </div>
+                </form>
+                <div class="hint2" id="has-reg" style="display: none;">
+                    <div>
+                        <h2>提示</h2>
+                        <p id="hint-p">此手机号码已注册，可直接登录</p>
+                        <div style="display: table;table-layout:fixed;width: 100%;">
+                            <button style="display: table-cell;width: 45%;" onclick="$('#has-reg').hide();">留在本页</button>
+                            <button style="display: table-cell;width: 45%;margin-left: 10%;" onclick="javascript:window.location.href='../login.html';">直接登录</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="second" style="display: none;">
+                <form id="second-form" action="">
+                    <div class="user-input">
+                        <span>账号</span>
+                        <span><input name="loginName" type="text" placeholder="3-18位英文、数字" /></span>
+                    </div>
+                    <div class="user-input">
+                        <span>登录密码</span>
+                        <span><input name="loginPwd" type="password" placeholder="3-18位英文、数字" /></span>
+                    </div>
+                    <div class="user-input">
+                        <span>确认密码</span>
+                        <span><input name="loginPwd2" type="password" placeholder="请输入登录密码" /></span>
+                    </div>
+                    <div class="user-input" onclick="javascript:$('div.trade').show();">
+                        <span>平台行业</span>
+                        <span><input name="trade" readonly type="text" placeholder="请选择行业" /></span>
+                    </div>
+                    <div class="user-input">
+                        <span>平台名称</span>
+                        <span><input name="sysName" type="text" placeholder="3-20位中英文、数字" /></span>
+                    </div>
+                    <div class="user-input">
+                        <span>平台域名</span>
+                        <span style="text-align: left;">
+                            <input style="max-width:60%;min-width: 40%;" name="loginPwd2" type="text" placeholder="3-10位英文、数字" />.dhb.hk
+                        </span>
+                    </div>
+                    <div class="user-input">
+                        <span>平台联系人</span>
+                        <span><input name="contact" type="text" placeholder="例：李明" /></span>
+                    </div>
+                    <div onclick="reg.saveReg();" class="user-input next-step">
+                        <span>下一步</span>
+                    </div>
+                    <div style="margin-bottom: 26rem;margin-top:1rem;">平台名称是客户在订货端看到的名称<br />
+客户可通过平台域名进行访问该平台 </div>
+                </form>
+            </section>
+            <section id="last" style="display: none;">
+                <div class="success">
+                    <div>
+                        <span><em><span></span></em></span>
+                        <span><em>恭喜您</em><br>恭喜您成功开通 <b>医统天下免费版！</b><br />您将体验到互联网+渠道分销带来的业务变革</span>
+                    </div>
+                    <div>
+                        <p><span>您的账号：</span><em class="under-line1"></em></p>
+                        <p><span>平台名称：</span><em class="under-line2"></em></p>
+                    </div>
+                </div>
+                <div>
+                    <p>您的账号信息我们已经发送到您的验证手机上，请注意保存！如果您有任何问题可以拨打我们的客服热线：</p>
+                    <em>400-6311-682</em>
+                </div>
+                <div class="user-input go-login">
+                    <span onclick="javascript:window.location.href='../bsmm/index.html';">立即登录</span>
+                </div>
+                <div class="hint2" id="hint">
+                    <div>
+                        <h2>温馨提示</h2>
+                        <p id="hint-p">医统天下手机管理端能够让您方便地在线处理业务。在此之前，请您先从电脑登录完善基础数据！</p>
+                        <div><button onclick="$('#hint').hide();">我知道了</button></div>
+                    </div>
+                </div>
+            </section>
+            <div class="trade">
+                <div>
+                    <h4>选择行业</h4>
+                    <ul>
+                    </ul>
+                    <div onclick="javascript:$('div.trade').hide();">关闭</div>
+                </div>
+            </div>
+        </div>
+        <div id="msg"></div>
+        <script src="../js/common/zepto.min.js" type="text/javascript"></script>
+        <script src="../js/common/from.js" type="text/javascript"></script>
+        <script src="../js/common/md5-min.js" type="text/javascript"></script>
+        <script>
+            // 工具对象
+            var utils = function(a){
+                
+                return {
+                    // http://wy.dhb.net.cn/mobileApi/api.php  http://yaoliankeji.dhb.net.cn/mobileApi/api.php
+                    url: 'http://yy.yitong111.com/mobileApi/api.php',
+                    stopPropagation: function(e){
+                        e = e || window.event;
+                        e.stopPropagation();
+                    }
+                };
+            }();
+            // function nextStep and goBack 是未引入zepto的时候写的
+            var reg = {
+                timer: null,
+                getCoding: false, // 正在获取验证码
+                showBlock: 1,// 1 2 3 
+                tradeId: '',
+                // 获取短信验证码
+                getSMSCode: function(ele){
+                    var formArr = $('#first-form').serializeArray();
+                    
+                    if(this.getCoding) {
+                        return;
+                    }
+                    if(!formArr[0].value){
+                        alert('请输入手机号码');
+                        return;
+                    }
+                    if(!/^\d{11}$/.test(formArr[0].value)){
+                        alert('请输入正确手机号码');
+                        return;
+                    }
+                    this.getCoding = true;
+                    var t = 60;
+                    $(ele).text(t + '秒后重新获取');
+                    this.timer = setInterval(function(){
+                        $(ele).text(--t + '秒后重新获取');
+                        if(t === 0){
+                            clearInterval(reg.timer);
+                            $(ele).text('获取短信验证码');
+                            reg.getCoding = false;
+                            return;
+                        }
+                    },1000);
+                    $('#msg').text('获取校验码中..').show();
+                    
+                    var params = {
+                        f: 'managerGetSmsCode',
+                        v: JSON.stringify({
+                            mobile: formArr[0].value,
+                            token: hex_md5(formArr[0].value + '_DHB')// mobile  
+                        })
+                    };
+                    $.ajax({
+                        url: utils.url,
+                        type: 'post',
+                        data: $.param(params),
+                        dataType: 'json',
+                        success: function(data){
+                            $('#msg').hide();
+                            
+                            if(data && data.rStatus == 100){
+                                //reg.code = data.rData;
+                            } else {
+                                if(data && data.isReg == 'T' ){
+                                    //手机号码已注册
+                                    $('#has-reg').show(); 
+                                }
+                                else{
+                                    alert(data.error);
+                                }
+                                clearInterval(reg.timer);
+                                $(ele).text('获取短信验证码');
+                                reg.getCoding = false; 
+                            }
+                            
+                        },
+                        error: function(){
+                            $('#msg').hide();
+                            clearInterval(reg.timer);
+                            $(ele).text('获取短信验证码');
+                            reg.getCoding = false; 
+                            alert('请求失败!')
+                        }
+                    });
+                },
+                // 检查当然步骤信息输入是否完整
+                checkCode: function(){
+                    var formArr = $('#first-form').serializeArray();
+                    if(!formArr[0].value){
+                        alert('请输入手机号码');
+                        return;
+                    }
+                    if(!/^\d{11}$/.test(formArr[0].value)){
+                        alert('请输入正确手机号码');
+                        return;
+                    }
+                    if(!formArr[1].value){
+                        alert('请输入短信校验码');
+                        return;
+                    }
+                   this.ClientPhone = formArr[0].value;
+                   this.ClientCode = formArr[1].value;
+                   
+                   var params = {
+                        f: 'managerVerifySmsCode',
+                        v: JSON.stringify({
+                            mobile: formArr[0].value,
+                            smsCode: formArr[1].value
+                        })
+                    };
+                    $.ajax({
+                        url: utils.url,
+                        type: 'post',
+                        data: $.param(params),
+                        dataType: 'json',
+                        success: function(data){
+                            if(data && data.rStatus == 100){
+                                $('#back').css('visibility','hidden');
+                                reg.nextStep('first','second','设置账号信息');
+                                reg.getTrade();
+                                $('#second-form input').eq(0).val(formArr[0].value);
+                            } else {
+                                alert(data.error);
+                            }
+                            
+                        },
+                        error: function(){
+                            alert('请求失败!请检查你的网络设置')
+                        }
+                    });
+                },
+                // 获取行业 
+                getTrade: function(){
+                    var params = {
+                        f: 'managerGetIndustry',
+                        v: JSON.stringify({})
+                    };
+                    $.ajax({
+                        url: utils.url,
+                        type: 'post',
+                        data: $.param(params),
+                        dataType: 'json',
+                        success: function(data){
+                            if(data && data.rStatus == 100){
+                                var liStr = '';
+                                //IndustryID,IndustryName
+                                for(var i = 0; i < data.rData.length; i += 1){
+                                    liStr += '<li data-tradeid="' + data.rData[i].IndustryID + '">' + data.rData[i].IndustryName + '</li>';
+                                }
+                                if(liStr.length > 0){
+                                    $('div.trade ul').html(liStr);
+                                }
+                                else {
+                                    $('div.trade ul').html('暂无数据');
+                                }
+                            }
+                            else {
+                                alert(data.error);
+                            }
+                            
+                        },
+                        error: function(){
+                            alert('请求失败!请检查你的网络设置')
+                        }
+                    });
+                },
+                // 
+                saveReg: function(){
+                    var formArr = $('#second-form').serializeArray();
+                    if(!formArr[0].value || !formArr[1].value || !formArr[2].value
+                         || !formArr[3].value || !formArr[4].value || !formArr[5].value){
+                        alert('所有项都为必填项');
+                        return;
+                    }
+                    if(!/^[0-9a-zA-Z]{3,18}$/.test(formArr[0].value)){
+                        alert('用户名格式错误');
+                        return; 
+                    }
+                    if(!/^[0-9a-zA-Z]{3,32}$/.test(formArr[1].value)){
+                        alert('密码格式错误');
+                        return; 
+                    }
+                    if(formArr[1].value != formArr[2].value){
+                        alert('两次密码输入不一致');
+                        return;
+                    }
+                    if(!/^[0-9a-zA-Z]{3,10}$/.test(formArr[5].value)){
+                        alert('二级域名输入格式错误');
+                        return; 
+                    }
+                    if(!formArr[4].value || formArr[4].value.length < 3){
+                        alert('平台名称长度至少为三位');
+                        return; 
+                    }
+                    var params = {
+                        f: 'managerSubmitCompany',
+                        v: JSON.stringify({
+                            loginFrom: loginFrom,
+                            username: formArr[0].value,
+                            confirmPassword: formArr[1].value,
+                            prefix: formArr[5].value,
+                            trueName: formArr[6].value,
+                            platformName: formArr[4].value,
+                            industry: this.tradeId,
+                            mobile: this.ClientPhone
+                        })
+                    };
+                    var _this = this;
+                    $.ajax({
+                        url: utils.url,
+                        type: 'post',
+                        dataType: 'json',
+                        data: $.param(params),
+                        success: function(data){
+                            if(data && data.rStatus == 100){
+                                $('.under-line1').text(formArr[0].value);
+                                $('.under-line2').text(formArr[4].value);
+                                window.localStorage['m_sKey'] = data.sKey;
+                                window.localStorage['url'] = utils.url;
+                                if(data.error){
+                                    $('#hint-p').text(data.error);
+                                }
+                                _this.nextStep('second','last','');
+                            }
+                            else{
+                                $('#msg').text(data.error).show();
+                                setTimeout(function(){
+                                    $('#msg').hide();
+                                },5000);
+                            }
+                        },
+                        error: function(){
+                            $('#msg').text('注册失败').show();
+                            setTimeout(function(){
+                                $('#msg').hide();
+                            },5000);
+                        }
+                    });
+                },
+                nextStep: function(from, to ,title){
+                    if(title){
+                        document.querySelector('#title').innerHTML = title;
+                    }
+                    if(to === 'last'){
+                        this.showBlock = 3;
+                        document.querySelector('#' + to).style.top = '0';
+                    }
+                    else if(to === 'second'){
+                        this.showBlock = 2;
+                    }
+                    else if(to === 'first'){
+                        this.showBlock = 1;
+                    }
+                    document.querySelector('#' + from).style.display = 'none';
+                    document.querySelector('#' + to).style.display = 'block';
+                    //window.history.pushState({from: 'next'},null,location.href);
+                },
+                goBack: function(tag){
+                    if(this.showBlock === 3){
+                        this.showBlock = 2;
+                        document.querySelector('#title').innerHTML = '设置账号信息';
+                        document.querySelector('#last').style.display = 'none';
+                        document.querySelector('#second').style.display = 'block';
+                    }
+                    else if(this.showBlock === 2){
+                        this.showBlock = 1;
+                        document.querySelector('#title').innerHTML = '安全验证';
+                        document.querySelector('#second').style.display = 'none';
+                        document.querySelector('#first').style.display = 'block';
+                    }
+                    if(!tag){
+                        window.history.back();
+                    }
+                },
+                toggleLayer: function(){
+                    if(this.layerState === 0){
+                        this.layerState = 1;
+                        $('#area-layer').css('-webkit-transform','translate3d(-100%,0,0)');
+                        return;
+                    }
+                    this.layerState = 0;
+                    $('#area-layer').css('-webkit-transform','translate3d(0,0,0)');
+                }
+            };
+            //window.onpopstate = function(e){
+                /*if(e.state && e.state.from !== 'next') {
+                    reg.showBlock = reg.showBlock === 3 ? reg.showBlock = 2 : (reg.showBlock === 2 ? reg.showBlock = 1 : 1);
+                    return;
+                };*/
+                //reg.goBack(true);
+            //};
+            //reg.getTrade();
+            var bindEvent = function(){
+                $('#sms-code').on('click',function(){
+                    reg.getSMSCode(this);
+                });
+                $('div.trade ul').on('click','li',function(){
+                    $('#second-form input')[3].value = $(this).text();
+                    reg.tradeId = $(this).attr('data-tradeid');
+                    $('div.trade').hide();
+                });
+            }();
+        </script>
+    </body>
+</html>

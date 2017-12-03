@@ -1,0 +1,15 @@
+@charset "utf-8";
+/* CSS Document */
+  small.err {
+            color:#f40;
+            font-size:14px;
+            display:none;
+        }
+        .reg-content > .step input[type="button"].btn-active {
+            background-color: #FFE6D6;
+            color: #FC6746;
+        }
+        .reg-content > .step input[type="button"].btn-active.disabled {
+            background-color: #f0f0f0;
+            color: #a7a6a6;
+        }

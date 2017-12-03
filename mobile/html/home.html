@@ -1,0 +1,101 @@
+<!-- 默认显示首页 -->
+<div ng-controller="homeController" class="page-home page-order-confirm">
+    <div class="home search">
+        <span data-ng-click="goSort('/goods-sort');" class="icon icon-list"></span>
+        <div>
+            <span data-goods-search class="icon icon-search"></span>
+            <input ng-model="globalSearch.keyWord" type="text" placeholder="商品搜索" />
+            <em class="icon"></em>
+        </div>
+        <span ng-show="showScanner" id="scanner" style="margin-left:0;margin-right: .4rem;" data-start-scanner class="scanner"></span>
+    </div>
+
+    <div data-load-more="goodses.loadMore();" class="page-index" style="position:absolute;width:100%;top:4.4rem;left:0;bottom:0rem;overflow-y:auto;overflow-x:hidden;">
+        <div>
+            <!-- 头部搜索和图片导航条 -->
+            <header>
+                <div class="banner">
+                    <ol data-banner-switch data-img-length="{{pics.length}}"><!-- {{pic.ArticleLink}} -->
+                        <li ng-repeat="pic in pics"><a ng-href=""><img ng-src="{{pic.ArticlePicture}}" width="100%" alt=""/></a></li>
+                    </ol>
+                    <ul>
+                        <!-- <li ng-repeat="i in [1,2,3]"></li> -->
+                    </ul>
+                </div>
+            </header>
+            <div class="pic-menu">
+                <ul class="first-line">
+					<li data-ng-click="changePath('/order-list');">
+                        <p class="icon icon-clipboard"></p>
+                        <p>再次购买</p>
+                    </li>
+                    
+                    <li data-ng-click="changePath('/goods-list/00',1);">
+                        <p class="icon icon-star2"></p>
+                        <p>我的收藏</p>
+                    </li>
+                    <li data-ng-click="changePath('/goods-list/000',2);">
+                        <p class="icon icon-folder"></p>
+                        <p>最近订购</p>
+                    </li>
+                    <li data-toggle data-selector="div.my-info"  ng-click="getContactTools();">
+                        <p class="icon icon-users"></p>
+                        <p>在线客服</p>
+                    </li>
+                </ul>
+				<!--
+                <ul>
+                    <li data-ng-click="changePath('/goods-list/0',0);">
+                        <p class="icon icon-ribbon"></p>
+                        <p>特价商品</p>
+                    </li>
+                    <li data-ng-click="changePath('/order-payment');">
+                        <p class="icon icon-banknote"></p>
+                        <p>付款单</p>
+                    </li>
+                    <li data-ng-click="changePath('/order-transport');">
+                        <p class="icon icon-truck"></p>
+                        <p>发货单</p>
+                    </li>
+                    <li data-ng-click="changePath('/info');">
+                        <p class="icon icon-chat-3"></p>
+                        <p>信息公告</p>
+                    </li>
+                </ul>
+				-->
+            </div>
+            <div class="divider"></div>
+            <div class="goods-list">
+                <p>推荐商品</p>
+                <ul>
+                    <li data-ng-repeat="goods in goodses.goodsList">
+                        <a href="" data-ui-sref="goods-list.goods-detail({goodsId:goods.ID})">
+                            <p data-trans-html html-text="goods.Name"></p>
+                            <p data-trans-html html-text="goods.BrandName"></p>
+                            <div>
+                                <span class="red clearfix">¥ {{goods.Price | number:2}}</span>
+                                <img data-img-loaded data-page="index" class="r" src="" data-ng-src="{{goods.Picture}}" alt="" />
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="my-info info-layer pay-type animated fadeIn">
+        <div>
+            <h4>在线工具</h4>
+            <ul>
+                <li ng-repeat="tool in contacts.tools">{{tool.ToolName + ' (' + tool.ToolType+')'}}<a href="javascript:;" class="r">{{tool.ToolNO}}</a></li>
+            </ul>
+            <h4>联系方式</h4>
+            <ul>
+                <li ng-repeat="contact in contacts.contact">{{contact.ContactName}}<a href="javascript:;" ng-href="{{contact.tellPhone}}" class="r">{{contact.ContactValue}}</a></li>
+            </ul>
+            <button class="btn" data-toggle data-selector="div.my-info">关闭</button>
+        </div>
+    </div>
+    <!-- <div data-ui-view></div> -->
+</div>

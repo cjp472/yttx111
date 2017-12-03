@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name='robots' content='noindex,nofollow' />
+<title><?=$_SESSION['ucc']['CompanyName']?> - <?=SITE_NAME?></title>
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="<?=CONF_PATH_IMG?>css/base.css?v=<?=VERID?>" type="text/css" rel="stylesheet" />
+<link href="<?=CONF_PATH_IMG?>css/showpage.css" rel="stylesheet" type="text/css">
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/function.js?v=<?=VERID?>" type="text/javascript"></script>
+<script src="template/js/cart.js?v=<?=VERID?>" type="text/javascript"></script>
+<style>
+#MainForm a:link{
+color:#0193dc;
+text-decoration: none;
+}
+#MainForm a:visited {
+color:#0193dc;
+}
+#MainForm a:hover{
+color:#f60;
+}
+.page_bar{
+float:right;
+}
+.page_bar span{
+line-height: 24px;
+}
+.page_bar a{
+height:24px;
+line-height: 24px;
+}
+#kw{
+border:1px solid #dbdbdb;
+height:20px;
+line-height:20px;
+}
+</style>
+</head>
+
+<body>
+<form id="forms" name="forms" method="post" action="list.php?m=select" style="margin-bottom: 0px;">
+ <table width="98%" border="0" cellspacing="0" cellpadding="4" style="margin:4px 0 0 0;">
+          <tr>
+            <td width="7%" nowrap="nowrap"><strong>&nbsp;快速查询：</strong></td>
+            <td width="20%" height="32" nowrap="nowrap">
+              <label>
+                <input type="text" name="kw" id="kw" size="28" value="
+<? if($in['kw']) { ?>
+<?=$in['kw']?>
+<? } ?>
+" onfocus="this.select();" />
+              </label>           
+            </td>
+            <td width="20%" nowrap="nowrap">            
+ <select name="s" id="s" style="width:155px; height:24px; margin:1px 2px;border:1px solid #dbdbdb;">
+                    <option value="">⊙ 所有商品分类</option>
+                    <?=$menumsg?>
+                  </select>                  
+            </td>
+            <td  align="left"><label>
+              <input name="button3" type="submit" class="button_6" id="button3" value=" 查询 " />
+            </label></td> 
+          </tr>
+        </table>
+</form>
+<div style="width:100%; height:370px; overflow:auto;">
+          <form id="MainForm" name="MainForm" method="post" action="" target="" >
+  <input type="hidden" name="selectid" id="selectid" value="" />
+        	  <table width="98%" border="0" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC" style="font-size:12px;">               
+               <thead>
+                <tr>
+                  <td height="24" width="5%" bgcolor="#efefef"  >&nbsp;序号</td>
+                  <td bgcolor="#efefef" >名称</td>
+                  <td width="24%" bgcolor="#efefef" >品牌</td>
+                  <td width="14%" bgcolor="#efefef" >规格</td>				  
+                  <td width="8%" align="right" bgcolor="#efefef" >价格(元)</td>
+  
+<? if($pns=="on") { ?>
+  <td width="8%" align="center" bgcolor="#efefef" >库存</td>
+  
+<? } ?>
+  <td width="6%" align="center" bgcolor="#efefef" >单位</td>
+  <td width="8%" align="center" bgcolor="#efefef" >订购</td>
+                </tr>
+     		 </thead>      		
+      		<tbody>
+<? if(!empty($goodslist['total'])) { if(is_array($goodslist['list'])) { foreach($goodslist['list'] as $gkey => $gvar) { ?>
+                <tr id="line_<?=$gvar['ID']?>"  onmouseover="inStyle(this)"  onmouseout="outStyle(this)" >
+                   <td height="26"  bgcolor="#FFFFFF" >&nbsp;<?=$gvar['NO']?></td>
+                  <td bgcolor="#FFFFFF" >
+<? if($gvar['CommendID']=="2") { ?>
+<span class="test_1" title="特价">[特]</span>
+<? } ?>
+<a href="content.php?id=<?=$gvar['ID']?>" target="_blank" title="<?=$gvar['Name']?>" > <?=$gvar['Name']?></a></td>
+<!--                   <td bgcolor="#FFFFFF" ><?=$gvar['Coding']?>&nbsp;</td>  -->
+                  <td bgcolor="#FFFFFF" ><?=$gvar['BrandName']?>&nbsp;</td> 
+                  <td bgcolor="#FFFFFF" ><?=$gvar['Model']?>&nbsp;</td>
+                  
+                  <td align="right" bgcolor="#FFFFFF"><span class="test_1">&nbsp;&nbsp;¥ <?=$gvar['Price']?> </span>&nbsp;</td>
+  
+<? if($pns=="on") { ?>
+  <td align="center" bgcolor="#FFFFFF" style=""><?=$goodslist['number'][$gvar['ID']]?>&nbsp;</td>
+  
+<? } ?>
+  <td align="center" bgcolor="#FFFFFF"><?=$gvar['Units']?>&nbsp;</td>
+  <td align="center" bgcolor="#FFFFFF">
+ 
+<? if($gvar['CommendID']=="9") { ?>
+【缺货】
+  
+<? } else { ?>
+  
+<? if($pn=="on" && $png=="off" && $goodslist['number'][$gvar['ID']] <= 0) { ?>
+【缺货】
+  
+<? } else { ?>
+【<a href="javascript:void(0);" onclick="quicktocart('<?=$gvar['ID']?>','<?=$gvar['cs']?>');" id="shareit_<?=$gvar['ID']?>">订购</a>】
+  
+<? } ?>
+  
+<? } ?>
+</td>
+              </tr>
+  
+<? } } } else { ?>
+     		  <tr>
+       				 <td height="30" colspan="7" align="center" bgcolor="#FFFFFF">无符合条件的商品!</td>
+   			  </tr>
+<? } ?>
+ 				</tbody>                
+              </table>
+
+              <INPUT TYPE="hidden" name="referer" value ="" >
+              </form>
+       	  </div>
+          <table width="98%" border="0" cellspacing="0" cellpadding="0" >
+     			 <tr>
+       			     <td width="15%"><input type="button" name="backtocart" class="button_7" id="backtocart" value=" 返回 " onclick="backtocart()" /></td>
+ <td  align="right"><?=$goodslist['showpage']?></td>					 
+     			 </tr>
+          </table>
+
+
+<div id="windowForm">
+<div id="windowContent">  </div>
+</div>
+
+<div id="shareit-box">
+<div id="shareit-header"></div>
+<div id="shareit-body">
+<div id="shareit-blank"></div>
+<div id="shareit-url">数量：<input type="text" value="1" onfocus="this.select();"  name="shareit-field" id="shareit-field" class="field" onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" />
+<input type="hidden" value="" name="togoodsid" id="togoodsid"  /></div>
+<div id="shareit-icon">
+<a href="javascript:void(0);" title="关闭" onclick="hideshow('shareit-box');">X</a> <input type="button" name="addtocart" id="addtocart" value="订 购" class="button_7" onclick="saveonetocart();"  />   
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

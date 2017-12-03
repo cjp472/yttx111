@@ -1,0 +1,118 @@
+@CHARSET "UTF-8";
+html{
+    width: 100%;
+    height: 100%;}
+body{
+    width: 100%;
+    height: 100%;
+}
+.quick-payment{
+    /*width: 1148px;*/
+    border: 1px solid #6c6c6c;
+    margin: 30px auto;
+    padding-top: 10px;
+    padding-bottom: 30px;
+
+}
+.quick-payment a:hover{
+	color:#fff;
+	text-decoration:none;
+}
+.quick-payment-content{
+    margin: 20px;
+}
+.quick-payment-title{
+    font-size: 30px;
+    color: #ff5705;
+}
+.quick-payment-info{
+    font-size: 14px;
+    padding-right: 75px;
+    line-height: 20px;
+    padding-top: 20px;
+
+}
+.mian-money{
+    position: absolute;
+    top: -7px;
+    right: -7px;
+}
+.p-r{
+    position: relative;
+    margin-top: 9px;
+}
+.company-set{
+    list-style: none;
+margin: 40px auto;
+
+    overflow: hidden;
+
+
+}
+.company-set li{
+
+
+}
+
+.image-ico{
+    float: left;
+    overflow: hidden;
+
+    text-align: center;
+
+}
+
+.tips{
+    float: left;
+    overflow: hidden;
+    width: 29%;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.tips p{
+    padding-right: 10px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: justify;
+}
+.btn{
+    width: 160px;
+    height: 40px;
+    line-height: 40px;
+    color: #fff;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    margin-top: 20px;
+    border-radius: 2px;
+}
+.btn-green{
+    background: #5b9cd6;
+    margin-left: 125px;
+    float: right;
+}
+.btn-green:hover{
+    background: #5b9cd6;
+    color: #fff !important;
+    margin-left: 125px;
+}
+.btn-bule{
+    background: #ffc000;
+    float: left;
+}
+
+.btn-bule:hover{
+    background: #ffc000;
+    color: #fff;
+}
+.tips .tips-title{
+    font-size: 18px;
+    padding-top: 0px;
+    margin-bottom: 15px;
+}
+.tips-title{
+	margin-top:5px;
+}

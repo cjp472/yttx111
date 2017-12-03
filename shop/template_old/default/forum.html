@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$_SESSION['ucc']['CompanyName']} - 订货宝 网上订货系统</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name="Author" content="rsung seekfor" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<link href="template/default/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/list.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="template/default/css/showpage.css" rel="stylesheet" type="text/css" media="screen" />
+
+<script src="template/js/jquery.js" type="text/javascript"></script>
+<script src="template/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="template/js/forum.js" type="text/javascript"></script>
+</head>
+
+<body>
+{template header}
+
+<div id="contentbody">
+	<div id="contentleft">
+
+        <div class="line margin_top" >
+<b class="b1"></b><b class="b2 d1"></b><b class="b3 d1"></b><b class="b4 d1"></b>
+<div class="b d1" style="height:68px;">
+
+<div class="line">
+	<div class="cartimg" onclick="javascript:window.location.href='cart.php'"><div id="cartnumber" ><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></div></div>
+	<div class="carttext">
+		<div><a href="cart.php"><img src="template/default/img/view_order.jpg" border="0" title="查看我的当前订单" /></a></div>
+		<div align="right" class="white">您已预购 <span id="cartnumber_2"><!--{if empty($_SESSION[cartitems])}-->0<!--{else}--><!--{echo count($_SESSION[cartitems]);}--><!--{/if}--></span> 件商品！</div>
+	</div>
+</div>
+
+</div>
+<b class="b4b d1"></b><b class="b3b d1"></b><b class="b2b d1"></b><b class="b1b"></b>
+		</div>
+
+
+		<div class="line margin_top">
+        	<div class="sort_title">在线客服</div>
+         	<div class="sort_line">
+                <dt><a href="forum.php" > &#8250;&#8250; 留言咨询</a></dt>
+					<dd><a href="forum.php" > &#8250;&#8250; 所有留言</a></dd>
+					<dd><a href="forum.php?ty=replyed" > &#8250;&#8250; 已回复留言</a></dd>
+					<dd><a href="forum.php?ty=noreply" > &#8250;&#8250; 未回复留言</a></dd>
+				<dt><a href="#" onclick="showpostforum()"> &#8250;&#8250; 我要留言</a></dt>
+					<dd></dd>
+				<dt><a href="#" > &#8250;&#8250; 在线交流</a></dt>
+				<!--{loop $tools $skey $svar}-->
+				<!--{if $svar[ToolType]=="QQ"}-->
+					<dd title="{$svar[ToolType]}"><a target="blank" href="tencent://message/?uin={$svar[ToolNO]}&amp;Site=qq&amp;Menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=1:{$svar[ToolNO]}:4" alt="点击发送消息给对方" />&nbsp;&nbsp;{$svar[ToolName]}: {$svar[ToolNO]}</a> </dd>
+				<!--{else}-->
+					<dd title="{$svar[ToolType]}"><a href="#" > &#8250;&#8250; {$svar[ToolName]}: {$svar[ToolNO]}</a></dd>
+				<!--{/if}-->
+				<!--{/loop}-->
+
+            </div>
+        	<div class="line"><img src="template/default/img/sort_bottom.jpg" /></div>  
+			
+        <div class="line" style="display:; margin-top:18px;">
+		<b class="g1"></b><b class="g2 h1"></b><b class="g3 h1"></b><b class="g4 h1"></b>
+		<div class="g h1" >
+		<div class="line96" style="margin:8px;">
+
+				<dt><a href="#" > <strong>&#8250;&#8250; 联系方式</strong></a></dt>
+				<!--{loop $contact $ckey $cvar}-->
+					<div style="margin:0;padding:2px; margin-left:4px;" title="{$cvar[ContactName]}" style="padding-left:12px;">  {$cvar[ContactName]}: {$cvar[ContactValue]}</div>
+				<!--{/loop}-->
+		</div>
+		</div>
+		<b class="g4g h1"></b><b class="g3g h1"></b><b class="g2g h1"></b><b class="g1g"></b>
+		</div>
+        </div>
+
+	</div>    
+    
+    
+    <div id="contentright">
+    	<div id="location"><strong>您的当前位置： </strong><a href="home.php">首页</a> &#8250;&#8250; <a href="forum.php">在线客服</a> </div>
+     	
+       
+		<div class="line margin_top">
+        	<div class="list_title">
+            	<div class="leftdiv line-height">留言咨询:</div>
+				<div class="rightdiv line-height"><span class="spanright" style="margin-top:8px;"><input name="replybuttom" id="replybuttom" value="发表我的留言" type="button" class="bluebtn" onclick="showpostforum()" />&nbsp;&nbsp;</span></div>
+          </div>
+         	<div class="list_line">
+<br />
+        <!--{if !empty($infomation[list])}-->
+        	<!--{loop $infomation[list] $key $var}-->
+		<div class="line94">
+		<div class="line" >
+		<span class="spanleft">
+			<img src="template/default/img/icon_arrow_down.gif" border="0" />&nbsp;
+			<span class="font16">{$var[Title]}<a name="linename_{$var[ID]}"></a></span>
+		</span>
+		<span class="spanright">
+			<span class="bold">{$var[Name]}</span>&nbsp;|&nbsp;<span><!--{echo date("Y-m-d H:i",$var[Date])}--></span>&nbsp;&nbsp;<span>[<a href="#linename_{$var[ID]}" onclick="showreply('{$var[ID]}');">回复</a>]</span>
+		</span>
+		</div>
+        <div class="line" style="margin-left:10px; line-height:180%; padding:8px; font-size:14px;" >
+        <!--{echo nl2br($var[Content])}-->
+		</div>
+		</div>
+        
+        <!--{if !empty($var[Reply])}-->
+        	<!--{loop $var[re] $rkey $rvar}-->
+			<!--{if !empty($rvar[Flag])}-->
+			<div class="listr2" title="管理员回复">
+			<!--{else}-->
+            <div class="listr" >
+			<!--{/if}-->
+            	<div class="line"><img src="template/default/img/icon_arrow_down.gif" border="0" />&nbsp;<span class="bold">{$rvar[Name]}</span>&nbsp;|&nbsp;<span><!--{echo date("Y-m-d H:i",$rvar[Date])}--></span></div>
+                <div class="line" style="margin-left:10px; line-height:180%; padding:8px; font-size:14px;"><!--{echo nl2br($rvar[Content])}--></div>        	
+			</div>
+        	<!--{/loop}-->
+		<!--{/if}-->
+		<div class="listr" id="replyinput_{$var[ID]}" style="display:none;" />
+			
+		</div>
+		<div class="line" id="allertidtext">&nbsp;</div>
+        	<!--{/loop}-->
+		<!--{/if}-->
+
+			<div id="replayinputtext">
+			<form id="PostForm" name="PostForm" method="post" action="" >
+			<input name="replypid" id="replypid" type="hidden" value="" />
+        	<div class="line96"><span class="bold">我要回应：</span><br /><textarea id="replycontent" name="replycontent" cols="50" rows="4" style="width:100%;"></textarea></div>
+            <div class="line96"><span class="spanleft">姓名：
+<input name="replyname" id="replyname" type="text" value="<!--{if !empty($_SESSION['cc']['ctruename'])}-->{$_SESSION['cc']['ctruename']}<!--{/if}-->" onfocus="this.select();" />&nbsp;&nbsp;</span><span class="spanright"><input name="cancelreplybuttom" id="cancelreplybuttom" value=" 取 消 " type="button" class="darkbtn" onclick="CancelReply()" />&nbsp;&nbsp;<input name="replybuttom" id="replybuttom" value="发表我的回应" type="button" class="bluebtn" onclick="SubmitReply()" /></span>
+</div>
+			</form><br />&nbsp;
+			</div>
+			
+			<div class="list_showpage">{$infomation[showpage]}</div>
+			<div class="line96"><span class="spanright"><a href="#top">› TOP</a></span></div>
+			<br />&nbsp;
+            </div>
+        	<div class="line"><img src="template/default/img/list_bottom_1.jpg" /></div>        
+        </div> 
+              
+    </div> 
+</div>
+
+{template bottom}
+
+    <div id="windowForm">
+		<div class="windowHeader">
+			<h3 id="windowtitle">发表留言：</h3>
+			<div class="windowClose"><div class="close-form" onclick="closewindowui()" title="关闭" >x</div></div>
+		</div>
+		<div id="windowContent">
+		<ul>
+			<form id="NewPostForm" name="NewPostForm" method="post" action="" >
+			<li id="showtext" style="display:none; color:red; width:90%; text-align:center; margin:4px; border-top:1px solid #cc0000; border-bottom:1px solid #cc0000"></li>
+			<li>如果您在订货过程中有什么疑问，欢迎 在此留言。我们会在尽快给予回复。
+如果您有其他问题，也可以来电咨询（详见联系方式）谢谢! 
+			</li>
+			<li><strong>姓名：</strong><input name="forumname" id="forumname" type="text"  size="30" value="<!--{if !empty($_SESSION['cc']['ctruename'])}-->{$_SESSION['cc']['ctruename']}<!--{/if}-->" maxlength="50" style="width:350px;" /></li>
+			<li><strong>标题：</strong><input name="forumtitle" id="forumtitle" type="text" size="30" style="width:350px;" /></li>
+			<li><strong>内容：</strong><textarea name="froumcontent" id="froumcontent" cols="40" rows="6" style="width:350px;"></textarea></li>
+			<li><input name="submitbtn" id="submitbtn" type="button" value=" 写好了，提交 " class="bluebtn" onclick="SubmitForum()" />&nbsp;&nbsp;<input name="cancelbtn" type="button" value="取消" class="darkbtn" onclick="closewindowui();" /><li>
+			
+			</form>
+        </ul>
+        </div>
+	</div>
+</body>
+</html>

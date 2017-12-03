@@ -1,0 +1,196 @@
+<!-- 新增药店 -->
+<div class="customer-add customer-info common-style" style="background-color: white;top: 0;">
+    <header>
+        <span data-back class="icon">&#x34;</span>
+        <h4 style="text-indent: 0;">{{customerManager.pageTitle}}</h4>
+        <span ng-click="customerManager.submitCustomer();">保存</span>
+    </header>
+    <div data-iscroll class="list bottom">
+        <ul>
+            <li>
+                <div class="list-head" ng-click="toggle.toggleLogininfo();">
+                    <strong>
+                        <em class="icon" style="font-size: 2.2rem;vertical-align: -.4rem;">&#x68;</em>
+                        <em>登录信息</em>
+                        <span class="icon f_right" style="margin-top: .5rem;font-size: 2rem;">&#x33;</span>
+                    </strong>
+                </div>
+                <div ng-show="toggle.logininfoShow" ng-class="{'fadeInDown':toggle.logininfo===2,'fadeOutUp':toggle.logininfo===1}" class="animated list-body">
+                    <div class="clearfix">
+                        <table style="width: 75%;float:right;">
+                            <tr>
+                                <td>{{customerManager.relatedData.prefix}}-</td>
+                                <td><input style="width: 100%;border: none;" type="text" placeholder="输入账号(必填)" ng-model="customerManager.customer.ClientName"/></td>
+                            </tr>
+                        </table>
+                        <span class="f_left">账号 *</span>
+                    </div>
+                    <p>
+                        <input type="text" placeholder="输入密码(必填)" ng-model="customerManager.customer.ClientPassword" />
+                        <span class="f_left">密码 *</span>
+                    </p>
+                    <p>
+                        <input type="text" placeholder="输入手机号" ng-model="customerManager.customer.ClientMobile" />
+                        <span class="f_left">手机</span>
+                    </p>
+                </div>
+                <div class="divider"></div>
+            </li>
+            <li>
+                <div class="list-head" ng-click="toggle.toggleBaseinfo();">
+                    <strong>
+                        <em class="icon" style="font-size: 2.6rem;vertical-align: -.4rem;">&#xe107;</em>
+                        <em>基本资料</em>
+                        <span class="icon f_right" style="margin-top: .5rem;font-size: 2rem;">&#x33;</span>
+                    </strong>
+                </div>
+                <div ng-show="toggle.baseinfoShow" ng-class="{'fadeInDown':toggle.baseinfo===2,'fadeOutUp':toggle.baseinfo===1}" class="animated list-body">
+                    <p>
+                        <input type="text" placeholder="输入名称(必填)" ng-model="customerManager.customer.ClientCompanyName" />
+                        <span class="f_left">名称 *</span>
+                    </p>
+                    <p>
+                        <input type="text" placeholder="输入联系人" ng-model="customerManager.customer.ClientTrueName" />
+                        <span class="f_left">联系人</span>
+                    </p>
+                    <p>
+                        <input type="text" placeholder="输入电话" ng-model="customerManager.customer.ClientPhone" />
+                        <span class="f_left">电话</span>
+                    </p>
+                    <p>
+                        <input type="text" placeholder="输入传真" ng-model="customerManager.customer.ClientFax" />
+                        <span class="f_left">传真</span>
+                    </p>
+                    <p>
+                        <input type="email" placeholder="输入邮箱" ng-model="customerManager.customer.ClientEmail" />
+                        <span class="f_left">邮箱</span>
+                    </p>
+                    <p>
+                        <input type="text" placeholder="输入地址" ng-model="customerManager.customer.ClientAdd" />
+                        <span class="f_left">地址</span>
+                    </p>
+                    <p>
+                        <input type="text" placeholder="输入备注" ng-model="customerManager.customer.ClientAbout" />
+                        <span class="f_left">备注</span>
+                    </p>
+                </div>
+                <div class="divider"></div>
+            </li>
+            <li>
+                <div ng-click="toggle.toggleOther();" class="list-head">
+                    <strong>
+                        <em class="icon" style="font-size: 2.6rem;vertical-align: -.4rem;">&#xe0ef;</em>
+                        <em>设置</em>
+                        <span class="icon f_right" style="margin-top: .5rem;font-size: 2rem;">&#x33;</span>
+                    </strong>
+                </div>
+                <div ng-show="toggle.otherShow" ng-class="{'fadeInDown':toggle.other===2,'fadeOutUp':toggle.other===1}" class="animated list-body">
+                    <p ng-click="customerLayer.toggleLayer(0)">
+                        <span class="f_left">所在地区:</span>
+                        <strong class="f_right">
+                            <span class="ellipsis-li" ng-bind="customerManager.customer.ClientAreaText"></span><em class="icon f_right">&#x35;</em>
+                        </strong>
+                    </p>
+                    <p ng-click="customerLayer.toggleLayer(1)">
+                        <span class="f_left">药店级别:</span>
+                        <strong class="f_right">
+                            <span class="ellipsis-li" ng-bind="customerManager.customer.ClientLevelText"></span><em class="icon f_right">&#x35;</em>
+                        </strong>
+                    </p>
+                    <p data-toggle data-selector="div.price">
+                        <span class="f_left">执行价格:</span>
+                        <strong class="f_right">
+                            <span class="ellipsis-li" ng-bind="customerManager.customer.ClientPriceText"></span><em class="icon f_right">&#x35;</em>
+                        </strong>
+                    </p>
+                    <p data-toggle data-selector="div.percent">
+                        <span class="f_left">折扣:</span>
+                        <strong class="f_right">
+                            <span class="ellipsis-li" ng-bind="customerManager.customer.ClientPercent"></span><em class="icon f_right">&#x35;</em>
+                        </strong>
+                    </p>
+                    <p>
+                        <span class="f_left">审核</span>
+                        <em ng-class="{'yes':customerManager.customer.ClientFlag==='0'}" ng-click="customerLayer.setStatus($event);" data-toggle-switch class="r switch"><em></em></em>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- 区域 -->
+    <div ng-click="customerLayer.toggleLayer(0)" ng-class="{'slideInRight':customerLayer.areaLayer==1,'slideOutRight':customerLayer.areaLayer==2}" class="animated customer-filter layer">
+        <div data-stop-bubble>
+            <h4>
+                <span ng-click="customerLayer.toggleLayer(0)" class="cancel f_left">取消</span>
+                <span>所在地区</span>
+            </h4>
+            <div data-iscroll class="layer-iscroll">
+                <ul ng-click="customerLayer.setArea($event);">
+                    <li data-areaid="{{area.AreaID}}"  data-areaname="{{area.AreaName}}" data-parentid="{{area.ParentID}}" ng-repeat="area in customerLayer.currArea">
+                        {{area.AreaName}}
+                        <span class="icon">&#x35;</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 级别 -->
+    <div ng-click="customerLayer.toggleLayer(1)" ng-class="{'slideInRight':customerLayer.levelLayer==1,'slideOutRight':customerLayer.levelLayer==2}" class="animated customer-filter layer">
+        <div data-stop-bubble>
+            <h4>
+                <span ng-click="customerLayer.toggleLayer(1)" class="cancel f_left">取消</span>
+                <span>药店级别</span>
+            </h4>
+            <div data-iscroll class="layer-iscroll">
+                <ul ng-click="customerLayer.setLevel($event);">
+                    <li data-level="{{level}}" ng-repeat="level in customerManager.relatedData.level">
+                        {{level}}
+                        <span class="icon">&#x35;</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="animated fadeIn price common-model">
+        <div>
+            <h4>执行价格</h4>
+            <ul class="order-date">
+                <li ng-click="customerLayer.setPrice(1);">
+                    <span>{{customerManager.relatedData.price1Name}}</span>
+                    <em ng-class="{'selected':customerManager.customer.ClientSetPrice=='Price1'}" class="radio"></em>
+                </li>
+                <li ng-click="customerLayer.setPrice(2);">
+                    <span>{{customerManager.relatedData.price2Name}}</span>
+                    <em ng-class="{'selected':customerManager.customer.ClientSetPrice=='Price2'}" class="radio"></em>
+                </li>
+            </ul>
+            <div class="btn-group">
+                <button data-toggle data-selector="div.price" style="width: 100%;">取消</button>
+            </div>
+        </div>
+    </div>
+    <div class="animated fadeIn percent common-model">
+        <div>
+            <h4>折扣</h4>
+            <ul class="order-date">
+                <li>
+                    <input  ng-model="customerManager.customer.ClientPercent" type="number" placeholder="折扣(只能输入1-10的数值):" />
+                </li>
+            </ul>
+            <div class="btn-group">
+                <button ng-click="customerLayer.checkPercent();">确定</button>
+                <button data-toggle data-selector="div.percent">取消</button>
+            </div>
+        </div>
+    </div>
+    <!-- <footer>
+        <div ng-click="customers.operatorCustomer();">
+            <span class="icon" style="color: #ff7e5a;">&#x6b;</span>
+            <span ng-bind="customers.selectCustomer.flagText"></span>
+        </div>
+        <div ng-click="customers.insteadSubmitOrder();" ng-show="customers.selectCustomer.ClientFlag!=='9'">
+            <span class="icon" style="color: #68c8ef;">&#x68;</span>
+            <span>代下订单</span>
+        </div>
+    </footer> -->
+</div>

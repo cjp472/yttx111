@@ -1,0 +1,88 @@
+<!-- 添加付款 -->
+<div data-ng-controller="onlinePayController" class="page-add-pay page-order-confirm page-order-list page-goods-list">
+    <!-- 标题 -->
+    <header class="common">
+        <em data-back><a href="javascript:;" class="arrow-left"></a></em>
+        <p>在线支付</p>
+        <!-- <span class="icon icon-expand"></span> -->
+    </header>
+    <!-- 添加付款单 -->
+    <div data-iscroll class="iscroll" style="bottom: 5rem;">
+        <form action="" name="addPayForm" class="add-pay">
+            <div class="order-date">
+                <div ng-show="orderCode==0" ng-click="finance.setPrepay(true);" class="prepay">
+                    <span ng-class="{'choice' : finance.financeYufu}"></span>
+                    <span>充值</span>
+                </div>
+                <div ng-show="orderCode">
+                    <span>订单号：{{orderCode}}</span>
+                </div>
+                <div ng-show="orderCode==0 && !finance.financeYufu" data-toggle-layer data-class-name="fadeInRight" ng-click="finance.getPayOrder();">
+                    <span class="arrow-right"></span>
+                    <span style="margin-left: 1.0rem;height: 4.4rem;line-height: 4.4rem;" class="ellipsis-one">{{finance.selectOrderText}}</span>
+                </div>
+                <div>
+                    <span style="margin-left: 1.0rem;height: 4.4rem;line-height: 4.4rem;" class="ellipsis-one">付款金额
+                        <input data-focus style="text-align:right;float: right;padding-right: 4.5rem;width:auto;min-width:16.0rem;text-indent:0;" ng-model="finance.financeTotal" required type="text" placeholder="转款金额" />    
+                    </span>
+                </div>
+                <div ng-if="onlinePay.payWay==1 && myInfo.yijifuMessage" style="padding: 3%;line-height: 2.2rem;"><em style="color:#ff4a00;">温馨提示：</em>{{myInfo.yijifuMessage}}</div>
+            </div>
+        </form> 
+    </div>
+    <!-- 选择框 -->
+    <div class="filter-layer animated default-apk layer">
+        <div class="filter">
+            <p>
+                <span ng-click="finance.setChoiceOrder(1);" data-toggle-layer data-class-name="fadeOutRight" class="l">取消</span>
+                选择订单
+                <span ng-click="finance.setChoiceOrder(0);" class="r" data-toggle-layer data-class-name="fadeOutRight">确定</span>
+            </p>
+            <div data-iscroll class="iscroll">
+                <ul>
+                    <li ng-click="finance.toggleChecked($index,true);" ng-repeat="payOrder in finance.payOrderList" class="account ellipsis-one">
+                        <span class="checked-order" ng-class="{'selected' : payOrder.isChecked}">
+                            <em style="border-radius:0;"></em>
+                        </span>
+                        <span>{{payOrder.OrderSN + ' (¥ ' + payOrder.OrderTotal +')-' + payOrder.OrderStatus}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+	
+	<div id="pay-to-alipay-form"></div>
+	<div id="bank-notice" class="pay-type animated fadeIn">
+        <div>
+            <h4>{{finance.BankNoticeTitle}}</h4>
+            <div class="pay-account" style="background-color: #fff;padding-left: 2rem;border:1px solid #efefef;">
+               {{finance.BankNoticeContent}}
+            </div>
+            <div class="btn-group">
+                <a ng-click="finance.yjf_goPay();" data-toggle data-selector="#bank-notice" href="">确定</a>
+            </div>
+        </div>
+    </div>
+	
+	
+	<div class="animated fadeIn add-addr addr-manager" id="edit_phone" >
+		<div>
+			<h4 class="ng-binding">确认手机号码</h4>
+			<ul  class="order-date">			
+				<li>
+					<input required="true" id="new_phones"  type="text" value="{{finance.phone}}"  placeholder="联系方式" class="ng-valid ng-valid-required ng-dirty">
+				</li>			
+			</ul>
+			<div class="btn-group">
+				<a href="javascript:;" ng-click="finance.yjf_add_accounts();">确定</a>
+				
+			</div>
+		</div>
+	</div>
+	
+    <footer>
+        <div class="l">付款金额: <em>¥ {{finance.financeTotal}}</em></div>
+        <div class="r" ng-click="finance.submitFinance();">去付款</div>
+    </footer>
+    <div data-ui-view class="animated fadeIn"></div>
+</div>
