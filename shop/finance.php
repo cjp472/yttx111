@@ -33,6 +33,9 @@ if($in['m']=="delfinance"){
 	$myYJF = array();
 	$YOpenApiSet = new YOpenApiSet();
 	$myYJF = $YOpenApiSet->getSignInfo(intval($_SESSION['cc']['cid']));
+
+	var_dump($_SESSION);
+	var_dump($myYJF);
 	
 	//若开通易极付、支付宝、通联，默认使用在线支付
 	if(empty($in['ty'])){
