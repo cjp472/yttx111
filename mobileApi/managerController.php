@@ -222,7 +222,7 @@ class managerController{
 					$rdata['rStatus'] = 119;
 					$rdata['error']   = '登录超时，请重新登录！';
 				}else{
-					if($cinfo['UserFlag']=="0" || $cinfo['UserFlag']=='2') //wangd 2017-11-30获取权限增加代理商及其客情
+					if($cinfo['UserFlag']=="0" || $cinfo['UserFlag']=="2") //wangd 2017-11-30获取权限增加代理商及其客情
 					{
 						$pope_info = $db->get_results("SELECT pope_module,pope_view,pope_form,pope_audit FROM ".DB_DATABASEU.DATATABLE."_order_pope where pope_company=".$cinfo['CompanyID']." and pope_user=".$cinfo['UserID']." ");
 						$popearr = null;
@@ -1111,6 +1111,12 @@ class managerController{
 
 					//取明细
 					$sqlc   = "select Name,Coding,Units,ContentColor,ContentSpecification,ContentPrice,ContentNumber,ContentPercent,'c' as conType from ".$sdatabase.DATATABLE."_view_index_cart where OrderID=".$oinfo['OrderID']." and CompanyID=".$cid." ";
+					//wangd 2017-12-09 如果是代理商及其客情，只能看到自己的商品明细
+					$userid=$cidarr['UserID'];
+					$type = $db->get_row("SELECT UserType,UserFlag,UpperID FROM ".DB_DATABASEU.DATATABLE."_order_user where UserID = ".$userid."");
+					if($type['UserType']=='M' && $type['UserFlag']==2)	$sqlc .=" AND AgentID= ".$userid." ";
+					if($type['UserType']=='S' && $type['UserFlag']==2)	$sqlc .=" AND AgentID= ".$type['UpperID']." ";
+
 					$cinfo  = $db->get_results ( $sqlc );
 					$infoall = $cinfo;
                 	$sqlg   = "select Name,Coding,Units,ContentColor,ContentSpecification,ContentPrice,ContentNumber,'g' as conType from ".$sdatabase.DATATABLE."_view_index_gifts where OrderID=".$oinfo['OrderID']." and CompanyID=".$cid." ";
@@ -1340,13 +1346,14 @@ class managerController{
     		if(!empty($param['kw']))  $sqlmsg .= " and CONCAT(c.ClientName, c.ClientCompanyName, c.ClientCompanyPinyi, c.ClientTrueName, c.ClientMobile) like '%".$param['kw']."%' ";
     		  
     		//业务员权限范围
+    		//yangmm 2017-12-09 返回字段中增加 C_Flag标志，MObile前端判断是否已经审核
     		if($cidarr['UserType'] == 'S'){
     			$sql_c 	= "SELECT count(*) AS allrow FROM ".$sdatabase.DATATABLE."_order_client c inner join ".$sdatabase.DATATABLE."_order_salerclient s ON c.ClientID = s.ClientID where c.ClientCompany = ".$cid." and s.SalerID=".$cidarr['UserID']."  ".$sqlmsg."";
-    			$sql	= "SELECT c.ClientID,c.ClientName,c.ClientCompanyName,c.ClientTrueName,c.ClientMobile,c.ClientAdd,c.ClientFlag FROM ".$sdatabase.DATATABLE."_order_client c inner join ".$sdatabase.DATATABLE."_order_salerclient s ON c.ClientID = s.ClientID where c.ClientCompany = ".$cid." and s.SalerID=".$cidarr['UserID']." ".$sqlmsg."  ORDER BY c.ClientID DESC ";
+    			$sql	= "SELECT c.ClientID,c.ClientName,c.ClientCompanyName,c.ClientTrueName,c.ClientMobile,c.ClientAdd,c.ClientFlag,c.C_Flag FROM ".$sdatabase.DATATABLE."_order_client c inner join ".$sdatabase.DATATABLE."_order_salerclient s ON c.ClientID = s.ClientID where c.ClientCompany = ".$cid." and s.SalerID=".$cidarr['UserID']." ".$sqlmsg."  ORDER BY c.ClientID DESC ";
     			$sql_a 	= "SELECT count(*) AS allrow FROM ".$sdatabase.DATATABLE."_order_client c inner join ".$sdatabase.DATATABLE."_order_salerclient s ON c.ClientID = s.ClientID where c.ClientCompany = ".$cid." and c.ClientFlag=9 and s.SalerID=".$cidarr['UserID']."  ";
     		}else{
     			$sql_c 	= "SELECT count(*) AS allrow FROM ".$sdatabase.DATATABLE."_order_client c where c.ClientCompany = ".$cid." ".$sqlmsg."";
-    			$sql	= "SELECT c.ClientID,c.ClientName,c.ClientCompanyName,c.ClientTrueName,c.ClientMobile,c.ClientAdd,c.ClientFlag FROM ".$sdatabase.DATATABLE."_order_client c  where c.ClientCompany = ".$cid." ".$sqlmsg."  ORDER BY c.ClientID DESC ";
+    			$sql	= "SELECT c.ClientID,c.ClientName,c.ClientCompanyName,c.ClientTrueName,c.ClientMobile,c.ClientAdd,c.ClientFlag,c.C_Flag FROM ".$sdatabase.DATATABLE."_order_client c  where c.ClientCompany = ".$cid." ".$sqlmsg."  ORDER BY c.ClientID DESC ";
     			$sql_a 	= "SELECT count(*) AS allrow FROM ".$sdatabase.DATATABLE."_order_client c where c.ClientCompany = ".$cid." and c.ClientFlag=9 ";
     		}
     		
