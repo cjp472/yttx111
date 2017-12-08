@@ -68,16 +68,16 @@ $clientdata = $db->get_results("select UserID,UserName,UserTrueName from ".DATAB
 						</select>
 					 &nbsp;&nbsp;<input type="button" name="newbutton" id="newbutton" value=" 查看 " class="mainbtn" onclick="show_stat_return_data()"/>&nbsp;&nbsp;<input type="button" name="exceltable" id="exceltable" value=" 导出报表 " class="mainbtn" onclick="output_deduct_excel();" /></td>
      			 </tr>
-				 <? 
+				 <?php 
 				if((strtotime($in['enddate']) - strtotime($in['begindate'])) / (60*60*24) > 365 )
 				{
 					echo ('<tr><td height="60" align="center">注意：时间跨度不能超过一年!</td></tr>');
 				}else{
 					$sqll = '';
 					if(!empty($in['sid'])) $sqll = " and DeductUser = ".$in['sid']." ";
+                                        
 					$statsql  = "SELECT DeductUser,sum(DeductTotal) as OTotal,count(*) as totalnumber from ".DATATABLE."_order_deduct where CompanyID=".$_SESSION['uinfo']['ucompany']."  ".$sqll." and FROM_UNIXTIME(DeductDate) between '".$in['begindate']." 00:00:00' and '".$in['enddate']." 23:59:59'  group by DeductUser";
-					$statdata = $db->get_results($statsql);
-
+                                        $statdata = $db->get_results($statsql);
 					$statsql0  = "SELECT DeductUser,sum(DeductTotal) as OTotal,count(*) as totalnumber from ".DATATABLE."_order_deduct where CompanyID=".$_SESSION['uinfo']['ucompany']." and DeductStatus='T' ".$sqll." and FROM_UNIXTIME(DeductDate) between '".$in['begindate']." 00:00:00' and '".$in['enddate']." 23:59:59'  group by DeductUser";
 					$rdata = $db->get_results($statsql0);
 					if(!empty($rdata))

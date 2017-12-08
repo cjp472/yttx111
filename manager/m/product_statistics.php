@@ -143,18 +143,41 @@ if(!empty($in['cid'])) $urlmsg .= "&cid=".$in['cid'];
 						$sqll  .= " and c.ClientID = ".$in['cid']." ";
 						$sql2  .= " and o.ReturnClient = ".$in['cid']." ";
 					}
-					//订购商品
-					$statsql  = "SELECT sum(ContentNumber) as cnum,sum(ContentSend) as snum,sum(ContentPrice*ContentNumber*ContentPercent/10) as ctotal,c.ContentID,c.ContentName from ".DATATABLE."_order_cart c left join ".DATATABLE."_order_orderinfo o on c.OrderID=o.OrderID where c.CompanyID=".$_SESSION['uinfo']['ucompany']." ".$sqll." and FROM_UNIXTIME(o.OrderDate) between '".$in['begindate']." 00:00:00' and '".$in['enddate']." 23:59:59' and o.OrderStatus!=8 and o.OrderStatus!=9 group by c.ContentID order by cnum desc";
-					$statdata = $db->get_results($statsql);
-					
-					//赠品
-					$statsqlg  = "SELECT sum(ContentNumber) as cnum,sum(ContentSend) as snum,c.ContentID,c.ContentName from ".DATATABLE."_order_cart_gifts c left join ".DATATABLE."_order_orderinfo o on c.OrderID=o.OrderID where c.CompanyID=".$_SESSION['uinfo']['ucompany']." ".$sqll." and FROM_UNIXTIME(o.OrderDate) between '".$in['begindate']." 00:00:00' and '".$in['enddate']." 23:59:59' and o.OrderStatus!=8 and o.OrderStatus!=9 group by c.ContentID order by cnum desc";
-					$statdatag = $db->get_results($statsqlg);
+                                        //修改代理商展示对应商品
+                                        $userid=$_SESSION['uinfo']['userid'];
+                                        $type = $db->get_row("SELECT UserType,UserFlag,UpperID FROM ".DATABASEU.DATATABLE."_order_user where UserID = ".$userid."");
+                                        if($type['UserType']=='M' && $type['UserFlag']==2) 
+                                        {
+                                            $goodslist=$db->get_results("select ID from ".DATATABLE."_order_content_index where AgentId=".$userid);
+                                            foreach($goodslist as $k=>$v)
+                                            {
+                                                $goodsnewlist[]=$v['ID'];
+                                            }
+                                            $goodsidlist=implode($goodsnewlist,',');
+                                          //订购商品
+					  $statsql  = "SELECT sum(ContentNumber) as cnum,sum(ContentSend) as snum,sum(ContentPrice*ContentNumber*ContentPercent/10) as ctotal,c.ContentID,c.ContentName from ".DATATABLE."_order_cart c left join ".DATATABLE."_order_orderinfo o on c.OrderID=o.OrderID where c.CompanyID=".$_SESSION['uinfo']['ucompany']." ".$sqll." and FROM_UNIXTIME(o.OrderDate) between '".$in['begindate']." 00:00:00' and '".$in['enddate']." 23:59:59' and o.OrderStatus!=8 and o.OrderStatus!=9 and c.ContentId in (".$goodsidlist.")  group by c.ContentID order by cnum desc";
+					  $statdata = $db->get_results($statsql);
+                                          //赠品
+					  $statsqlg  = "SELECT sum(ContentNumber) as cnum,sum(ContentSend) as snum,c.ContentID,c.ContentName from ".DATATABLE."_order_cart_gifts c left join ".DATATABLE."_order_orderinfo o on c.OrderID=o.OrderID where c.CompanyID=".$_SESSION['uinfo']['ucompany']." ".$sqll." and FROM_UNIXTIME(o.OrderDate) between '".$in['begindate']." 00:00:00' and '".$in['enddate']." 23:59:59' and o.OrderStatus!=8 and o.OrderStatus!=9 and c.ContentId in (".$goodsidlist.") group by c.ContentID order by cnum desc";
+					  $statdatag = $db->get_results($statsqlg);
+                                          //退货
+					  $statsqlr  = "SELECT sum(ContentNumber) as cnum,c.ContentID,c.ContentName from ".DATATABLE."_order_cart_return c left join ".DATATABLE."_order_returninfo o on c.ReturnID=o.ReturnID where c.CompanyID=".$_SESSION['uinfo']['ucompany']." ".$sql2." and FROM_UNIXTIME(o.ReturnDate) between '".$in['begindate']." 00:00:00' and '".$in['enddate']." 23:59:59' and (o.ReturnStatus=2 or o.ReturnStatus=3 or o.ReturnStatus=5) and c.ContentId in (".$goodsidlist.") group by c.ContentID order by cnum desc";
+					  $rdata = $db->get_results($statsqlr);
+                                        }else{
+                                            //订购商品
+                                            $statsql  = "SELECT sum(ContentNumber) as cnum,sum(ContentSend) as snum,sum(ContentPrice*ContentNumber*ContentPercent/10) as ctotal,c.ContentID,c.ContentName from ".DATATABLE."_order_cart c left join ".DATATABLE."_order_orderinfo o on c.OrderID=o.OrderID where c.CompanyID=".$_SESSION['uinfo']['ucompany']." ".$sqll." and FROM_UNIXTIME(o.OrderDate) between '".$in['begindate']." 00:00:00' and '".$in['enddate']." 23:59:59' and o.OrderStatus!=8 and o.OrderStatus!=9 group by c.ContentID order by cnum desc";
+                                            $statdata = $db->get_results($statsql);
 
-					//退货
-					$statsqlr  = "SELECT sum(ContentNumber) as cnum,c.ContentID,c.ContentName from ".DATATABLE."_order_cart_return c left join ".DATATABLE."_order_returninfo o on c.ReturnID=o.ReturnID where c.CompanyID=".$_SESSION['uinfo']['ucompany']." ".$sql2." and FROM_UNIXTIME(o.ReturnDate) between '".$in['begindate']." 00:00:00' and '".$in['enddate']." 23:59:59' and (o.ReturnStatus=2 or o.ReturnStatus=3 or o.ReturnStatus=5) group by c.ContentID order by cnum desc";
-					$rdata = $db->get_results($statsqlr);
+                                            //赠品
+                                            $statsqlg  = "SELECT sum(ContentNumber) as cnum,sum(ContentSend) as snum,c.ContentID,c.ContentName from ".DATATABLE."_order_cart_gifts c left join ".DATATABLE."_order_orderinfo o on c.OrderID=o.OrderID where c.CompanyID=".$_SESSION['uinfo']['ucompany']." ".$sqll." and FROM_UNIXTIME(o.OrderDate) between '".$in['begindate']." 00:00:00' and '".$in['enddate']." 23:59:59' and o.OrderStatus!=8 and o.OrderStatus!=9 group by c.ContentID order by cnum desc";
+                                            $statdatag = $db->get_results($statsqlg);
 
+                                            //退货
+                                            $statsqlr  = "SELECT sum(ContentNumber) as cnum,c.ContentID,c.ContentName from ".DATATABLE."_order_cart_return c left join ".DATATABLE."_order_returninfo o on c.ReturnID=o.ReturnID where c.CompanyID=".$_SESSION['uinfo']['ucompany']." ".$sql2." and FROM_UNIXTIME(o.ReturnDate) between '".$in['begindate']." 00:00:00' and '".$in['enddate']." 23:59:59' and (o.ReturnStatus=2 or o.ReturnStatus=3 or o.ReturnStatus=5) group by c.ContentID order by cnum desc";
+                                            $rdata = $db->get_results($statsqlr);
+                                        }
+//                                            $sqlmsg .=" AND AgentID= ".$userid." ";
+                      
 					$totalr = $totalc = 0;
 					$totalm = 0;
 					$totalq = 0;

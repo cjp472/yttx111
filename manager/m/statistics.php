@@ -105,6 +105,12 @@ $clientdata = $db->get_results("select ClientID,ClientCompanyName,ClientCompanyP
 					}else{
 					
 					if(!empty($in['cid'])) $sqll = " and OrderUserID=".$in['cid']." ";
+                                        //修改展示代理商和商业公司不同数据
+                                        $user_flag = trim($_SESSION['uinfo']['userflag']);
+                                        if($user_flag == 2){
+                                            $AgentSql = "select OrderID from ".DATATABLE."_view_index_cart where CompanyID = ".$_SESSION['uinfo']['ucompany']." and AgentID= ".$_SESSION['uinfo']['userid']."";
+                                            $sqll.= " and OrderID in (".$AgentSql.")";
+                                        } 
 					$statsql  = "SELECT left(OrderSN,8) as ODate,sum(OrderTotal) as OTotal,count(*) as totalnumber from ".DATATABLE."_order_orderinfo where OrderCompany=".$_SESSION['uinfo']['ucompany']." ".$sqll." and FROM_UNIXTIME(OrderDate) between  '".$in['begindate']." 00:00:00' and '".$in['enddate']." 23:59:59' and OrderStatus!=8 and OrderStatus!=9 group by left(OrderSN,8)";
 					$statdata = $db->get_results($statsql);
 					foreach($statdata as  $rvar)

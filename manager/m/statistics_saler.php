@@ -11,8 +11,24 @@ $begin = strtotime(date('Y-m-d 00:00:00',strtotime($in['begindate'])));
 $end = strtotime(date('Y-m-d 23:59:59',strtotime($in['enddate'])));
 
 $clientdata = $db->get_results("select ClientID,ClientCompanyName,ClientCompanyPinyi from ".DATATABLE."_order_client where ClientCompany=".$_SESSION['uinfo']['ucompany']." and ClientFlag=0 order by ClientCompanyPinyi asc");
+    $user_flag = trim($_SESSION['uinfo']['userflag']);
+    
+    if ($user_flag=='2')
+    {   //如果是代理商登陆进来查看客情列表，则只允许查看该代理商的客情
+    	$upper_id = $_SESSION['uinfo']['userid'];
+      $datasql   = "SELECT UserID,UserName,UserTrueName,UserPhone,UserLogin,UserLoginIP,UserLoginDate,UserFlag FROM ".DATABASEU.DATATABLE."_order_user where UserCompany = ".$_SESSION['uinfo']['ucompany']." ".$sqlmsg." and UserFlag!='1' and UserType='S' and UpperID='$upper_id' ORDER BY UserID DESC";
+    }
+    else if ($user_flag == '0')
+    {
+    	//如果是商业公司及其子账号和其客情账号登陆进来那么就查询商业公司的客情
+    	$upper_id = '0';
+      $datasql   = "SELECT UserID,UserName,UserTrueName,UserPhone,UserLogin,UserLoginIP,UserLoginDate,UserFlag FROM ".DATABASEU.DATATABLE."_order_user where UserCompany = ".$_SESSION['uinfo']['ucompany']." ".$sqlmsg." and UserFlag!='1' and UserType='S' and UpperID='$upper_id' ORDER BY UserID DESC";
+    }
+    else if ($user_flag == '9')
+    {
+      $datasql   = "SELECT UserID,UserName,UserTrueName,UserPhone,UserLogin,UserLoginIP,UserLoginDate,UserFlag FROM ".DATABASEU.DATATABLE."_order_user where UserCompany = ".$_SESSION['uinfo']['ucompany']." ".$sqlmsg." and UserFlag!='1' and UserType='S' ORDER BY UserID DESC";
+    }
 
-$datasql   = "SELECT UserID,UserName,UserTrueName,UserPhone,UserLogin,UserLoginIP,UserLoginDate,UserFlag FROM ".DATABASEU.DATATABLE."_order_user where UserCompany = ".$_SESSION['uinfo']['ucompany']." ".$sqlmsg." and UserFlag!='1' and UserType='S' ORDER BY UserID DESC";
 $saler = $db->get_results($datasql);
 $axis = array();//横坐标
 $cnts = array();//订单数

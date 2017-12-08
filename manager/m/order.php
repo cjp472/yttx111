@@ -466,7 +466,6 @@ if(empty($in['stype']))
 		$datasql   = "SELECT OrderID,OrderSN,OrderUserID,OrderSendType,OrderSendStatus,OrderPayType,OrderPayStatus,OrderReceiveCompany,OrderReceiveName,OrderReceivePhone,DeliveryDate,OrderRemark,OrderTotal,OrderStatus,OrderDate,OrderType,OrderSaler,OrderFrom,OrderSpecial,SMSNotified FROM ".DATATABLE."_order_orderinfo where OrderCompany = ".$_SESSION['uinfo']['ucompany']." ".$sqlmsg.$advsql." Order by OrderID Desc";	
 	}
 
-
 	$InfoDataNum = $db->get_row($sqlnum);
 	$page        = new ShowPage;
     $page->PageSize = 30;
@@ -496,9 +495,29 @@ if(empty($in['stype']))
 	}else{
 		if(!empty($in['kw']))   $sqlson .= " and OrderSN like '%".$in['kw']."%' ";
 	}
-	$sqlnum  = "select count(*) as allrow from ".DATATABLE."_order_orderinfo where OrderCompany=".$_SESSION['uinfo']['ucompany']." ".$sqlson." ".$sdmsg." ";
-	$datasql = "select OrderID,OrderSN,OrderUserID,OrderSendType,OrderSendStatus,OrderPayType,OrderPayStatus,OrderReceiveCompany,OrderReceiveName,OrderReceivePhone,DeliveryDate,OrderRemark,OrderTotal,OrderStatus,OrderDate,OrderType,OrderSaler,OrderFrom,OrderSpecial,SMSNotified from ".DATATABLE."_order_orderinfo where OrderCompany=".$_SESSION['uinfo']['ucompany']." ".$sqlson." ".$sdmsg." Order by OrderID Desc";
+        //代理商查询订单判断
+        $user_flag = trim($_SESSION['uinfo']['userflag']);
+        if ($user_flag == '2')
+	{	
+		$sqlnum = "SELECT count(DISTINCT o.OrderID) AS allow FROM "
+			.DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+			where OrderCompany = ".$_SESSION['uinfo']['ucompany']." and c.AgentID= ".$_SESSION['uinfo']['userid']." "
+			.$sqlson.$sdmsg." ";
 
+		$subsql = "SELECT DISTINCT o.OrderID AS allow FROM "
+			.DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+			where OrderCompany = ".$_SESSION['uinfo']['ucompany']." and c.AgentID= ".$_SESSION['uinfo']['userid']." "
+			.$sqlson.$sdmsg." ";
+		$datasql = "SELECT OrderID,OrderSN,OrderUserID,OrderSendType,OrderSendStatus,OrderPayType,OrderPayStatus,OrderReceiveCompany,OrderReceiveName,OrderReceivePhone,DeliveryDate,OrderRemark,OrderTotal,OrderStatus,OrderDate,OrderType,OrderSaler,OrderFrom,OrderSpecial,SMSNotified FROM "
+		.DATATABLE."_order_orderinfo 
+		where OrderID in (".$subsql.")";
+	}
+	else //管理员和商业公司可以看到所有订单
+	{
+		$sqlnum = "SELECT count(*) AS allrow FROM ".DATATABLE."_order_orderinfo where OrderCompany = ".$_SESSION['uinfo']['ucompany']." ".$sqlson.$sdmsg." ";
+		$datasql   = "SELECT OrderID,OrderSN,OrderUserID,OrderSendType,OrderSendStatus,OrderPayType,OrderPayStatus,OrderReceiveCompany,OrderReceiveName,OrderReceivePhone,DeliveryDate,OrderRemark,OrderTotal,OrderStatus,OrderDate,OrderType,OrderSaler,OrderFrom,OrderSpecial,SMSNotified FROM ".DATATABLE."_order_orderinfo where OrderCompany = ".$_SESSION['uinfo']['ucompany']." ".$sqlson.$sdmsg." Order by OrderID Desc";	
+	}
+        
 	$InfoDataNum = $db->get_row($sqlnum);
 	$page = new ShowPage;
 	$page->PageSize = 30;

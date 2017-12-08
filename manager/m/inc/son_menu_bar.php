@@ -193,13 +193,12 @@ $son_menu	 = array(
 				),
 				"statistics"		=> array(
 					"statistics"		=> "订单统计",
-                    "statistics_deliver"=> "发货统计",
+
                     "statistics_saler"  => "客情官统计",
-					"return_stat"		=> "退单统计",
+
 					"product_statistics"=> "商品统计",
-                    "area_statistics"   => "地区统计",
-					"finance_stat"		=> "款项统计",
-					"reconciliation"	=> "往来对帐",
+
+
 					"statistics_deduct"	=> "提成统计",
 					"statistics_credit"	=> "账期对账",
 				),
