@@ -654,6 +654,46 @@ class YopenApiFront extends YOpenApi{
 		return YAPI_ORDER_PREFIX_BACKEND.str_pad(($this->companyID + GLOBAL_NUMERIC_FIXED), 7, '0', STR_PAD_LEFT);
 		
 	}//END getCompanyID
+
+	//maxy 2017-12-09 从PC端YopenAPI中复制函数，开户使用
+	public function ppmNewRuleRegisterUser(){
+		
+		$oClient = new ClientInfo();
+		$cinfo = $oClient->getClientInfo($this->companyID, $this->dhbUserID);
+		
+		if(empty($cinfo['ClientMobile'])) return array('status' => 'error', 'message' => '请在用户中心填写真实手机号码');
+		
+		//这里是只有新乡爱森的进行处理
+		$post = array(
+				"userName"			=> $cinfo['ClientCompany'] == 523 ? 'et'.$cinfo['ClientMobile'] : $cinfo['ClientMobile'],
+				"registerUserType"	=> 'PERSONAL',
+				"mobile"			=> $cinfo['ClientMobile'],
+				"merchOrderNo"		=> $this->orderNo
+		);
+		 
+		//添加本模块服务代码
+		$to = array_merge($this->predefine[__FUNCTION__], $post);
+		$this->bulidSet($to);
+		
+		//同步方式提交
+		$excute = $this->submitExecute->setCurlHandle($this->commonPost);
+		if($excute['resultCode'] == 'EXECUTE_SUCCESS'){
+			
+			$params = array(
+					'dhbUserid'		=> $this->dhbUserID,
+					'YapiUserId'	=> $excute['userId'],
+					'YapiuserName'	=> $post['userName'],
+					'YapiUserType'	=> $post['registerUserType'],
+			);
+			$this->yOpenApiSet->UserRegister($params);
+			
+			$return = array('status' => 'success', 'message' => $excute['resultMessage']);
+		}else{
+			$return = array('status' => 'error', 'message' => $excute['resultMessage']);
+		}
+		
+		return $return;
+	}
 	
 	
 }//EOC 

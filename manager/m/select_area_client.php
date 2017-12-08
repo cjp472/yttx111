@@ -10,37 +10,21 @@ if(empty($in['selectid']) || $in['selectid']=="undefined")
 //判断当前登录的人是否代理商，如果登陆的人不是代理商的话，就是商业公司或者管理员
 if ($_SESSION['uinfo']['usertype']=='M' && $_SESSION['uinfo']['userflag']==2) {
 	//根据当前登陆的人的身份去找出当前登陆人下的客情官的id
-	$ips = $db->get_col("select UserID FROM  ".DATABASEU.DATATABLE."_order_user where UpperID=".$_SESSION['uinfo']['userid']." ");
-}else{
+	$sqlip = "select UserID FROM  ".DATABASEU.DATATABLE."_order_user where UpperID=".$_SESSION['uinfo']['userid']." ";
+}
+if ($_SESSION['uinfo']['usertype']=='M' && $_SESSION['uinfo']['userflag']==0) {
 	//根据商业公司/管理员的地区去查找当前商业公司/管理员下的客情官
-	$ips = $db->get_col("select UserID FROM  ".DATABASEU.DATATABLE."_order_user where UserCompany=".$_SESSION['uinfo']['ucompany']." and UserType='S' and UserFlag='0'");
+	$sqlip = "select UserID FROM  ".DATABASEU.DATATABLE."_order_user where UserCompany=".$_SESSION['uinfo']['ucompany']." and UserType='S' and UserFlag='0'";
 }
-//统计出当前登陆的人下面有几个客情官
-$count=count($ips);
-//根据客情官的id查出客情官所管辖的药店id
-for ($i=0; $i <$count ; $i++) { 
-$info = $db->get_col("select ClientID FROM  ".DATATABLE."_order_salerclient where CompanyID=".$_SESSION['uinfo']['ucompany']." and SalerID=".$ips[$i]." ");
-// ymm 2017-11-30 判断是否上面那个的$info 
-if (!empty($info)) {
-	$info_copy[]=$info;
-}
-}
-//ymm 2017-11-30 统计结果数
-$c_info=count($info_copy);
-//ymm 2017-11-30 把$_c_info处理为一维数组
-for ($i=0; $i < $c_info; $i++) { 
-	if (is_array($info_copy[$i])) {
-		$c_info_copy=count($info_copy[$i]);
-		for ($j=0; $j < $c_info_copy; $j++) { 
-			$cinfo[]=$info_copy[$i][$j];
-		}
-	}else{
-			$cinfo[]=$info_copy[$i][0];
-	}
-}
-$sidarr1 = explode(";",$in['selectid']);
-$sidarr = array_merge_recursive($sidarr1, $cinfo);
 
+//根据客情官的id查出客情官所管辖的药店id
+$info = $db->get_results("select ClientID FROM  ".DATATABLE."_order_salerclient where CompanyID=".$_SESSION['uinfo']['ucompany']." and SalerID in (".$sqlip.")");
+$count=count($info);
+foreach ($info as $key => $val) {
+	$cinfo[]=$val['ClientID'];
+}
+$sidarr1 = explode(",",$in['selectid']);
+$sidarr = array_merge_recursive($sidarr1, $cinfo);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

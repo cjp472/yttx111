@@ -67,6 +67,7 @@ class YOpenApi{
 										"payOrder"		=> array("service" => "commandPayTradeCreatePay"),
 										"qftSetAccount"	=> array("service" => "qftDealerRegister"),
 										"certifyStatus"	=> array("service" => "userInfoQuery"),//wanjun 查询用户信息
+										"ppmNewRuleRegisterUser"	=> array("service" => "ppmNewRuleRegisterUser"),//wangd 2017-12-09 与PC端同步：经销商在线开户
 										"commandPayConfirm"	=> array("service" => "commandPayConfirm"),//wanjun 担保交易确认打款
 									);
 	

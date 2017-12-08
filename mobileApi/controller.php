@@ -3126,8 +3126,7 @@ class controller{
     	//var_dump($clientInfo);exit;
     	if(empty($myinfo)){//还没开户，执行开户操作
     		//maxy 2017-12-09 原来的地址不正确，修改正确
-    		include_once ("../global/module/ClientInfo.module.php");
-    		include_once ("../global/class/YopenApiFront.class");
+    		include_once ("./class/ClientInfo.module.php");
     		$front = new YopenApiFront($clientInfo['ClientID'],$clientInfo['ClientCompany']);
     		$aynResponse = $front->ppmNewRuleRegisterUser($clientInfo);
     		if($aynResponse['status'] == 'error') die(json_encode($aynResponse));
