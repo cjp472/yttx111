@@ -1,0 +1,80 @@
+<!-- 新增药店资质上传 -->
+<div class="addupload common-style" ng-controller="adduploadController">
+    <header>
+        <span data-back class="icon">&#x34;</span>
+        <h4>上传资质</h4>
+    </header>
+    <div data-iscroll class="list">
+    	<div class="addContent">
+    		<div class="upload">
+           		<p>身份证</p>
+           		<p>
+           			<span>未上传</span>
+           			<input type="file" data-file  id="idcard"/>
+           			<input type="text" value="上传" readonly="readonly"/>
+           			<button data-toggle data-preview data-selector="div.Imglayer" disabled="true">预览</button>
+           			<input type="hidden" name="" id="" value="" />
+           		</p>
+           		<p  class="relative">
+           			<input type="text" placeholder="请输入身份证号码" data-add-show ng-model="data.IDCard" class="IDCard" maxlength="13"/>
+           			<img src="../img/upload_del.png" data-add-del/>
+           		</p>
+            </div>
+            <div class="upload">
+           		<p>营业执照</p>
+           		<p>
+           			<span>未上传</span>
+           			<input type="file" data-file  id="business"/>
+           			<input type="text" value="上传" readonly="readonly"/>
+           			<button data-toggle data-preview data-selector="div.Imglayer" disabled="true">预览</button>
+           			<input type="hidden" name="" id="" value="" />
+           		</p>
+           		<p  class="relative">
+           			<input type="text" placeholder="请输入营业执照号码" data-add-show ng-model="data.BusinessCard" class="BusinessCard"/>
+           			<img src="../img/upload_del.png" data-add-del/>
+           		</p>
+           		
+	           
+            </div>
+            <div class="upload">
+          		<p>药品经营许可证</p>
+           		<p>
+           			<span>未上传</span>
+           			<input type="file" data-file  id="licence"/>
+           			<input type="text" value="上传" readonly="readonly"/>
+           			<button data-toggle data-preview data-selector="div.Imglayer" disabled="true">预览</button>
+           			<input type="hidden" name="" id="" value="" />
+           		</p>
+           		<p  class="relative">
+           			<input type="text" placeholder="请输入药品经营许可证号码" data-add-show ng-model="data.IDLicenceCard" class="IDLicenceCard"/>
+           			<img src="../img/upload_del.png" data-add-del/>
+           		</p>
+           		
+            </div>
+            <div class="upload">
+          		<p>GSP认证</p>
+           		<p>
+           			<span>未上传</span>
+           			<input type="file" data-file id="gsp"/>
+           			<input type="text" value="上传" readonly="readonly"/>
+           			<button data-toggle data-preview data-selector="div.Imglayer" disabled="true">预览</button>
+           			<input type="hidden" name="" id="" value="" />
+           		</p>
+           		<p  class="relative">
+           			<input type="text" placeholder="请输入GSP执照号码" data-add-show ng-model="data.GPCard" class="GPCard"/>
+           			<img src="../img/upload_del.png" data-add-del/>
+           		</p>
+           		
+            </div>
+            <p class="uploadButton">
+            	<button data-back>上一步</button>
+            	<button ng-click="actions.open()">提交开户</button>
+            </p>
+    	</div>
+    	
+    </div>
+    <div class="Imglayer animated fadeIn common-model">
+		<img ng-src="{{src}}"/>
+		<img src="../img/up_del.png" class="quit" data-toggle data-selector="div.Imglayer"/>
+	</div>
+</div>

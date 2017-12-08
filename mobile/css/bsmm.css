@@ -25,6 +25,7 @@ a:active { color: #666;outline: none;star:expression(this.onFocus=this.blur());}
 input:focus{outline: none;}
 input,button,textarea,select{font-size: 1.4rem;border:none; font-family: Microsoft YaHei}
 
+* { touch-action: none; }
 button, html input[type="button"],
 input[type="reset"], input[type="submit"] {
     -webkit-appearance: button;
@@ -681,6 +682,11 @@ div,ul,textarea,p,li,footer{
 .operator > ul,.icon-bar > ul{
     padding: 0 !important;
     height: 100%;
+    /*2017.11修改  开始*/
+    display: -webkit-flex;
+    display: flex;
+    justify-content: flex-start;
+    /*2017.11修改  结束*/
 }
 .operator ul > li, .icon-bar ul > li{
     border-radius: .4rem;
@@ -688,14 +694,35 @@ div,ul,textarea,p,li,footer{
     margin-left: 2%;
     padding: 1rem 0;
 }
+.operator ul > li{
+  /*2017.11修改  开始*/
+    /*width: 49%;
+    float: right;*/
+    -webkit-box-flex: 1;
+    box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    /*2017.11修改  结束*/
+}
 .operator ul > li:nth-child(1){
     text-align: left;
-    width: 49%;
-    float: left;
+    /*2017.11修改  开始*/
+    /*width: 49%;
+    float: left;*/
+    -webkit-box-flex: 2;
+    box-flex: 2;
+    -webkit-flex: 2;
+    flex: 2;
+    /*2017.11修改  结束*/
 }
-.operator ul > li:nth-child(2){
-    width: 49%;
-    float: right;
+.operator ul > li:nth-child(3) p:first-child {
+    width: 4rem;
+    height: 2rem;
+    margin: auto;
+    /*background-color: #FFFFFF;*/
+    color: #8f9fdb;
+    font-size: 2.4rem;
+
 }
 .operator ul > li:nth-child(1),.icon-bar ul > li:nth-child(1){
     margin-left: 0;
@@ -735,7 +762,10 @@ div,ul,textarea,p,li,footer{
 }
 .content .operator li > p:nth-child(2){
     font-size: 1.6rem;
-    line-height: 5rem;
+    /*2017.11修改*/
+    /*line-height: 5rem;*/
+   line-height: 3rem;
+   /*2017.11修改 结束*/
 }
 /*.icon-bar{margin-bottom: 2rem;}*/
 .icon-bar > ul{
@@ -1250,4 +1280,333 @@ footer > div:last-child{border-right: none;}
     left: 0;
     bottom: 0;
     overflow: auto;
+}
+/**
+ *     page addShop css
+ */
+.addShop{top: 0;background: #f6f6f6;}
+.addShop .list{
+    top: 5rem;
+    bottom: 0;
+    padding: 0 4%;
+    width: 100%;
+    border-top: 1px solid #eae9e9;
+    font-size: 0;
+}
+.addShop .addContent{
+	padding: 1.25rem 0 2rem 0;
+}
+.addShop .addChoice{
+	padding: 0.8333rem;
+	background: #fff;
+	
+	border-radius: 0.1667rem;
+	
+	position: relative;
+}
+.addShop .addTel{
+	background: #fff;
+	border-radius: 0.3rem;
+	margin-top: 0.8333rem;
+	padding: 0.8333rem;
+	
+	position: relative;
+}
+.addShop .addChoice p,.addShop .addTel p{
+	width: 100%;
+	font-size: 1.3333rem;
+	color: #424242;
+	line-height: 1.3333rem;
+	margin-bottom: 0.8333rem;
+}
+/*.addShop .addChoice img,.addShop .addTel img{
+	width: 1.25rem;
+	height: 1.25rem;
+	position: absolute;
+	right: 1.4rem;
+	bottom: 1.7rem;
+}*/
+.addShop input{
+	font-size: 1.25rem;
+	color: #666;
+	
+	border: none;
+	outline: none;
+	
+	border: 1px solid #cfcfcf;
+	width: 96%;
+	height: 2.75rem;
+	padding-left: 3%;
+}
+.addShop .addChoice input{
+	background: url(../img/upload_search.png) no-repeat 35% center;
+	background-size: 6%;
+}
+
+.addShop .relative{
+	position: relative;
+	margin-bottom: 0 !important;
+}
+.addShop .relative img{
+	position: absolute;
+	right: 1rem;
+	bottom: 0.8333rem;
+	width: 1.25rem;
+	height: 1.25rem;
+	display: none;
+	
+}
+.addShop .addChoice .showShop{
+	/*width: 100%;*/
+	width: 27.0833rem;
+	height: 20rem;
+	/*position: absolute;*/
+	/*left: 0.8333rem;*/
+	/*right: 0;*/
+	font-size: 2rem;
+	text-indent: 1.6666rem;
+	z-index: 1000;
+}
+.addShop .addChoice .showShop li{
+	background: #fff;
+	height: 3.3333rem;
+	line-height: 3.3333rem;
+	border-bottom: 1px solid #cfcfcf;
+	
+	font-size: 1.25rem;
+	white-space: nowrap;  
+    overflow: hidden;  
+    text-overflow: ellipsis;  
+}
+.addShop .no-data{
+	margin-top: 30%;
+}
+.addShop .addTel .getNum{
+	font-size: 0;
+	height: 2.9167rem;
+	border: 1px solid #cfcfcf;
+	margin-bottom: 0;
+	
+	display: -webkit-box;
+    display: box;
+    display: -webkit-flex;
+    display: flex;
+}
+.addShop .addTel .getNum input{
+	border: none;
+	outline: none;
+	
+	border-right: 1px solid #cfcfcf;
+	width: 15rem;
+	height: 2.75rem;
+	padding-left: 3%;
+	
+	flex: 1;
+	-webkit-box-flex: 1;
+    box-flex: 1;
+    -webkit-flex: 1;
+}
+.addShop .addTel .getNum button{
+	border: none;
+	outline: none;
+	
+	background: #fd7c5e;
+	width: 11rem;
+	height: 2.75rem;
+	line-height: 2.75rem;
+	color: #fff;
+	font-size: 1.25rem;
+	vertical-align: top;
+	
+	flex: 1;
+	-webkit-box-flex: 1;
+    box-flex: 1;
+    -webkit-flex: 1;
+}
+.addShop .addButton{
+	margin-top: 2.5rem;
+	height: 3.9167rem;
+	
+	display: -webkit-box;
+    display: box;
+    display: -webkit-flex;
+    display: flex;
+}
+.addShop .addButton button{
+	width: 13.9583rem;
+	height: 100%;
+	line-height: 100%;
+	text-align: center;
+	
+	background: #ccc;
+	font-size: 1.5rem;
+	color: #fff;
+	
+	border-radius: 0.1667rem;
+	flex: 1;
+	-webkit-box-flex: 1;
+    box-flex: 1;
+    -webkit-flex: 1;
+}
+.addShop .addButton button:nth-of-type(2){
+	margin-left: 0.8333rem;
+	background: #fd7c5e;
+}
+.addShop input::-ms-input-placeholder{text-align: center;color: #999;font-size: 1.25rem;} 
+.addShop input::-webkit-input-placeholder{text-align: center;color: #999;font-size: 1.25rem;} 
+
+
+/**
+ *     page addupload css
+ */
+.addupload{top: 0;background: #f6f6f6;}
+.addupload  .list{
+    top: 5rem;
+    bottom: 0;
+    padding: 0 4%;
+    width: 100%;
+    border-top: 1px solid #eae9e9;
+    font-size: 0;
+}
+.addupload  .addContent{
+	padding: 1.25rem 0 5rem 0;
+}
+.addupload .upload{
+	padding: 0.8333rem;
+	background: #fff;
+	border-radius: 0.1667rem;
+	
+	margin-bottom: 0.8333rem;
+}
+.addupload .upload>p:nth-of-type(1){
+	height: 1.3333rem;
+	line-height: 1.3333rem;
+	color: #424242;
+	font-size: 1.3333rem;
+}
+.addupload .upload>p:nth-of-type(2){
+	height: 2.25rem;
+	line-height: 2.25rem;
+	margin:  0.25rem 0 1rem 0;
+	
+	font-size: 1.0833rem;
+	
+	position: relative;
+}
+.addupload .upload>p:nth-of-type(2)>span{
+	color: #FD7C5E;
+	
+	float: left;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
+.addupload span.uploaded{color: #666 !important;}
+.addupload .upload>p:nth-of-type(2)>button{
+	height: 100%;
+    font-style: normal;
+	/*color: #FD7C5E;*/
+	color: #b8b8b8;
+	float: right;
+	
+	margin-right: 2.25rem;
+	background: #fff;
+}
+.addupload button.uploaded{color: #FD7C5E !important;}
+.addupload .upload>p:nth-of-type(2)>input{
+    float: right;
+	border: none;
+	outline: none;
+	width: 5.4167rem;
+	border-radius: 0.1667rem;
+	height: 100%;
+	
+	background: #79cae8;
+	color: #fff;
+	text-align: center;
+}
+.addupload .upload>p:nth-of-type(2)>input[type="file"]{
+	width: 5.4167rem;
+	height: 2.25rem;
+	position: absolute;
+	right: 0;
+	top: 0;
+	
+	opacity: 0;
+}
+/*.addupload .upload>input{
+	padding-left: 3%;
+	width: 96%;
+	
+	height: 2.5rem;
+	border: 0.0417rem solid #cfcfcf;
+}*/
+.addupload .upload .relative{
+	width: 100%;
+	height: 2.6667rem;
+	position: relative;
+	margin-bottom: 0 !important;
+}
+.addupload .relative input{
+	padding-left: 3%;
+	width: 96%;
+	
+	height: 2.5rem;
+	line-height: 2.5rem;
+	border: 0.0417rem solid #cfcfcf;
+	
+	color: #666;
+	font-size: 1.1667rem;
+}
+.addupload .relative img{
+	position: absolute;
+	right: 1rem;
+	bottom: 26.5%;
+	width: 1.25rem;
+	height: 1.25rem;
+	
+	display: none;
+}
+.addupload .uploadButton{
+	height: 3.9167rem;
+	margin-top: 2.5rem;
+	
+	display: -webkit-box;
+    display: box;
+    display: -webkit-flex;
+    display: flex;
+}
+.addupload .uploadButton button{
+	width: 13.9583rem;
+	height: 100%;
+	line-height: 100%;
+	text-align: center;
+	
+	background: #ccc;
+	font-size: 1.5rem;
+	color: #fff;
+	
+	border-radius: 0.1667rem;
+	flex: 1;
+	-webkit-box-flex: 1;
+    box-flex: 1;
+    -webkit-flex: 1;
+}
+.addupload .uploadButton button:nth-of-type(2){
+	margin-left: 0.8333rem;
+	background: #fd7c5e;
+}
+.addupload .Imglayer img{
+	width: 87%;
+	height: 48.9%;
+	
+	margin: 20% auto 5rem auto;
+	display: block;
+}
+.addupload .Imglayer .quit{
+	width: 3.75rem;
+	height: 3.75rem;
+	
+	display: block;
+	margin: 0 auto;
 }

@@ -780,6 +780,7 @@ angular.module('DHBApp.bsmmControllers',[])
                     _this.noData = true;
                 } 
                 if(data && data.rStatus == '100'){
+//              	console.log(data.rData)
                     _this.countAudit = parseInt(data.countAudit,10);
                     if(data.rData){
                         if(_this.totalPage == 0){
@@ -792,13 +793,18 @@ angular.module('DHBApp.bsmmControllers',[])
                             if(!data.rData[i].ClientMobile){
                                 data.rData[i].ClientMobile = '暂无联系方式';
                             }
-                            if(data.rData[i].ClientFlag === '9'){
-                                data.rData[i].flagText = '未审核';
-                            }
-                            else{
+                            if(data.rData[i].C_Flag === 'T'){
                                 data.rData[i].flagText = '已审核';
-                            }
+                            }else if(data.rData[i].C_Flag === 'F'){
+                                data.rData[i].flagText = '审核不过';
+                            }else if(data.rData[i].C_Flag === 'D'){
+                                data.rData[i].flagText = '待审核';
+                            }else if(data.rData[i].C_Flag === 'W'){
+                                data.rData[i].flagText = '未上传';
+                            };
                             _this.list.push(data.rData[i]);
+//                          console.log(_this.list)
+                           
                         }
                         if(_this.totalPage == _this.currPage){
                             _this.hasMore = false;
@@ -832,19 +838,20 @@ angular.module('DHBApp.bsmmControllers',[])
             var params = {
                 f: 'managerClientContent',
                 v: {
-                    clientId: clientId //客户编号
+                    clientId: clientId, //客户编号
                 }
             }
             commonService.getDataList(params).success(function(data){
                 if(data && data.rStatus == '100'){
                     $scope.changePath('/customer/customer-info');
-                    if(data.rData.ClientFlag==='9'){
-                        data.rData.flagText = '审核';
-                        data.rData.flagText2 = '未审核';
+                    if(data.rData.C_Flag ==='T' || data.rData.C_Flag==='F' ){
+                    	console.log(123)
+                        data.rData.flagText = '已审核';
+                        data.rData.flagText2 = '已审核';//显示在customer-info页面
                     }
                     else{
-                        data.rData.flagText = '反审核';
-                        data.rData.flagText2 = '已审核';
+                        data.rData.flagText = '未审核';
+                        data.rData.flagText2 = '未审核';
                     }
                     _this.selectCustomer = data.rData;
                 }
@@ -856,13 +863,14 @@ angular.module('DHBApp.bsmmControllers',[])
                 //alert('获取数据失败!');
             });
         },
-        // 药店审核 反审核
+        // 药店审核 反审核   
         operatorCustomer: function(index){
             if(this.auditing) return;
             this.auditing = true;
             if(index === 0 || index){
                 this.index = index;
                 this.selectCustomer = this.list[index];
+                console.log(this.selectCustomer)
             }
             var params = {
                 f: 'managerSetClient',
@@ -871,6 +879,7 @@ angular.module('DHBApp.bsmmControllers',[])
                     action: this.selectCustomer.ClientFlag === '9' ? 'audit' : 'unaudit'
                 }
             }
+            params.v.C_Flag = "";
             var _this = this;
             commonService.saveData(params).success(function(data){
                 $timeout(function(){
@@ -924,6 +933,7 @@ angular.module('DHBApp.bsmmControllers',[])
         insteadSubmitOrder: function(index){
             if(index === 0 || index){
                 this.selectCustomer = this.list[index];
+                console.log(this.selectCustomer)
             }
             var params = {
                 f: 'managerChangeClient',
@@ -931,7 +941,9 @@ angular.module('DHBApp.bsmmControllers',[])
                     clientId: this.selectCustomer.ClientID //客户编号
                 }
             }
+            console.log(params)
             commonService.getDataList(params).success(function(data){
+            	console.log(data)
                 if(data && data.rStatus == '100'){
                     window.localStorage['sKey'] = data.sKey;
                     window.sessionStorage['orderType'] = $scope.myInfo.UserType;
@@ -2101,9 +2113,9 @@ angular.module('DHBApp.bsmmControllers',[])
         }
         commonService.saveData(params).success(function(){
             delete window.localStorage['m_sKey'];
-            window.location.href = '../bsmm_login.html';
+            window.location.href = '../login.html';
         }).error(function(){
-            window.location.href = '../bsmm_login.html';
+            window.location.href = '../login.html';
         });
     };
     // 接触绑定微信
@@ -2223,5 +2235,114 @@ angular.module('DHBApp.bsmmControllers',[])
             $scope.feedBack.closeLayer(true);
         }
     };
+}])
+
+
+/**
+ * 上传资质第一步   选择药店 手机号
+ */
+.controller('addshopController',['$scope','$rootScope','commonService',function($scope,$rootScope,commonService){
+	$scope.data = {
+	    shopShow    : false ,//搜索药店点击显示
+	    noData      : false,//无数据显示
+	};
+	$scope.actions = {
+		inputClick : function () {
+	        $scope.data.shopShow = true;
+
+	   },
+	    nextAction : function () {//药店输入框不为空进入下一步
+	    	if($('#addSearch').val() != ""){
+	    		$scope.changePath('/addShop_upload');
+	    	};
+	    }
+	}
+	
+	
+	var params = {
+        f: 'managerSearch',
+        v: {
+        	search : ''
+        }
+   };
+    commonService.getDataList(params).success(function(data){
+    	$scope.datas = eval(data);
+//  	console.log($scope.datas.rData.length)
+    	if($scope.datas.rData.length == 0){
+//  		console.log(2);
+    		$scope.data.noData = true;
+//  		DHB.showMsg("没有符合条件的数据");
+    	};
+    }).error(function(error){
+		console.log(error)
+    });
+    
+    $rootScope.shopname = $('#addSearch').val();
+    $rootScope.tel      = $('')
+}])
+/**
+ * 上传资质第二步   选择图片信息上传
+ */
+.controller('adduploadController',['$scope','$rootScope','commonService',function($scope,$rootScope,commonService){
+
+	$scope.data = {
+	    ClientID        : "",//药店ID
+		ClientName      : "",//手机号
+		IDCard          : "",//身份证号码
+		IDCardImg       : "",//身份证图片
+		BusinessCard    : "",//营业执照号码
+		BusinessCardImg : "",//营业执照图片
+		IDLicenceImg    : "",//药品/经营许可证图片
+		IDLicenceCard   : "",//药品/经营许可证号码
+		GPImg           : "",//GMP/GSP认证图片
+		GPCard          : "",//GSP认证号码
+	};
+	$scope.actions = {
+	    open  : function () {//药店输入框不为空进入下一步
+	    	var params = {
+		        f: 'managerSubmitAccount',
+		        v: {}
+		    };
+		    params.v.ClientID        = parseInt(window.localStorage.getItem('ClientID'));
+		    params.v.ClientName      = parseInt(window.localStorage.getItem('clientmobile'));
+		    params.v.IDCard          = $scope.data.IDCard;
+		    params.v.IDCardImg       = $('.IDCard').attr('data-path');
+		    params.v.BusinessCard    = $scope.data.BusinessCard;
+		    params.v.BusinessCardImg = $('.BusinessCard').attr('data-path');
+		    params.v.IDLicenceCard   = $scope.data.IDLicenceCard;
+		    params.v.IDLicenceImg    = $('.IDLicenceCard').attr('data-path');
+		    params.v.GPCard          = $scope.data.GPCard;
+		    params.v.GPImg           = $('.GPCard').attr('data-path');
+
+		    if(params.v.IDCard && params.v.BusinessCard && params.v.IDLicenceCard && params.v.GPCard && params.v.IDCardImg && params.v.BusinessCardImg && params.v.IDLicenceImg && params.v.GPImg){
+		    	commonService.getDataList(params).success(function(data){
+//		    	$scope.datas = eval(data);
+				    if(data.codes == 100){
+						$scope.changePath('/customer');
+					};
+			    }).error(function(error){
+					console.log(error)
+			    });
+			    
+		    }else if(params.v.IDCard == ""){
+		    	DHB.showMsg("身份证号码不能为空");
+		    }else if(params.v.BusinessCard == ""){
+		    	DHB.showMsg("营业执照号码不能为空");
+		    }else if(params.v.IDLicenceCard == ""){
+		    	DHB.showMsg("药品经营许可证号码不能为空");
+		    }else if(params.v.GPCard == ""){
+		    	DHB.showMsg("GSP执照号码不能为空");
+		    }else if(!params.v.IDCardImg){
+		    	DHB.showMsg("请选择身份证图片");
+		    }else if(!params.v.BusinessCardImg){
+		    	DHB.showMsg("请选择营业执照图片");
+		    }else if(!params.v.IDLicenceImg){
+		    	DHB.showMsg("请选择药品经营许可证图片");
+		    }else if(!params.v.GPImg){
+		    	DHB.showMsg("请选择GSP图片");
+		    };
+	    }
+	}
+ 		
 }])
 ;

@@ -161,6 +161,18 @@ var app = angular.module('bsmmApp', [
         url: '/customer-count',
         templateUrl: 'customer_count.html?v=' + version
     })
+//2017.11添加开始
+    // 新增药店
+    .state('add-shop',{ 
+        url: '/add-shop',
+        templateUrl: 'addShop.html?v=' + version
+    })
+    //上传资质
+	  .state('addShop_upload',{ 
+	    url: '/addShop_upload',
+	    templateUrl: 'addShop_upload.html?v=' + version
+    })
+//2017.11添加结束
     // 客户
     .state('customer',{ 
         url: '/customer',

@@ -3,7 +3,252 @@
  * 所有自定义指令 
  */
 var directiveModule = angular.module('DHBApp.directives',[]);
-directiveModule.directive('showStyle',[function(){
+directiveModule
+//首页，分类，药企公共头部
+.directive('commonHeader',[function(){
+	return {
+		restrict: 'AE',
+		template: `
+			<header>
+				<img src="../img/menu.png" alt="" ui-sref="homeMenu" ng-click="actions.setCurrent(2)"/>
+				<p>
+					<input type="text" name="search" placeholder="搜索你想要的"/>
+					<img src="../img/search.png"/>
+				</p>
+				<img src="../img/scan.png"/>
+			</header>
+		`,
+		replace: true,	
+	}
+}])
+/**
+ *上传药店资质：搜索药店出现搜索按钮并搜索
+ */
+.directive('addSearch', ['commonService',function(commonService){  
+    return {  
+        link: function (scope, el, attrs) { 
+            el.bind('input propertychange',function(){
+		    	if($(this).val() !="" ){
+		    		$(this).css({
+			    		'background':'none'
+			    	});
+			    	var params = {
+				        f: 'managerSearch',
+				        v: {}
+				    };
+				    params.v.search = $(this).val();
+				    commonService.getDataList(params).success(function(data){
+				    	scope.datas = eval(data);
+				    	if(scope.datas.rData.length == 0){
+				    		scope.data.noData = true;
+				//  		DHB.showMsg("没有符合条件的数据");
+				    	}else{
+				    		scope.data.noData = false;
+				    	};
+				    }).error(function(error){
+						console.log(error)
+				    });
+		    	}else{
+		    		$(this).css({
+			    		'background': 'url(../img/upload_search.png) no-repeat 35% center',
+			    		"background-size": "6%"
+			    	});
+			    	
+		    	};
+    		});
+    		el.bind('blur',function(){
+		    	if($(this).val() =="" ){
+		    		$(this).css({
+			    		'background': 'url(../img/upload_search.png) no-repeat 35% center',
+			    		"background-size": "6%"
+			    	});
+		    	};
+				scope.data.shopShow = false;
+		    });
+        },
+    };  
+}]) 
+/**
+ *上传药店资质：选择搜索的药店
+ */
+.directive('addChoose', ['commonService',function(commonService){  
+    return {  
+        link: function (scope, el, attrs) { 
+            el.bind('click',function(){
+//          	console.log($(this).attr('data-ClientID'))
+            	window.localStorage.ClientID = $(this).attr('data-ClientID');//缓存药店id
+            	$('#addSearch').val($(this).text());
+            	$('#addTel').val($(this).attr('data-ClientMobile'));
+            	window.localStorage.clientmobile = $('#addTel').val();//缓存电话
+		    	scope.data.shopShow = false;
+    			if($('#addSearch').val() != ""){
+    				$('#addSearch').css({
+			    		'background':'none'
+			    	});
+    			};
+    		});
+    		
+        },
+    };  
+}]) 
+/**
+ *上传药店资质：input focus出现后面的删除图片
+ */
+.directive('addShow', function () {  
+    return {  
+        link: function (scope, el, attrs) {  
+            el.bind('focus',function(){
+		    	$(this).next().show();
+    		});
+    		el.bind('blur',function(){
+		    	$(this).next().hide();
+		    });
+        },
+    };  
+})
+/**
+ *上传药店资质：点击删除图片清空input
+ */
+.directive('addDel', function () {  
+    return {  
+        link: function (scope, el, attrs) {  
+            el.bind('click',function(){
+		    	$(this).prev().val('').focus();
+    		});
+        },
+    };  
+})
+/**
+ *上传药店资质：选择文件
+ */
+.directive('file',['commonService',function(commonService){    
+    return {  
+//      scope: { 
+//          file: '='  
+//      }, 
+//      template: 
+        link: function (scope, el, attrs) {  
+            el.bind('change', function (event) {
+//          	console.log($(this).attr('id'))
+            	var _id     = $(this).attr('id');
+				var _prev   = $(this).prev();
+				var _next   = $(this).next().next();
+				var _hidden = $(this).next().next().next();
+				var _input  = $(this).parent().next().children()[0];//input输入框
+//				console.log($(this).parent().next().children()[0])
+//				console.log(event.target.files)
+                var file = event.target.files[0];  
+//				console.log(file)
+      			var reader  = new FileReader();
+      			
+      			var str = file.name;
+				var subStr = getSubStr(str);
+
+				function getSubStr (str){
+				    if(str.length > 20){
+				    	var subStr1 = str.substr(0,10);
+					    var subStr2 = str.substr(str.length-10,10);
+					    var subStr = subStr1 + "..." + subStr2 ;
+				    }else{
+				    	var subStr = str;
+				    };
+				    
+				    return subStr;
+				};
+				//上传的参数
+      			var params = {
+	                f: 'managerQualifications',
+	                v: { 
+	                }
+	            };
+
+				reader.onload = function (e) {
+//					console.log(e)
+
+				   _prev.text(subStr).addClass('uploaded');
+				   _next.addClass('uploaded').removeAttr('disabled');
+				   _hidden.val(e.target.result);
+
+				/* 压缩图片 */
+			        lrz(file, {
+			            width: 280,           
+			            height: 350,
+			            quality: 0.8 //设置压缩参数
+			        }).then(function (rst) {
+			            /* 处理成功后执行 */
+			           console.log(rst)
+//			            console.log(rst.base64);
+//			               _hidden.val(rst.base64);
+
+						params.v.param = rst.base64;
+						params.v.name = _id;
+      					params.v.user_id = parseInt(window.localStorage.getItem('ClientID'));
+
+						commonService.getDataList(params).success(function(data){
+//							console.log(data.path);
+							$(_input).attr('data-path',data.path);
+		                }).error(function(error){
+							console.log(error)	
+		                }); 
+			        }).catch(function (err) {
+			            /* 处理失败后执行 */
+			        }).always(function () {
+			            /* 必然执行 */
+			        });
+				};
+				
+				if (file) {
+				    reader.readAsDataURL(file);
+				};
+
+            });  
+        },
+
+    };  
+}]) 
+
+/**
+ *上传药店资质：预览选择文件
+ */
+.directive('preview', function () {  
+    return {  
+        link: function (scope, el, attrs) {  
+            el.bind('click', function (event) {
+				var _next = $(this).next().val();
+//				console.log(_next)
+				$('.Imglayer img').eq(0).attr('src',_next);
+	
+      		
+            });  
+        },
+    };  
+}) 
+
+
+
+
+
+
+
+//首页banner
+.directive('bannerChange',[function(){
+	return {
+		restrict: 'AE',
+		link: function(scope,ele,attrs){
+		}
+	}
+}])
+//点击删除按钮
+.directive('cartDel',[function(){
+	return {
+		restrict: 'AE',
+		link: function(scope,ele,attrs){
+			console.log(ele)
+		}
+	}
+}])
+
+.directive('showStyle',[function(){
     // 商品显示样式 grid形式 list形式两种
     return {
         restrict: 'AE',
@@ -756,6 +1001,7 @@ directiveModule.directive('showStyle',[function(){
             ele.on('click',function(e){
                 e.preventDefault();
                 e.stopPropagation();
+//              console.log($(scope.selector))
                 $(scope.selector).toggle();
             });
         }
@@ -1169,6 +1415,7 @@ directiveModule.directive('showStyle',[function(){
     return function(scope,ele,attr){
         var s_l,s_t;
         ele.on('touchstart',function(e){
+        	console.log(e.targetTouches[0])
             e.stopPropagation();
             //e.preventDefault();
             if(e.targetTouches.length == 1){
