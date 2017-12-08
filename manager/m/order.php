@@ -524,7 +524,7 @@ if(empty($in['stype']))
 	$page->Total   = $InfoDataNum['allrow'];
 	$page->LinkAry = array("kw"=>$in['kw'],"stype"=>$in['stype'],"bdate"=>$in['bdate'],"edate"=>$in['edate']);  
 	$list_data = $db->get_results($datasql." ".$page->OffSet());
-}
+} 
 	if(!empty($list_data))
 	{
 		foreach($list_data as $lsv)
