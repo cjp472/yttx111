@@ -3326,8 +3326,147 @@ class managerController{
     	
     }
  
+    /**
+     * 建立账号 搜索店铺
+     * @param string $param (sKey) 
+     * @return array $data
+     */
+    public function managerSearch($param)
+    {
+    	global $db,$log;
+    	//先查询出当前登陆的人的身份
+    	$cinfo = $db->get_row("SELECT UserCompany,UserID,UserFlag,UserType FROM ".DB_DATABASEU.DATATABLE."_order_user where TokenValue = '".$param['sKey']."' limit 0,1");
+   		$sqlmsg=' AND ClientFlag!=1'; 
+    	$param['search']=trim($param['search']);   
+        if ($param['search']!='') {
+              $sqlmsg.=" AND ClientCompanyName like '%".$param['search']."%'";
+	    }
+	    //如果是客情官的话就去查询客情管所管辖的药店之后根据条件搜索
+        if($cinfo['UserType']=='S'){
+            $salersql="SELECT ClientID FROM  ".DB_DATABASE.".".DATATABLE."_order_salerclient where SalerID=".$cinfo['UserID']."";
+            $saler=$db->get_results($salersql);
+    	  	foreach ($saler as $key => $val) {
+        		$client=$db->get_row("SELECT ClientID,ClientCompanyName,ClientMobile FROM ".DB_DATABASE.'.'.DATATABLE."_order_client where ClientCompany = ".$cinfo['UserCompany']." AND ClientID=".$val['ClientID'].$sqlmsg." AND (C_Flag = 'W' or C_Flag = 'F')");
+        		if ($client) {
+        			$rData[]=$client;
+        		}
+        	}
+       }else{
+       		//如果是商业公司或者管理员或者代理商的话就可以显示所有的药店之后根据条件搜索
+	    	$sql="SELECT ClientID,ClientCompanyName,ClientMobile FROM ".DB_DATABASE.'.'.DATATABLE."_order_client where ClientCompany = ".$cinfo['UserCompany'].$sqlmsg." AND (C_Flag = 'W' or C_Flag = 'F')";
+	    	$rData=$db->get_results($sql);
+	   }
+	    	$data['rData']=$rData;
+	    	return $data;
+    }
 
+ 
+ 	/**
+     * 建立账号
+     * @param int $tel 手机号
+     * @param int $user_id 药店id
+     * @return array $msg
+     */
+ 	public function managerEstablish($tel,$user_id=0)
+ 	{	
+ 	  	//默认可以点击下一步
+ 	 	$msg['error'] = 100;
+ 	  	//判断是否填写店铺信息	
+ 	  	if ($user_id==0) {
+ 	  		 $msg['error'] = 101;
+ 	  		 $msg['data'] = "请先选择店铺信息";
+ 	    }
+ 	  	//判断手机号格式是否正确
+ 	  	if ($tel!='') {
+	 	  	if (!preg_match("/^(1(([35][0-9])|(47)|[8][0126789]))\d{8}$/",$tel)) {
+		  		 $msg['error'] = 101;
+		  		 $msg['data'] = "手机号格式不对";
+		 	 }
+ 	  	}
+	    return $msg;	
+ 	}
 
+ 	/**
+     * 上传资质
+     * @param array $param (sKey)
+     * @return array $data
+     * @Author yangmm 2017-12-08
+     */
+    public function managerQualifications($param)
+    {   
+    	global $db,$log;
+		$CompanyID=$db->get_row("SELECT ClientCompany FROM ".DB_DATABASE.".".DATATABLE."_order_client WHERE ClientID=".$param['user_id']."");
+	    //文件存放目录
+	   	$dir=$_SERVER['DOCUMENT_ROOT']."/resource/".$CompanyID['ClientCompany'];
+       	if(!is_dir($dir)){
+       		mkdir($dir,0777);
+            chmod($dir,0777);
+       	}
+       	if(preg_match('/^(data:\s*image\/(\w+);base64,)/', $param['param'], $result)){
+                $type = $result[2];
+                if(in_array($type,array('pjpeg','jpeg','jpg','gif','bmp','png'))){
+                	  //唯一的文件名
+                	  $file= date("d_His")."_".$this->currentTimeMillis()."".rand(10,99).'.'.$type;
+                	  //文件路径
+                      $new_file = $dir.'/'.$file;  
+                    if(file_put_contents($new_file,base64_decode(str_replace($result[1],'',$param['param'])))){
+                    			//入库的图片路径
+                    			$path=$CompanyID['ClientCompany'].'/'.$file;  
+	                            $data['code']=100;
+	                            $data['path']=$path;    
+                    }else{
+
+                                $data['code']=103;
+                                $data['message']='上传失败';
+                    }
+                }else{
+                     	   //文件类型错误
+                            $data['code']=103;
+                            $data['message']='上传类型错误';
+                }
+            }else{
+               				//文件错误
+                            $data['code']=103;
+                            $data['message']='文件错误';
+            }
+            return $data;
+    }
+
+    public function currentTimeMillis()
+    {
+		list($usec, $sec) = explode(" ",microtime()); 
+		return substr($usec, 2, 3); 
+    }
+
+	/**
+     * 提交开户
+     * @param array $param 
+     * @return array $rdata
+     */
+    public function managerSubmitAccount($param)
+    {
+    	global $db,$log;
+    	if (empty($param['IDCard']) || empty($param['BusinessCard']) || empty($param['IDLicenceCard']) || empty($param['GPCard'])) {
+    		$rData['codes'] = 101;
+    		$rData['rdata'] = "输入框不能为空";
+    	}
+    	$select = "select CompanyID from ".DB_DATABASEU.DATATABLE."_three_sides_merchant where MerchantID=".$param['ClientID']."";
+        $selectID = $db->get_row($select);
+        $order_client=$db->get_row("select ClientCompany,ClientCompanyName,ClientTrueName from ".DB_DATABASE.'.'.DATATABLE."_order_client where ClientID = ".$param['ClientID']."");
+        // 查询 判断是否已存在    
+        if(empty($selectID)){  	
+            $addSql = "insert into ".DB_DATABASEU.DATATABLE."_three_sides_merchant (CompanyID,MerchantID,BusinessName,BusinessCard,BusinessCardImg,IDLicenceImg,GPImg,TureUserName,UserPhone,IDCard,IDCardImg,IDLicenceCard,GPCard)values(".$order_client['ClientCompany'].",".$param['ClientID'].",'".$order_client['ClientCompanyName']."','".$param['BusinessCard']."','".$param['BusinessCardImg']."','".$param['IDLicenceImg']."','".$param['GPImg']."','".$order_client['ClientTrueName']."','".$param['ClientName']."',".$param['IDCard'].",'".$param['IDCardImg']."','".$param['IDLicenceCard']."','".$param['GPCard']."')";
+        }else{
+            $addSql = "update ".DB_DATABASEU.DATATABLE."_three_sides_merchant set BusinessName='".$order_client['ClientCompanyName']."',BusinessCard='".$param['BusinessCard']."',BusinessCardImg='".$param['BusinessCardImg']."',IDLicenceImg ='".$param['IDLicenceImg']."',GPImg='".$param['GPImg']."',TureUserName='".$order_client['ClientTrueName']."',UserPhone='".$param['ClientName']."',IDCard='".$param['IDCard']."',IDCardImg='".$param['IDCardImg']."',IDLicenceCard='".$param['IDLicenceCard']."',GPCard='".$param['GPCard']."' where CompanyID = ".$selectID['CompanyID']." and MerchantID=".$param['ClientID']; 
+        }  
+        $res=$db->query("UPDATE ".DB_DATABASE.'.'.DATATABLE."_order_client SET C_Flag='D' where ClientID =".$param['ClientID']."");
+		$is=$db->query($addSql);
+		if ($is&&$res) {
+			$rData['codes'] = 100;
+			$rData['rdata'] = "开户成功";
+		}
+		return $rData;
+    }
 
 }
 ?>

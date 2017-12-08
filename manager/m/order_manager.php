@@ -761,7 +761,8 @@ if($oinfo['InvoiceType'] != 'N' && !empty($oinfo['InvoiceTax'])){
 					<input type="button" value="审核订单" class="greenbtn" name="confirmbtn1" id="confirmbtn1" onclick="do_order_status(\'Audit\',\''.$in['ID'].'\')" '.$disablemsg1.'  />&nbsp;&nbsp;';
                                     }
 									
-									if($oinfo['OrderPayStatus'] != 2 ){
+                                    //wangdan 2017-12-08 支付方式为货到付款或者已经支付时，可以审核订单
+									if($oinfo['OrderPayStatus']!=2 && $oinfo['OrderPayType']!=8){
 										$ext = '
 					<input type="button" value="审核订单" class="greenbtn" name="confirmbtn1" id="confirmbtn1" onclick="unapprove_order()" '.$disablemsg1.'  />&nbsp;&nbsp;';
 									}
