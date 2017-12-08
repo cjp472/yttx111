@@ -77,23 +77,30 @@ setcookie("backurl", $_SERVER['REQUEST_URI']);
       		<tbody>
 <?php
 	
-	$condition = $in['kw'] ? " and BrandName like '%".trim($in['kw'])."%'" : "";
-	
-	$datasql = "SELECT BrandID,BrandNO,BrandName,BrandPinYin,Logo,IsIndex FROM ".DATATABLE."_order_brand where CompanyID = ".$_SESSION['uinfo']['ucompany']." ".$condition." Order by BrandID Desc";
-	$InfoSql = "SELECT count(*) as allrow FROM ".DATATABLE."_order_brand where CompanyID = ".$_SESSION['uinfo']['ucompany']." ".$condition."  Order by BrandID Desc";
+	$condition = $in['kw'] ? " and b.BrandName like '%".trim($in['kw'])."%'" : "";
+  //ymm 2017-12-8 判斷当前的人登录的身份
+  $userid=$_SESSION['uinfo']['userid'];
+  $type = $db->get_row("SELECT UserType,UserFlag,UpperID FROM ".DATABASEU.DATATABLE."_order_user where UserID = ".$userid."");
+  //ymm 2017-12-8 如果是代理商的话就找出该代理商下的所有商品之后找出商品品牌
+  if($type['UserType']=='M' && $type['UserFlag']==2)    $condition .=" AND c.AgentID= ".$userid." ";
+  $page = new ShowPage;
+  $page->PageSize = 50;
+  $page->Total = $InfoDataNum['allrow'];
+  $page->LinkAry = array("kw"=>$in['kw'],"sid"=>$in['sid'],"sid"=>$in['sid'],"BrandID"=>$in['BrandID'],"CommendID"=>$in['CommendID'],"oby"=>$in['oby'],"osc"=>$in['osc']);        
+	$datasql = "SELECT b.BrandID,b.BrandNO,b.BrandName,b.BrandPinYin,b.Logo,b.IsIndex FROM ".DATATABLE."_view_index_site as c left join ".DATATABLE."_order_brand as b on b.BrandID=c.BrandID where c.CompanyID = ".$_SESSION['uinfo']['ucompany'].$condition." and FlagID=0 Order by b.BrandID Desc";
+	$InfoSql = "SELECT count(*) as allrow FROM ".DATATABLE."_view_index_site as c left join ".DATATABLE."_order_brand as b on b.BrandID=c.BrandID where c.CompanyID = ".$_SESSION['uinfo']['ucompany'].$condition."  and FlagID=0 Order by b.BrandID Desc";
 	$InfoDataNum = $db->get_row($InfoSql);
-	
 	$page = new ShowPage();
 	$page->PageSize = 50;
 	$page->Total = $InfoDataNum['allrow'];
 	$page->LinkAry = array("kw"=>$in['kw']);
 	$list_data = $db->get_results($datasql." ".$page->OffSet());
-	
 	if(!empty($list_data))
 	{
 	 $n=1;
      foreach($list_data as $lsv)
 	 {
+      if ($lsv['BrandID']!=0) {
 ?>
                 <tr id="line_<? echo $lsv['BrandID'];?>" class="bottomline"  onmouseover="inStyle(this)"  onmouseout="outStyle(this)" >
                   <td ><? echo $n++;?></td>
@@ -113,7 +120,7 @@ setcookie("backurl", $_SERVER['REQUEST_URI']);
 					<a href="javascript:void(0);" onclick="do_delete_bill('<? echo $lsv['BrandID'];?>');" ><span class="iconfont icon-dacha01" style="color:#666;font-size:19px;position: relative;top: 4px;"></span></a>
 				  </td>
                 </tr>
-<? } }else{?>
+<? } } }else{?>
      			 <tr>
        				 <td colspan="8" height="30" align="center">暂无符合此条件的内容!</td>
        			 </tr>
