@@ -2313,10 +2313,10 @@ angular.module('DHBApp.bsmmControllers',[])
 		    params.v.IDLicenceImg    = $('.IDLicenceCard').attr('data-path');
 		    params.v.GPCard          = $scope.data.GPCard;
 		    params.v.GPImg           = $('.GPCard').attr('data-path');
-
 		    if(params.v.IDCard && params.v.BusinessCard && params.v.IDLicenceCard && params.v.GPCard && params.v.IDCardImg && params.v.BusinessCardImg && params.v.IDLicenceImg && params.v.GPImg){
 		    	commonService.getDataList(params).success(function(data){
-//		    	$scope.datas = eval(data);
+		    		console.log(data)
+		    	$scope.datas = eval(data);
 				    if(data.codes == 100){
 						$scope.changePath('/customer');
 					};
@@ -2332,13 +2332,13 @@ angular.module('DHBApp.bsmmControllers',[])
 		    	DHB.showMsg("药品经营许可证号码不能为空");
 		    }else if(params.v.GPCard == ""){
 		    	DHB.showMsg("GSP执照号码不能为空");
-		    }else if(!params.v.IDCardImg){
+		    }else if(params.v.IDCardImg == null){
 		    	DHB.showMsg("请选择身份证图片");
-		    }else if(!params.v.BusinessCardImg){
+		    }else if(params.v.BusinessCardImg == null){
 		    	DHB.showMsg("请选择营业执照图片");
-		    }else if(!params.v.IDLicenceImg){
+		    }else if(params.v.IDLicenceImg == null){
 		    	DHB.showMsg("请选择药品经营许可证图片");
-		    }else if(!params.v.GPImg){
+		    }else if(params.v.GPImg == null){
 		    	DHB.showMsg("请选择GSP图片");
 		    };
 	    }

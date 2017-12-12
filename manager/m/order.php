@@ -455,7 +455,7 @@ if(empty($in['stype']))
 			.$sqlmsg.$advsql." ";
 		$datasql = "SELECT OrderID,OrderSN,OrderUserID,OrderSendType,OrderSendStatus,OrderPayType,OrderPayStatus,OrderReceiveCompany,OrderReceiveName,OrderReceivePhone,DeliveryDate,OrderRemark,OrderTotal,OrderStatus,OrderDate,OrderType,OrderSaler,OrderFrom,OrderSpecial,SMSNotified FROM "
 		.DATATABLE."_order_orderinfo 
-		where OrderID in (".$subsql.")";
+		where OrderID in (".$subsql.") Order by OrderID Desc";
 	}
 	else //管理员和商业公司可以看到所有订单
 	{
@@ -506,7 +506,7 @@ if(empty($in['stype']))
 			.$sqlson.$sdmsg." ";
 		$datasql = "SELECT OrderID,OrderSN,OrderUserID,OrderSendType,OrderSendStatus,OrderPayType,OrderPayStatus,OrderReceiveCompany,OrderReceiveName,OrderReceivePhone,DeliveryDate,OrderRemark,OrderTotal,OrderStatus,OrderDate,OrderType,OrderSaler,OrderFrom,OrderSpecial,SMSNotified FROM "
 		.DATATABLE."_order_orderinfo 
-		where OrderID in (".$subsql.")";
+		where OrderID in (".$subsql.") Order by OrderID Desc";
 	}
 	else //管理员和商业公司可以看到所有订单
 	{

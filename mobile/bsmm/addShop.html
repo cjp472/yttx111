@@ -9,13 +9,12 @@
     		<div class="addChoice">
            		<p>请选择您的药店</p>
            		<p class="relative">
-           			<input type="text" name="" id="addSearch" value="" placeholder="搜索药店" data-add-search ng-focus="actions.inputClick()"/>
-           			<!--<img src="../img/upload_del.png"/>-->
+           			<input type="text" name="" id="addSearch" value="" placeholder="搜索药店" data-add-search ng-focus="actions.inputClick()" data-add-show/>
+           			<img src="../img/upload_del.png" data-add-del class="adddel"/>
            		</p>
            		<div class="showShop" data-iscroll ng-show="data.shopShow">
            			<ul>
            				<li  ng-repeat="item in datas.rData track by $index" data-add-choose data-ClientID="{{ item.ClientID }}" data-ClientMobile="{{ item.ClientMobile }}">{{ item.ClientCompanyName }}</li>
-           				<!--<li>北京大兴区同仁堂药店分店2</li>-->
            				<div class="no-data" ng-show="data.noData">
 					        <div>
 					            <p class="search-result"></p>
@@ -29,10 +28,7 @@
            		<p>手机号码（选填）：</p>
            		<p class="relative">
            			<input type="number" data-add-show id="addTel"/>
-           			<!--<input type="number" required="required" ng-model="user.userName" name="userName" ng-maxlength="11"/>
-           			<span class="warning" ng-show="angularForm.userName.$dirty && angularForm.userName.$error.required">*</span>
-                    <span class="warning" ng-show="angularForm.userName.$error.number">只能输入数字</span>
-                    <span class="warning" ng-show="angularForm.userName.$error.maxlength">最多为11位数</span>-->
+       
            			<img src="../img/upload_del.png" data-add-del/>
            		</p>
            		<!--<p>验证码：</p>
