@@ -1813,13 +1813,20 @@ class controller{
 	        $sqlunion  = " and OrderUserID   = ".$cidarr['ClientID']." ";
 	        $statsqlt  = "SELECT sum(OrderIntegral) as Ftotal from ".$sdatabase.DATATABLE."_order_orderinfo where OrderCompany=".$cid." ".$sqlunion." and OrderStatus!=8 and OrderStatus!=9 ";
 	        $statdatat = $db->get_row($statsqlt);
+
+	        //没取消但使用账期支付的订单金额 @maxy add at 20171212 15:29
+	        $sqlunion  = " and OrderUserID   = ".$cidarr['ClientID']." ";
+	        $statsqltzq  = "SELECT sum(OrderIntegral) as Ftotal from ".$sdatabase.DATATABLE."_order_orderinfo where OrderCompany=".$cid." ".$sqlunion." and (OrderStatus!=8 and OrderStatus!=9 and OrderPayType=12) ";
+	        $statdatatzq = $db->get_row($statsqltzq);
 	        
 	        //退货金额
 	        $sqlunion   = " and ReturnClient  = ".$cidarr['ClientID']." ";
 	        $statsqlt1  = "SELECT sum(ReturnTotal) as Ftotal from ".$sdatabase.DATATABLE."_order_returninfo where ReturnCompany=".$cid." ".$sqlunion." and (ReturnStatus=3 or ReturnStatus=5) ";
 	        $statdata1  = $db->get_row($statsqlt1);
 	
-	        $begintotal = $statdata2['Ftotal'] - $statdatat['Ftotal'] + $statdata4['Ftotal'] + $statdata1['Ftotal'];
+	        // $begintotal = $statdata2['Ftotal'] - $statdatat['Ftotal'] + $statdata4['Ftotal'] + $statdata1['Ftotal'];
+	        //账单金额减去没取消但使用账期支付的订单金额@maxy add at 20171212 15:29
+	        $begintotal = $statdata2['Ftotal'] - ($statdatat['Ftotal'] - $statdatatzq['Ftotal']) + $statdata4['Ftotal'] + $statdata1['Ftotal'];
 	
 	        $begintotal = floatval($begintotal);
 	        $begintotal = sprintf("%.2f",round($begintotal,2));        

@@ -1439,7 +1439,8 @@ angular.module('DHBApp.controllers',[])
 							}
 							 return false;
 						}else{
-							
+                            //隐藏修改手机号弹框@maxy add at 20171212 13:28
+							$('#edit_phone').hide();
 							// 在线支付
 						window.sessionStorage['payTotal'] = $scope.payObj.userInputMoney;
 						window.sessionStorage['payOid'] = $scope.newOrderId;
@@ -3817,7 +3818,8 @@ angular.module('DHBApp.controllers',[])
 							}
 							 return false;
 						}else{
-							
+                            //隐藏修改手机号弹框@maxy add at 20171212 13:28
+							$('#edit_phone').hide();
 							// 在线支付
 						$scope.replacePath('/pay-online/' + $scope.orderCode + '/pay-jump');
 						}
