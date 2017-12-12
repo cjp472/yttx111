@@ -185,6 +185,7 @@ directiveModule
       					params.v.user_id = parseInt(window.localStorage.getItem('ClientID'));
 
 						commonService.getDataList(params).success(function(data){
+//							console.log(data);
 //							alert(data.path);
 							$(_input).attr('data-path',data.path);
 							console.log($(_input))
