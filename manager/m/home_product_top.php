@@ -4,7 +4,12 @@
 	$today  = strtotime(date('Y-m-d')." 23:59:59") + 1;
 	$yestodayStart = $today - $secPer * 2;
 	$yestodayEnd   = $today - $secPer - 1;
-
+        //首页商品销量区分商业公司和代理商 wkk
+        $user_flag = trim($_SESSION['uinfo']['userflag']);
+        $userid=$_SESSION['uinfo']['userid'];
+        if($user_flag == '2'){
+            $sqlmsg = " AND i.AgentID= ".$userid."";
+        }
 	$productYesSql = "SELECT
 					COUNT(1) AS cnt,c.ContentID,i.Name,i.Model,i.Units,SUM(c.ContentNumber) AS total,
 					SUM((c.ContentNumber * c.ContentPercent * c.ContentPrice)/10) AS money
@@ -18,7 +23,7 @@
 				WHERE
 					c.CompanyID=".$_SESSION['uc']['CompanyID']."
 					AND o.OrderStatus NOT IN (8, 9) 
-    				AND o.OrderDate>".$yestodayStart." AND o.OrderDate<".$yestodayEnd."
+    				AND o.OrderDate>".$yestodayStart." AND o.OrderDate<".$yestodayEnd."".$sqlmsg."
 				GROUP BY c.ContentID
 				ORDER BY total DESC
 				LIMIT 10";
@@ -39,7 +44,7 @@
 			       WHERE
 			             c.CompanyID=".$_SESSION['uc']['CompanyID']."
 			             AND o.OrderStatus NOT IN (8, 9) 
-			             AND o.OrderDate>".$nearSev." AND o.OrderDate<".($today-1)."
+			             AND o.OrderDate>".$nearSev." AND o.OrderDate<".($today-1)."".$sqlmsg."
 			       GROUP BY c.ContentID
 			       ORDER BY total DESC
 			       LIMIT 10";
@@ -59,7 +64,7 @@
 			        WHERE
 			            c.CompanyID=".$_SESSION['uc']['CompanyID']."
 			            AND o.OrderStatus NOT IN (8, 9) 
-			            AND FROM_UNIXTIME(o.OrderDate,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')
+			            AND FROM_UNIXTIME(o.OrderDate,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')".$sqlmsg."
 			        GROUP BY c.ContentID
 			        ORDER BY total DESC
 			        LIMIT 10";

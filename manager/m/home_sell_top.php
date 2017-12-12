@@ -52,6 +52,33 @@ $today  = strtotime(date('Y-m-d')." 23:59:59") + 1;
 $yestodayStart = $today - $secPer * 2;
 $yestodayEnd   = $today - $secPer - 1;
 
+    //首页商品销量区分商业公司和代理商 wkk
+    $user_flag = trim($_SESSION['uinfo']['userflag']);
+    $userid=$_SESSION['uinfo']['userid'];
+    if($user_flag == '2'){
+        $nearSev = $today - $secPer * 7;
+        $yejiSev = "SELECT
+                      COUNT(1) AS total,
+                                  SUM(OrderTotal) AS Tmoney,
+                                  FROM_UNIXTIME(OrderDate, '%m.%d') AS Tdate
+                                FROM
+                                  ".DATATABLE."_order_orderinfo
+                                WHERE OrderCompany=".$_SESSION['uc']['CompanyID']."
+                                AND OrderStatus NOT IN(8,9)
+                                AND OrderDate>".$nearSev." AND OrderDate<".($today-1)."
+                                GROUP BY Tdate
+                                LIMIT 7 ";
+        $yejiSevInfo = $db->get_results($yejiSev);
+        $yejiSevLine = $yejiSevName = $yejiSevCount = array();
+        foreach($yejiSevInfo as $sev){
+                $yejiSevLine[]  = $sev['Tmoney'];
+                $yejiSevCount[] = $sev['total'];
+                $yejiSevName[]  = "'".$sev['Tdate']."'";
+        }
+        
+        print_r($yejiSev);
+        
+    }else{
 //最近7天
 $nearSev = $today - $secPer * 7;
 $yejiSev = "SELECT
@@ -113,7 +140,7 @@ foreach($yejiMonthInfo as $sev){
 	$yejiMonthCount[] = $sev['total'];
 	$yejiMonthName[]  = "'".$sev['Tdate']."'";
 }
-
+}
 
 ?>
 <script>

@@ -151,11 +151,23 @@ $_SESSION['uc']['CompanyCredit'] =  $CompanyCreditSel['CompanyCredit'];
                 <div class="infox2">
                     <p>客情</p>
                     <?php
-					$datasql   = "SELECT COUNT(*) AS total FROM ".DATABASEU.DATATABLE."_order_user where UserCompany=".$_SESSION['uinfo']['ucompany']." and UserFlag!='1' and UserType='S'";
-                	$saleInfo = $db->get_row($datasql);
-
-                    //冻结
-                    $stoSalesql   = "SELECT COUNT(*) AS total FROM ".DATABASEU.DATATABLE."_order_user where UserCompany=".$_SESSION['uinfo']['ucompany']." and UserFlag='1' and UserType='S'";
+                    //判断为商业公司客情还是代理商客情 wkk
+                    $user_flag = trim($_SESSION['uinfo']['userflag']);
+                    if($user_flag=='2'){
+                        $upper_id = $_SESSION['uinfo']['userid'];
+                        $datasql   = "SELECT COUNT(*) AS total FROM ".DATABASEU.DATATABLE."_order_user where UserCompany=".$_SESSION['uinfo']['ucompany']." and UserFlag!='1' and UpperID='$upper_id' and UserType='S'";
+                        $stoSalesql   = "SELECT COUNT(*) AS total FROM ".DATABASEU.DATATABLE."_order_user where UserCompany=".$_SESSION['uinfo']['ucompany']." and UserFlag='1' and UpperID='$upper_id' and UserType='S'";
+                    }elseif($user_flag=='0'){
+                        $upper_id = 0;
+                        $datasql   = "SELECT COUNT(*) AS total FROM ".DATABASEU.DATATABLE."_order_user where UserCompany=".$_SESSION['uinfo']['ucompany']." and UserFlag!='1' and UpperID='$upper_id' and UserType='S'";
+                        $stoSalesql   = "SELECT COUNT(*) AS total FROM ".DATABASEU.DATATABLE."_order_user where UserCompany=".$_SESSION['uinfo']['ucompany']." and UserFlag='1' and UpperID='$upper_id' and UserType='S'";
+                    }elseif($user_flag=='9'){
+                        $datasql   = "SELECT COUNT(*) AS total FROM ".DATABASEU.DATATABLE."_order_user where UserCompany=".$_SESSION['uinfo']['ucompany']." and UserFlag!='1' and UserType='S'";
+                        $stoSalesql   = "SELECT COUNT(*) AS total FROM ".DATABASEU.DATATABLE."_order_user where UserCompany=".$_SESSION['uinfo']['ucompany']." and UserFlag='1' and UserType='S'";
+                    }
+                    //客情
+                    $saleInfo = $db->get_row($datasql);
+                    //冻结客情
                     $stoSaleInfo = $db->get_row($stoSalesql);
                     ?>
 
@@ -171,8 +183,16 @@ $_SESSION['uc']['CompanyCredit'] =  $CompanyCreditSel['CompanyCredit'];
                 </div>
 
                 <?php
-					$osql = "select OrderStatus,count(*) as numstatus from ".DATATABLE."_order_orderinfo where OrderCompany=".$_SESSION['uinfo']['ucompany']." group by OrderStatus";
-					$oinfo = $db->get_results($osql);
+                //修改 wkk
+                    if ($user_flag == '2')
+                    {	
+                        $osql = "SELECT  o.OrderStatus,count(*) as numstatus FROM "
+                        .DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+                        where OrderCompany = ".$_SESSION['uinfo']['ucompany']." and c.AgentID= ".$_SESSION['uinfo']['userid']." group by OrderStatus";
+                    }else{
+                        $osql = "select OrderStatus,count(*) as numstatus from ".DATATABLE."_order_orderinfo where OrderCompany=".$_SESSION['uinfo']['ucompany']." group by OrderStatus";
+                    }
+                    $oinfo = $db->get_results($osql);
                 $totalorder = 0;
                 foreach($oinfo as $ovar)
                 {
@@ -183,15 +203,25 @@ $_SESSION['uc']['CompanyCredit'] =  $CompanyCreditSel['CompanyCredit'];
                 {
                 $orderpencent[$ovar['OrderStatus']] = round($ordernumber[$ovar['OrderStatus']]/$totalorder*100,2);
                 }
-
-                $ssql = "select OrderSendStatus,count(*) as numsendstatus from ".DATATABLE."_order_orderinfo where OrderCompany=".$_SESSION['uinfo']['ucompany']." group by OrderSendStatus";
+                if($user_flag == '2'){
+                     $ssql = "SELECT  o.OrderSendStatus,count(*) as numsendstatus FROM "
+                        .DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+                        where OrderCompany = ".$_SESSION['uinfo']['ucompany']." and c.AgentID= ".$_SESSION['uinfo']['userid']." group by OrderSendStatus";
+                }else{
+                    $ssql = "select OrderSendStatus,count(*) as numsendstatus from ".DATATABLE."_order_orderinfo where OrderCompany=".$_SESSION['uinfo']['ucompany']." group by OrderSendStatus";
+                }
                 $sinfo = $db->get_results($ssql);
                 foreach($sinfo as $svar)
                 {
                 $ordersendnumber[$svar['OrderSendStatus']] = $svar['numsendstatus'];
                 }
-
-                $psql = "select OrderPayStatus,count(*) as numpaystatus from ".DATATABLE."_order_orderinfo where OrderCompany=".$_SESSION['uinfo']['ucompany']." group by OrderPayStatus";
+                if($user_flag == '2'){
+                     $psql = "SELECT  o.OrderPayStatus,count(*) as numpaystatus FROM "
+                        .DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+                        where OrderCompany = ".$_SESSION['uinfo']['ucompany']." and c.AgentID= ".$_SESSION['uinfo']['userid']." group by OrderPayStatus";
+                }else{
+                    $psql = "select OrderPayStatus,count(*) as numpaystatus from ".DATATABLE."_order_orderinfo where OrderCompany=".$_SESSION['uinfo']['ucompany']." group by OrderPayStatus";
+                }
                 $pinfo = $db->get_results($psql);
                 foreach($pinfo as $pvar)
                 {
@@ -216,15 +246,20 @@ $_SESSION['uc']['CompanyCredit'] =  $CompanyCreditSel['CompanyCredit'];
                     <span class="iconfont icon-jingxuan" style="font-size:22px;float:left;margin:5px 10px 0 12px;color:#FFA05F"></span><p style="font-size: 16px;float:left;margin-top:9px;">商品</p>
                 </div>
                 <?php
-				   $psql = "SELECT COUNT(*) AS total FROM ".DATATABLE."_order_content_index WHERE CompanyID=".$_SESSION['uinfo']['ucompany']." AND FlagID=0";
+                                //修改展示数据 wkk
+                                    $userid=$_SESSION['uinfo']['userid'];
+                                    if($type['UserType']=='M' && $type['UserFlag']==2)    $sqlmsg .=" AND AgentID= ".$userid." ";
+				   $psql = "SELECT COUNT(*) AS total FROM ".DATATABLE."_order_content_index WHERE CompanyID=".$_SESSION['uinfo']['ucompany']."".$sqlmsg." AND FlagID=0";
 				   $pinfo = $db->get_row($psql);
                 ?>
 
                 <div class="infox2">
 
                     <?php
-				   //下架
-				   $stoPsql = "SELECT COUNT(*) AS total FROM ".DATATABLE."_order_content_index WHERE CompanyID=".$_SESSION['uinfo']['ucompany']." AND FlagID=1";
+				   //下架  wkk区分代理商和商业公司的区别
+                                   $userid=$_SESSION['uinfo']['userid'];
+                                   if($user_flag=='2')    $sqlmsg .=" AND AgentID= ".$userid." ";
+				   $stoPsql = "SELECT COUNT(*) AS total FROM ".DATATABLE."_order_content_index WHERE CompanyID=".$_SESSION['uinfo']['ucompany']."".$sqlmsg." AND FlagID=1";
 				   $stoPpinfo = $db->get_row($stoPsql);
 
                     ?>
@@ -234,8 +269,14 @@ $_SESSION['uc']['CompanyCredit'] =  $CompanyCreditSel['CompanyCredit'];
                     </div>
                     <div class="infox2">
                         <?php
-							$bsql = "select count(*) as total from ".DATATABLE."_order_brand where CompanyID=".$_SESSION['uinfo']['ucompany'];
-							$binfo = $db->get_row($bsql);
+                                                //修改 区分药厂代理商和商业公司的区别 wkk
+                                                    if($user_flag == '2'){
+                                                            $userid=$_SESSION['uinfo']['userid'];
+                                                            $bsql = "SELECT count(*) as total FROM ".DATATABLE."_view_index_site as c inner join ".DATATABLE."_order_brand as b on b.BrandID=c.BrandID where c.CompanyID = ".$_SESSION['uinfo']['ucompany']." AND c.AgentID= ".$userid." and FlagID=0 Order by b.BrandID Desc";
+                                                    }else{
+                                                            $bsql = "select count(*) as total from ".DATATABLE."_order_brand where CompanyID=".$_SESSION['uinfo']['ucompany'];
+                                                    }
+                                                    $binfo = $db->get_row($bsql);
                         ?>
                         <p style="margin-left:50px;">药厂：<a href="./product_brand.php"><?php echo intval($binfo['total']);?></a> 个</p>
 
