@@ -3,7 +3,6 @@ $menu_flag = "order";
 $pope	   = "pope_view";
 include_once ("header.php");
 include_once ("arr_data.php");
-
 	$clientdata = $db->get_results("select ClientID,ClientCompanyName,ClientCompanyPinyi from ".DATATABLE."_order_client where ClientCompany=".$_SESSION['uinfo']['ucompany']." and ClientFlag=0 order by ClientCompanyPinyi asc");
 
 	$sqlmsg = '';
@@ -442,16 +441,14 @@ if(empty($in['stype']))
 		$area_client_arr = $db->get_col($sql);	
 		$sqlmsg .=" and OrderUserID IN (".$sql.") ";
 	}
-
 	//wangd 2017-11-28 判断是否为代理商，代理商只能看到自己所管辖商品相关的订单
 	$user_flag = trim($_SESSION['uinfo']['userflag']);
 	if ($user_flag == '2')
-	{	
+	{		
 		$sqlnum = "SELECT count(DISTINCT o.OrderID) AS allow FROM "
 			.DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
 			where OrderCompany = ".$_SESSION['uinfo']['ucompany']." and c.AgentID= ".$_SESSION['uinfo']['userid']." "
 			.$sqlmsg.$advsql." ";
-
 		$subsql = "SELECT DISTINCT o.OrderID AS allow FROM "
 			.DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
 			where OrderCompany = ".$_SESSION['uinfo']['ucompany']." and c.AgentID= ".$_SESSION['uinfo']['userid']." "
@@ -465,7 +462,6 @@ if(empty($in['stype']))
 		$sqlnum = "SELECT count(*) AS allrow FROM ".DATATABLE."_order_orderinfo where OrderCompany = ".$_SESSION['uinfo']['ucompany']." ".$sqlmsg.$advsql." ";
 		$datasql   = "SELECT OrderID,OrderSN,OrderUserID,OrderSendType,OrderSendStatus,OrderPayType,OrderPayStatus,OrderReceiveCompany,OrderReceiveName,OrderReceivePhone,DeliveryDate,OrderRemark,OrderTotal,OrderStatus,OrderDate,OrderType,OrderSaler,OrderFrom,OrderSpecial,SMSNotified FROM ".DATATABLE."_order_orderinfo where OrderCompany = ".$_SESSION['uinfo']['ucompany']." ".$sqlmsg.$advsql." Order by OrderID Desc";	
 	}
-
 	$InfoDataNum = $db->get_row($sqlnum);
 	$page        = new ShowPage;
     $page->PageSize = 30;
@@ -567,7 +563,22 @@ if(empty($in['stype']))
 				  </td>
                   <td >
 				  <?php 
-				  echo "<span title='金额' class=font12>¥ ".$lsv['OrderTotal']."</span><br />
+				  //2017-12-12 ymm 判断当前登录的人的身份如果是代理商或者是代理商的客情的话就查询出对应的订单信息
+				   $user_flag = trim($_SESSION['uinfo']['userflag']);
+				   if ($user_flag == '2'){
+				        $sql1 = "select ContentPrice,ContentNumber,ContentPercent from ".DATATABLE."_view_index_cart where CompanyID=".$_SESSION['uinfo']['ucompany']." and OrderID=".$lsv['OrderID']." and AgentID=".$_SESSION['uinfo']['userid']." order by SiteID asc, BrandID asc, ID asc";
+				    }
+				    else //管理员和商业公司可以看到所有订单
+				    {
+				        $sql1 = "select ContentPrice,ContentNumber,ContentPercent from ".DATATABLE."_view_index_cart where CompanyID=".$_SESSION['uinfo']['ucompany']." and OrderID=".$lsv['OrderID']." order by SiteID asc, BrandID asc, ID asc";
+				    }
+				   $total=$db->get_results($sql1);
+				   $alltotal=0;
+				   //2017-12-12 算出负责的订单总金额
+				  foreach ($total as $key => $cvar) {
+				  	$alltotal+=$cvar['ContentNumber']*$cvar['ContentPrice']*$cvar['ContentPercent']/10;
+				  }
+				  echo "<span title='金额' class=font12>¥ ".$alltotal."</span><br />
 				  <span title='付款方式'>".$paytypearr[$lsv['OrderPayType']]."</span>";
 				  if($lsv['OrderStatus']=="8" || $lsv['OrderStatus']=="9"){
 				    	echo '<br /><span title="付款状态" class="red">[已取消]</span>';

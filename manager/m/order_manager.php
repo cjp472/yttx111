@@ -13,7 +13,7 @@ $oinfo = array();
 		exit('错误参数!');
 	}
 
-	$cinfo = $db->get_row("SELECT ClientID,ClientName,ClientCompanyName,ClientTrueName,ClientPhone,ClientMobile,ClientAdd,ClientGUID FROM ".DATATABLE."_order_client where ClientCompany = ".$_SESSION['uinfo']['ucompany']." and ClientID=".$oinfo['OrderUserID']." limit 0,1");
+    $cinfo = $db->get_row("SELECT ClientID,ClientName,ClientCompanyName,ClientTrueName,ClientPhone,ClientMobile,ClientAdd,ClientGUID FROM ".DATATABLE."_order_client where ClientCompany = ".$_SESSION['uinfo']['ucompany']." and ClientID=".$oinfo['OrderUserID']." limit 0,1");
 
     //wangd 2017-11-28 判断是否为代理商，代理商只能看到自己所管辖商品
     $user_flag = trim($_SESSION['uinfo']['userflag']);

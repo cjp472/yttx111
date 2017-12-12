@@ -228,7 +228,25 @@ if(!empty($valuearr['audit_type']) && $valuearr['audit_type']=="on"){
 				    ?>
 					</td>
                   <td >
-					<? echo "<span title='金额' class=font12>¥ ".$lsv['OrderTotal']."</span><br /><span title='付款方式'>".$paytypearr[$lsv['OrderPayType']]."</span><br /><span title='付款状态' class=red>".$pay_status_arr[$lsv['OrderPayStatus']]."</span><br />";?>
+					<?
+					//2017-12-12 ymm 判断当前登录的人的身份如果是代理商的客情的话就查询出对应的订单信息
+				   $user_flag = trim($_SESSION['uinfo']['userflag']);
+				   if ($user_flag == '2'){
+				        $agent=$db->get_row("select UpperID from ".DATABASEU.DATATABLE."_order_user where UserID=".$_SESSION['uinfo']['userid']."");
+				        $agentid=$agent['UpperID'];
+				        $sql1 = "select ContentPrice,ContentNumber,ContentPercent from ".DATATABLE."_view_index_cart where CompanyID=".$_SESSION['uinfo']['ucompany']." and OrderID=".$lsv['OrderID']." and AgentID=".$agentid." order by SiteID asc, BrandID asc, ID asc";
+				    }
+				    else //管理员和商业公司可以看到所有订单
+				    {
+				        $sql1 = "select ContentPrice,ContentNumber,ContentPercent from ".DATATABLE."_view_index_cart where CompanyID=".$_SESSION['uinfo']['ucompany']." and OrderID=".$lsv['OrderID']." order by SiteID asc, BrandID asc, ID asc";
+				    }
+				   $total=$db->get_results($sql1);
+				   $alltotal=0;
+				   //2017-12-12 ymm 算出负责的订单总金额
+				  foreach ($total as $key => $cvar) {
+				  	$alltotal+=$cvar['ContentNumber']*$cvar['ContentPrice']*$cvar['ContentPercent']/10;
+				  }
+					 echo "<span title='金额' class=font12>¥ ".$alltotal."</span><br /><span title='付款方式'>".$paytypearr[$lsv['OrderPayType']]."</span><br /><span title='付款状态' class=red>".$pay_status_arr[$lsv['OrderPayStatus']]."</span><br />";?>
 					</td>
                   <td >&nbsp;&nbsp;<? 
 					if(!empty($valuearr['audit_type']) && $valuearr['audit_type']=="on")
