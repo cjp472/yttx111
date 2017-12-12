@@ -614,7 +614,7 @@ div,ul,textarea,p,li,footer{
     overflow: auto;
     background-color: #f6f6f6;
 }
-.content > div{
+.content >div >div{
     margin-top: .8rem;
     border-radius: .3rem;
     background-color: #FFFFFF;
@@ -681,8 +681,8 @@ div,ul,textarea,p,li,footer{
 }
 .operator > ul,.icon-bar > ul{
     padding: 0 !important;
-    height: 100%;
-    /*2017.11修改  开始*/
+    height: 7rem !important;
+  
     display: -webkit-flex;
     display: flex;
     justify-content: flex-start;
@@ -1314,9 +1314,9 @@ footer > div:last-child{border-right: none;}
 }
 .addShop .addChoice p,.addShop .addTel p{
 	width: 100%;
-	font-size: 1.3333rem;
+	font-size: 1.6rem;
 	color: #424242;
-	line-height: 1.3333rem;
+	line-height: 1.6rem;
 	margin-bottom: 0.8333rem;
 }
 /*.addShop .addChoice img,.addShop .addTel img{
@@ -1327,15 +1327,15 @@ footer > div:last-child{border-right: none;}
 	bottom: 1.7rem;
 }*/
 .addShop input{
-	font-size: 1.25rem;
+	font-size: 1.6rem;
 	color: #666;
 	
 	border: none;
 	outline: none;
 	
 	border: 1px solid #cfcfcf;
-	width: 96%;
-	height: 2.75rem;
+	width: 96%;             
+	height: 3.3333rem;
 	padding-left: 3%;
 }
 .addShop .addChoice input{
@@ -1351,8 +1351,8 @@ footer > div:last-child{border-right: none;}
 	position: absolute;
 	right: 1rem;
 	bottom: 0.8333rem;
-	width: 1.25rem;
-	height: 1.25rem;
+	width: 1.6667rem;
+	height: 1.6667rem;
 	display: none;
 	
 }
@@ -1369,11 +1369,11 @@ footer > div:last-child{border-right: none;}
 }
 .addShop .addChoice .showShop li{
 	background: #fff;
-	height: 3.3333rem;
-	line-height: 3.3333rem;
+	height: 4rem;
+	line-height: 4rem;
 	border-bottom: 1px solid #cfcfcf;
 	
-	font-size: 1.25rem;
+	font-size: 1.6rem;
 	white-space: nowrap;  
     overflow: hidden;  
     text-overflow: ellipsis;  
@@ -1452,8 +1452,8 @@ footer > div:last-child{border-right: none;}
 	margin-left: 0.8333rem;
 	background: #fd7c5e;
 }
-.addShop input::-ms-input-placeholder{text-align: center;color: #999;font-size: 1.25rem;} 
-.addShop input::-webkit-input-placeholder{text-align: center;color: #999;font-size: 1.25rem;} 
+.addShop input::-ms-input-placeholder{text-align: center;color: #999;font-size: 1.5rem;} 
+.addShop input::-webkit-input-placeholder{text-align: center;color: #999;font-size: 1.5rem;} 
 
 
 /**
@@ -1479,17 +1479,17 @@ footer > div:last-child{border-right: none;}
 	margin-bottom: 0.8333rem;
 }
 .addupload .upload>p:nth-of-type(1){
-	height: 1.3333rem;
-	line-height: 1.3333rem;
+	height: 1.6rem;
+	line-height: 1.6rem;
 	color: #424242;
-	font-size: 1.3333rem;
+	font-size: 1.6rem;
 }
 .addupload .upload>p:nth-of-type(2){
 	height: 2.25rem;
 	line-height: 2.25rem;
 	margin:  0.25rem 0 1rem 0;
 	
-	font-size: 1.0833rem;
+	font-size: 1.5rem;
 	
 	position: relative;
 }
@@ -1503,6 +1503,7 @@ footer > div:last-child{border-right: none;}
 }
 .addupload span.uploaded{color: #666 !important;}
 .addupload .upload>p:nth-of-type(2)>button{
+    font-size: 1.5rem;
 	height: 100%;
     font-style: normal;
 	/*color: #FD7C5E;*/
@@ -1520,9 +1521,11 @@ footer > div:last-child{border-right: none;}
 	width: 5.4167rem;
 	border-radius: 0.1667rem;
 	height: 100%;
+	line-height: 1..%;
 	
 	background: #79cae8;
 	color: #fff;
+	font-size: 1.5rem;
 	text-align: center;
 }
 .addupload .upload>p:nth-of-type(2)>input[type="file"]{
@@ -1543,7 +1546,7 @@ footer > div:last-child{border-right: none;}
 }*/
 .addupload .upload .relative{
 	width: 100%;
-	height: 2.6667rem;
+	height: 3.3333rem;
 	position: relative;
 	margin-bottom: 0 !important;
 }
@@ -1551,19 +1554,19 @@ footer > div:last-child{border-right: none;}
 	padding-left: 3%;
 	width: 96%;
 	
-	height: 2.5rem;
+	height: 3.3333rem;
 	line-height: 2.5rem;
 	border: 0.0417rem solid #cfcfcf;
 	
 	color: #666;
-	font-size: 1.1667rem;
+	font-size: 1.5rem;
 }
 .addupload .relative img{
 	position: absolute;
 	right: 1rem;
 	bottom: 26.5%;
-	width: 1.25rem;
-	height: 1.25rem;
+	width: 1.6667rem;
+	height: 1.6667rem;
 	
 	display: none;
 }

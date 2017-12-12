@@ -177,7 +177,7 @@ directiveModule
 			        }).then(function (rst) {
 			            /* 处理成功后执行 */
 			           console.log(rst)
-//			            console.log(rst.base64);
+//			            alert(rst.base64);
 //			               _hidden.val(rst.base64);
 
 						params.v.param = rst.base64;
@@ -185,8 +185,9 @@ directiveModule
       					params.v.user_id = parseInt(window.localStorage.getItem('ClientID'));
 
 						commonService.getDataList(params).success(function(data){
-//							console.log(data.path);
+//							alert(data.path);
 							$(_input).attr('data-path',data.path);
+							console.log($(_input))
 		                }).error(function(error){
 							console.log(error)	
 		                }); 
