@@ -3,7 +3,6 @@ $menu_flag = "statistics";
 $pope	   = "pope_view";
 include_once ("header.php");
 include_once ("arr_data.php");
-
 $clientdata = $db->get_results("select c.ClientID,c.ClientCompanyName,c.ClientCompanyPinyi from ".DATATABLE."_order_client c left join ".DATATABLE."_order_salerclient s ON c.ClientID=s.ClientID  where c.ClientCompany=".$_SESSION['uinfo']['ucompany']." and s.CompanyID=".$_SESSION['uinfo']['ucompany']." and s.SalerID=".$_SESSION['uinfo']['userid']." and c.ClientFlag=0 order by c.ClientCompanyPinyi asc");
 
 $sdmsg = '';
@@ -25,36 +24,91 @@ if(!empty($in['cid'])){
     foreach($clientdata as $val){
         $clientIds[] = $val['ClientID'];
     }
-    $where .= " AND OrderUserID IN(".implode(',',$clientIds).")";
+    $where .= " AND o.OrderUserID IN(".implode(',',$clientIds).")";
     //所有药店
 }
-$dataSql = "SELECT
-              LEFT(OrderSN, 8) AS ODate,
-              SUM(OrderTotal) AS OTotal,
-              COUNT(*) AS totalnumber
-            FROM
-              ".DATATABLE."_order_orderinfo
-            WHERE OrderCompany = ".$_SESSION['uinfo']['ucompany']."
-              AND FROM_UNIXTIME(OrderDate) BETWEEN '".$in['beginDate']." 00:00:00'
-              AND '".$in['endDate']." 23:59:59'
-              AND OrderStatus != 8
-              AND OrderStatus != 9" . $where ."
-              GROUP BY LEFT(OrderSN,8) DESC
-              ";
 
-//待审核
-$dataSql0 = "SELECT
-              LEFT(OrderSN, 8) AS ODate,
-              SUM(OrderTotal) AS OTotal,
-              COUNT(*) AS totalnumber
-            FROM
-              ".DATATABLE."_order_orderinfo
-            WHERE OrderCompany = ".$_SESSION['uinfo']['ucompany']."
-              AND FROM_UNIXTIME(OrderDate) BETWEEN '".$in['beginDate']." 00:00:00'
-              AND '".$in['endDate']." 23:59:59'
-              AND OrderStatus = 0" . $where . "
-              GROUP BY LEFT(OrderSN,8) DESC
-              ";
+$type = $db->get_row("SELECT UserType,UserFlag,UpperID FROM ".DATABASEU.DATATABLE."_order_user where UserID = ".$_SESSION['uinfo']['userid']."");
+
+$user_flag = trim($_SESSION['uinfo']['userflag']);
+if ($user_flag == '2')
+{
+    //修改订单按客情统计 @maxy update at 2017121314:33
+    //所有订单
+    $dataSql = "SELECT
+        LEFT(o.OrderSN, 8) AS ODate,
+        SUM(o.OrderTotal) AS OTotal,
+        COUNT(*) AS totalnumber
+    FROM
+        ".DATATABLE."_order_orderinfo o
+        inner join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID 
+        left join ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+    WHERE o.OrderCompany = ".$_SESSION['uinfo']['ucompany']."
+        AND s.SalerID=".$_SESSION['uinfo']['userid']." 
+        AND c.AgentID=".$type['UpperID']."
+        AND FROM_UNIXTIME(o.OrderDate) BETWEEN '".$in['beginDate']." 00:00:00'
+        AND '".$in['endDate']." 23:59:59'
+        AND o.OrderStatus != 8
+        AND o.OrderStatus != 9" . $where ."
+    GROUP BY LEFT(o.OrderSN,8) DESC
+    ";              
+
+    //待审核订单
+    $dataSql0 = "SELECT
+        LEFT(o.OrderSN, 8) AS ODate,
+        SUM(o.OrderTotal) AS OTotal,
+        COUNT(*) AS totalnumber
+    FROM
+        ".DATATABLE."_order_orderinfo o
+        inner join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID 
+        left join ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+        WHERE o.OrderCompany = ".$_SESSION['uinfo']['ucompany']."
+        AND s.SalerID=".$_SESSION['uinfo']['userid']." 
+        AND c.AgentID=".$type['UpperID']." 
+        WHERE o.OrderCompany = ".$_SESSION['uinfo']['ucompany']."
+        AND FROM_UNIXTIME(o.OrderDate) BETWEEN '".$in['beginDate']." 00:00:00'
+        AND '".$in['endDate']." 23:59:59'
+        AND o.OrderStatus = 0" . $where . "
+    GROUP BY LEFT(o.OrderSN,8) DESC
+    ";
+}
+else // 商业公司客情能看到所有订单
+{
+    //修改订单按客情统计 @maxy update at 2017121314:33
+    //所有订单
+    $dataSql = "SELECT
+        LEFT(o.OrderSN, 8) AS ODate,
+        SUM(o.OrderTotal) AS OTotal,
+        COUNT(*) AS totalnumber
+    FROM
+        ".DATATABLE."_order_orderinfo o
+        inner join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID 
+    WHERE o.OrderCompany = ".$_SESSION['uinfo']['ucompany']."
+        AND s.SalerID=".$_SESSION['uinfo']['userid']." 
+        AND FROM_UNIXTIME(o.OrderDate) BETWEEN '".$in['beginDate']." 00:00:00'
+        AND '".$in['endDate']." 23:59:59'
+        AND o.OrderStatus != 8
+        AND o.OrderStatus != 9
+    GROUP BY LEFT(o.OrderSN,8) DESC
+    ";              
+
+    //待审核订单
+    $dataSql0 = "SELECT
+        LEFT(o.OrderSN, 8) AS ODate,
+        SUM(o.OrderTotal) AS OTotal,
+        COUNT(*) AS totalnumber
+    FROM
+        ".DATATABLE."_order_orderinfo o
+        inner join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID 
+        WHERE o.OrderCompany = ".$_SESSION['uinfo']['ucompany']."
+        AND s.SalerID=".$_SESSION['uinfo']['userid']." 
+        AND FROM_UNIXTIME(o.OrderDate) BETWEEN '".$in['beginDate']." 00:00:00'
+        AND '".$in['endDate']." 23:59:59'
+        AND o.OrderStatus = 0 
+    GROUP BY LEFT(o.OrderSN,8) DESC
+    ";
+}
+
 $rdata = $db->get_results($dataSql0);
 $rarr = array();
 
