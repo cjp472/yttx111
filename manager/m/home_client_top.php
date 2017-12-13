@@ -6,55 +6,76 @@ $today  = strtotime(date('Y-m-d')." 23:59:59") + 1;
 $yestodayStart = $today - $secPer * 2;
 $yestodayEnd   = $today - $secPer - 1;
 
-//昨天
-$clientYesSql = "SELECT 
-				  SUM(o.OrderTotal) AS total,
-				  c.ClientCompanyName 
-				FROM
-				  rsung_order_orderinfo AS o 
-				  LEFT JOIN rsung_order_client AS c 
-				    ON o.OrderUserID = c.ClientID 
-				WHERE o.OrderCompany=".$_SESSION['uc']['CompanyID']."
-					  AND o.OrderStatus NOT IN (8, 9) 
-					  AND o.OrderDate>".$yestodayStart." AND o.OrderDate<".$yestodayEnd."
-				GROUP BY c.ClientID 
-				ORDER BY total DESC
-				LIMIT 10 ";
-$clientYesInfo = $db->get_results($clientYesSql);
+//ymm 2017-12-13                判断是否为代理商，代理商只能看到自己所管辖商品相关的药店
+//昨日
+$user_flag = trim($_SESSION['uinfo']['userflag']);
+if ($user_flag == '2')
+{       
+    $subsql = "SELECT DISTINCT o.OrderID FROM "
+        .DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+        where c.AgentID= ".$_SESSION['uinfo']['userid']." AND o.OrderCompany=".$_SESSION['uc']['CompanyID']." AND o.OrderStatus NOT IN (8, 9) AND o.OrderDate>".$yestodayStart." AND o.OrderDate<".$yestodayEnd."";
+    $clientYesSql = "SELECT c.ClientCompanyName,o.OrderID FROM "
+    .DATATABLE."_order_orderinfo o RIGHT JOIN ".DATATABLE."_order_client c on o.OrderUserID=c.ClientID
+    where OrderID in (".$subsql.")";
+}else{ //管理员和商业公司可以看到所有订单
 
+     $clientYesSql = "SELECT c.ClientCompanyName,o.OrderID FROM "
+    .DATATABLE."_order_orderinfo o RIGHT JOIN ".DATATABLE."_order_client c on o.OrderUserID=c.ClientID where c.ClientCompany=".$_SESSION['uc']['CompanyID']." AND o.OrderStatus NOT IN (8, 9) AND o.OrderDate>".$yestodayStart." AND o.OrderDate<".$yestodayEnd."";
+}
+$clientYes = $db->get_results($clientYesSql);
+//处理结果集把OrderID分割成字符串
+foreach ($clientYes as $key => $val) {
+    $clientYesInfo['ClientCompanyName'][$val['ClientCompanyName']][]=$val['OrderID'];
+}
+foreach ($clientYesInfo['ClientCompanyName'] as $key => $val) {
+    $clientYesInfo['ClientCompanyName'][$key]['OrderID']=implode(',',$val);
+}
+
+//ymm 2017-12-13                判断是否为代理商，代理商只能看到自己所管辖商品相关的药店
 //7天
 $nearSev = $today - $secPer * 7;
-$clientSevSql = "SELECT
-				  SUM(o.OrderTotal) AS total,
-				  c.ClientCompanyName
-				FROM
-				  rsung_order_orderinfo AS o
-				  LEFT JOIN rsung_order_client AS c
-				    ON o.OrderUserID = c.ClientID
-				WHERE o.OrderCompany=".$_SESSION['uc']['CompanyID']."
-					  AND o.OrderStatus NOT IN (8, 9)
-					  AND o.OrderDate>".$nearSev." AND o.OrderDate<".($today-1)."
-				GROUP BY c.ClientID
-				ORDER BY total DESC
-				LIMIT 10 ";
-$clientSevInfo = $db->get_results($clientSevSql);
+if ($user_flag == '2')
+{       
+    $subsql = "SELECT DISTINCT o.OrderID FROM "
+        .DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+        where c.AgentID= ".$_SESSION['uinfo']['userid']." AND o.OrderCompany=".$_SESSION['uc']['CompanyID']." AND o.OrderStatus NOT IN (8, 9) AND o.OrderDate>".$nearSev." AND o.OrderDate<".($today-1)."";
+    $clientSevSql = "SELECT c.ClientCompanyName,o.OrderID FROM "
+    .DATATABLE."_order_orderinfo o RIGHT JOIN ".DATATABLE."_order_client c on o.OrderUserID=c.ClientID
+    where OrderID in (".$subsql.")";
+}else{ //管理员和商业公司可以看到所有订单
+     $clientSevSql = "SELECT c.ClientCompanyName,o.OrderID FROM "
+    .DATATABLE."_order_orderinfo o RIGHT JOIN ".DATATABLE."_order_client c on o.OrderUserID=c.ClientID where c.ClientCompany=".$_SESSION['uc']['CompanyID']." AND o.OrderStatus NOT IN (8, 9) AND o.OrderDate>".$nearSev." AND o.OrderDate<".($today-1)."";
+}
+$clientSev = $db->get_results($clientSevSql);
+//处理结果集把OrderID分割成字符串
+foreach ($clientSev as $key => $val) {
+    $clientSevInfo['ClientCompanyName'][$val['ClientCompanyName']][]=$val['OrderID'];
+}
+foreach ($clientSevInfo['ClientCompanyName'] as $key => $val) {
+    $clientSevInfo['ClientCompanyName'][$key]['OrderID']=implode(',',$val);
+}
 
+//ymm 2017-12-13                判断是否为代理商，代理商只能看到自己所管辖商品相关的药店
 //本月
 $thirdStart = $today - $secPer * 30;
-$clientMonthSql = "SELECT
-				  SUM(o.OrderTotal) AS total,
-				  c.ClientCompanyName
-				FROM
-				  rsung_order_orderinfo AS o
-				  LEFT JOIN rsung_order_client AS c
-				    ON o.OrderUserID = c.ClientID
-				WHERE o.OrderCompany=".$_SESSION['uc']['CompanyID']."
-					  AND o.OrderStatus NOT IN (8, 9)
-					  AND FROM_UNIXTIME(o.OrderDate,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')
-				GROUP BY c.ClientID
-				ORDER BY total DESC
-				LIMIT 10 ";
-$clientMonthInfo = $db->get_results($clientMonthSql);
+if ($user_flag == '2'){   
+    $subsql = "SELECT DISTINCT o.OrderID FROM "
+        .DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+        where c.AgentID= ".$_SESSION['uinfo']['userid']." AND o.OrderCompany=".$_SESSION['uc']['CompanyID']." AND o.OrderStatus NOT IN (8, 9) AND FROM_UNIXTIME(o.OrderDate,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')";
+    $clientMonthSql = "SELECT c.ClientCompanyName,o.OrderID FROM ".DATATABLE."_order_orderinfo o RIGHT JOIN ".DATATABLE."_order_client c on o.OrderUserID=c.ClientID
+    where OrderID in (".$subsql.")";
+}else{ //管理员和商业公司可以看到所有订单
+    $clientMonthSql = "SELECT c.ClientCompanyName,o.OrderID FROM ".DATATABLE."_order_orderinfo o RIGHT JOIN ".DATATABLE."_order_client c on o.OrderUserID=c.ClientID where c.ClientCompany=".$_SESSION['uc']['CompanyID']." AND o.OrderStatus NOT IN (8, 9) AND FROM_UNIXTIME(o.OrderDate,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')";
+}
+$clientMonth = $db->get_results($clientMonthSql);
+//处理结果集把OrderID分割成字符串
+foreach ($clientMonth as $key => $val) {
+    $clientMonthInfo['ClientCompanyName'][$val['ClientCompanyName']][]=$val['OrderID'];
+}
+foreach ($clientMonthInfo['ClientCompanyName'] as $key => $val) {
+    $clientMonthInfo['ClientCompanyName'][$key]['OrderID']=implode(',',$val);
+}
+
 ?>
 
         <li style="height:45%">
@@ -81,14 +102,30 @@ $clientMonthInfo = $db->get_results($clientMonthSql);
                                 </tr>
                                 <?php
 								}else{
-                            	foreach($clientYesInfo as $toV){
-                            		$toV['ClientCompanyName'] = trim($toV['ClientCompanyName']);
-                            		$clientYesName[] = "'".$toV['ClientCompanyName']."'";
-                            		$clientYesLine[] = "{value:".$toV['total'].", name:'".$toV['ClientCompanyName']."'}";
-                            ?>
+                            	foreach($clientYesInfo['ClientCompanyName'] as $ktoV=>$toV){
+                            		$ktoV = trim($ktoV);
+                            	                            ?>
                                 <tr>
-                                    <td class="mo" title="<?php echo $toV['ClientCompanyName'];?>"><?php echo $toV['ClientCompanyName'];?></td>
-                                    <td >￥<?php echo number_format($toV['total'], 2, '.', '');?></td>
+                                    <td class="mo" title="<?php echo $ktoV;?>"><?php echo $ktoV;?></td>
+                                    <td >￥<?php
+                                    //2017-12-13 ymm 判断当前登录的人的身份如果是代理商就查询出对应的订单信息
+                                    $user_flag = trim($_SESSION['uinfo']['userflag']);
+                                    if ($user_flag == '2'){
+                                    $sql1 = "select ContentPrice,ContentNumber,ContentPercent from ".DATATABLE."_view_index_cart where CompanyID=".$_SESSION['uinfo']['ucompany']." and OrderID in (".$toV['OrderID'].") and AgentID=".$_SESSION['uinfo']['userid']." order by SiteID asc, BrandID asc, ID asc";
+                                    }
+                                    else //管理员和商业公司可以看到所有订单
+                                    {
+                                    $sql1 = "select ContentPrice,ContentNumber,ContentPercent from ".DATATABLE."_view_index_cart where CompanyID=".$_SESSION['uinfo']['ucompany']." and OrderID in (".$toV['OrderID'].") order by SiteID asc, BrandID asc, ID asc";
+                                    }
+                                    $yestotal=$db->get_results($sql1);
+                                    $yes_total=0;
+                                    //2017-12-13 ymm 算出负责的订单总金额
+                                    foreach ($yestotal as $key => $cvar) {
+                                    $yes_total+=$cvar['ContentNumber']*$cvar['ContentPrice']*$cvar['ContentPercent']/10;
+                                    }
+                                     $clientYesLine[] = "{value:".$yes_total.", name:'".$ktoV."'}"; 
+
+                                     echo number_format($yes_total, 2, '.', '');?></td>
                                 </tr>
                                 <?php
 								}
@@ -113,14 +150,30 @@ $clientMonthInfo = $db->get_results($clientMonthSql);
                                 </tr>
                                 <?php
 								}else{
-                            	foreach($clientSevInfo as $sv){
-                            		$sv['ClientCompanyName'] = trim($sv['ClientCompanyName']);
-                            		$clientSevName[] = "'".$sv['ClientCompanyName']."'";
-                            		$clientSevLine[] = "{value:".$sv['total'].", name:'".$sv['ClientCompanyName']."'}";
+                            	foreach($clientSevInfo['ClientCompanyName'] as $ksv=>$sv){
+                            		$ksv = trim($ksv);
+                            		$clientSevName[] = "'".$ksv."'";
                             ?>
                                 <tr>
-                                    <td class="mo"><?php echo $sv['ClientCompanyName'];?></td>
-                                    <td >￥<?php echo number_format($sv['total'], 2, '.', '');?></td>
+                                    <td class="mo"><?php echo $ksv;?></td>
+                                    <td >￥<?php 
+                                    //2017-12-13 ymm 判断当前登录的人的身份如果是代理商就查询出对应的订单信息
+                                    $user_flag = trim($_SESSION['uinfo']['userflag']);
+                                    if ($user_flag == '2'){
+                                    $sev_sql = "select ContentPrice,ContentNumber,ContentPercent from ".DATATABLE."_view_index_cart where CompanyID=".$_SESSION['uinfo']['ucompany']." and OrderID in (".$sv['OrderID'].") and AgentID=".$_SESSION['uinfo']['userid']." order by SiteID asc, BrandID asc, ID asc";
+                                    }
+                                    else //管理员和商业公司可以看到所有订单
+                                    {
+                                    $sev_sql = "select ContentPrice,ContentNumber,ContentPercent from ".DATATABLE."_view_index_cart where CompanyID=".$_SESSION['uinfo']['ucompany']." and OrderID in (".$sv['OrderID'].") order by SiteID asc, BrandID asc, ID asc";
+                                    }
+                                    $sevtotal=$db->get_results($sev_sql);
+                                    $sev_total=0;
+                                    //2017-12-13 ymm 算出负责的订单总金额
+                                    foreach ($sevtotal as $key => $cvar) {
+                                    $sev_total+=$cvar['ContentNumber']*$cvar['ContentPrice']*$cvar['ContentPercent']/10;
+                                    }
+                                    $clientSevLine[] = "{value:".$sev_total.", name:'".$ksv."'}";
+                                    echo number_format($sev_total, 2, '.', '');?></td>
                                 </tr>
                                 <?php
 								}
@@ -145,14 +198,30 @@ $clientMonthInfo = $db->get_results($clientMonthSql);
                                 </tr>
                                 <?php
 								}else{
-                            	foreach($clientMonthInfo as $mV){
-                            		$mV['ClientCompanyName'] = trim($mV['ClientCompanyName']);
-                            		$clientMonthName[] = "'".$mV['ClientCompanyName']."'";
-                            		$clientMonthLine[] = "{value:".$mV['total'].", name:'".$mV['ClientCompanyName']."'}";
+                            	foreach($clientMonthInfo['ClientCompanyName'] as $mk=>$mV){
+                            		$mk = trim($mk);
+                            		$clientMonthName[] = "'".$mk."'";
                             ?>
                                 <tr>
-                                    <td class="mo"><?php echo $mV['ClientCompanyName'];?></td>
-                                    <td >￥<?php echo number_format($mV['total'], 2, '.', '');?></td>
+                                    <td class="mo"><?php echo $mk;?></td>
+                                    <td >￥<?php
+                                    //2017-12-13 ymm 判断当前登录的人的身份如果是代理商就查询出对应的订单信息
+                                    $user_flag = trim($_SESSION['uinfo']['userflag']);
+                                    if ($user_flag == '2'){
+                                    $mon_sql = "select ContentPrice,ContentNumber,ContentPercent from ".DATATABLE."_view_index_cart where CompanyID=".$_SESSION['uinfo']['ucompany']." and OrderID in (".$mV['OrderID'].") and AgentID=".$_SESSION['uinfo']['userid']." order by SiteID asc, BrandID asc, ID asc";
+                                    }
+                                    else //管理员和商业公司可以看到所有订单
+                                    {
+                                    $mon_sql = "select ContentPrice,ContentNumber,ContentPercent from ".DATATABLE."_view_index_cart where CompanyID=".$_SESSION['uinfo']['ucompany']." and OrderID in (".$mV['OrderID'].") order by SiteID asc, BrandID asc, ID asc";
+                                    }
+                                    $montotal=$db->get_results($mon_sql);
+                                    $mon_total=0;
+                                    //2017-12-13 ymm 算出负责的订单总金额
+                                    foreach ($montotal as $key => $cvar) {
+                                    $mon_total+=$cvar['ContentNumber']*$cvar['ContentPrice']*$cvar['ContentPercent']/10;
+                                    }
+                                    $clientMonthLine[] = "{value:".$mon_total.", name:'".$mk."'}";
+                                    echo number_format($mon_total, 2, '.', '');?></td>
                                 </tr>
                                 <?php
 								}

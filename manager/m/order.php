@@ -563,7 +563,7 @@ if(empty($in['stype']))
 				  </td>
                   <td >
 				  <?php 
-				  //2017-12-12 ymm 判断当前登录的人的身份如果是代理商或者是代理商的客情的话就查询出对应的订单信息
+				  //2017-12-12 ymm 判断当前登录的人的身份如果是代理商的话就查询出对应的订单信息
 				   $user_flag = trim($_SESSION['uinfo']['userflag']);
 				   if ($user_flag == '2'){
 				        $sql1 = "select ContentPrice,ContentNumber,ContentPercent from ".DATATABLE."_view_index_cart where CompanyID=".$_SESSION['uinfo']['ucompany']." and OrderID=".$lsv['OrderID']." and AgentID=".$_SESSION['uinfo']['userid']." order by SiteID asc, BrandID asc, ID asc";
