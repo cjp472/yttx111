@@ -216,9 +216,10 @@ $_SESSION['uc']['CompanyCredit'] =  $CompanyCreditSel['CompanyCredit'];
                 $ordersendnumber[$svar['OrderSendStatus']] = $svar['numsendstatus'];
                 }
                 if($user_flag == '2'){
-                     $psql = "SELECT  o.OrderPayStatus,count(*) as numpaystatus FROM "
+                     $psqla = "SELECT  o.OrderPayStatus,count(*) as numpaystatus FROM "
                         .DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
                         where OrderCompany = ".$_SESSION['uinfo']['ucompany']." and c.AgentID= ".$_SESSION['uinfo']['userid']." group by OrderPayStatus";
+                        $psql = "select OrderPayStatus,count(*) as numpaystatus from ".DATATABLE."_order_orderinfo where OrderCompany=".$_SESSION['uinfo']['ucompany']." and OrderId in(".$psqla.") group by OrderPayStatus";
                 }else{
                     $psql = "select OrderPayStatus,count(*) as numpaystatus from ".DATATABLE."_order_orderinfo where OrderCompany=".$_SESSION['uinfo']['ucompany']." group by OrderPayStatus";
                 }
@@ -248,7 +249,8 @@ $_SESSION['uc']['CompanyCredit'] =  $CompanyCreditSel['CompanyCredit'];
                 <?php
                                 //修改展示数据 wkk
                                     $userid=$_SESSION['uinfo']['userid'];
-                                    if($type['UserType']=='M' && $type['UserFlag']==2)    $sqlmsg .=" AND AgentID= ".$userid." ";
+                                    $sqlmsg= "";
+                                    if($user_flag=='2')    $sqlmsg .=" AND AgentID= ".$userid." ";
 				   $psql = "SELECT COUNT(*) AS total FROM ".DATATABLE."_order_content_index WHERE CompanyID=".$_SESSION['uinfo']['ucompany']."".$sqlmsg." AND FlagID=0";
 				   $pinfo = $db->get_row($psql);
                 ?>

@@ -56,6 +56,73 @@ $yestodayEnd   = $today - $secPer - 1;
     $user_flag = trim($_SESSION['uinfo']['userflag']);
     $userid=$_SESSION['uinfo']['userid'];
     if($user_flag == '2'){
+        //最近7天wkk
+        $nearSev = $today - $secPer * 7;
+        		$subsql = "SELECT DISTINCT o.OrderID AS allow FROM "
+			.DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+			where OrderCompany = ".$_SESSION['uinfo']['ucompany']." and c.AgentID= ".$userid."";
+        $yejiSev = "SELECT
+                      COUNT(1) AS total,
+                                  SUM(OrderTotal) AS Tmoney,
+                                  FROM_UNIXTIME(OrderDate, '%m.%d') AS Tdate
+                                FROM
+                                  ".DATATABLE."_order_orderinfo
+                                WHERE OrderCompany=".$_SESSION['uc']['CompanyID']."
+                                AND OrderStatus NOT IN(8,9)
+                                and OrderID in(".$subsql.")
+                                AND OrderDate>".$nearSev." AND OrderDate<".($today-1)."
+                                GROUP BY Tdate
+                                LIMIT 7 ";
+        $yejiSevInfo = $db->get_results($yejiSev);
+        $yejiSevLine = $yejiSevName = $yejiSevCount = array();
+        foreach($yejiSevInfo as $sev){
+                $yejiSevLine[]  = $sev['Tmoney'];
+                $yejiSevCount[] = $sev['total'];
+                $yejiSevName[]  = "'".$sev['Tdate']."'";
+        }
+        //30天wkk
+        $thirdStart = $today - $secPer * 30;
+        $yejiThird = "SELECT
+                        COUNT(1) AS total,
+                                        SUM(OrderTotal) AS Tmoney,
+                                    FROM_UNIXTIME(OrderDate, '%m.%d') AS Tdate
+                                  FROM
+                                        ".DATATABLE."_order_orderinfo
+                                  WHERE OrderCompany=".$_SESSION['uc']['CompanyID']."
+                                                AND OrderStatus NOT IN(8,9)
+                                                and OrderID in(".$subsql.")
+                                        AND OrderDate>".$thirdStart." AND OrderDate<".($today-1)."
+                                  GROUP BY Tdate
+                                  LIMIT 30 ";
+        $yejiThirdInfo = $db->get_results($yejiThird);
+        $yejiThirdLine = $yejiThirdName = $yejiThirdCount = array();
+        foreach($yejiThirdInfo as $sev){
+                $yejiThirdLine[]  = $sev['Tmoney'];
+                $yejiThirdCount[] = $sev['total'];
+                $yejiThirdName[]  = "'".$sev['Tdate']."'";
+        }
+        //本月wkk
+        $yejiMonth = "SELECT
+                        COUNT(1) AS total,
+                                        SUM(OrderTotal) AS Tmoney,
+                                        FROM_UNIXTIME(OrderDate, '%m.%d') AS Tdate
+                                  FROM
+                                        ".DATATABLE."_order_orderinfo
+                                  WHERE OrderCompany=".$_SESSION['uc']['CompanyID']."
+                                            AND OrderStatus NOT IN(8,9)
+                                            and OrderID in(".$subsql.")
+                                            AND FROM_UNIXTIME(OrderDate,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')
+                                  GROUP BY Tdate
+                                  LIMIT 30 ";
+        $yejiMonthInfo = $db->get_results($yejiMonth);
+        $yejiMonthLine = $yejiMonthName = $yejiMonthCount = array();
+        foreach($yejiMonthInfo as $sev){
+                $yejiMonthLine[]  = $sev['Tmoney'];
+                $yejiMonthCount[] = $sev['total'];
+                $yejiMonthName[]  = "'".$sev['Tdate']."'";
+        }
+    }else{
+        //最近7天
         $nearSev = $today - $secPer * 7;
         $yejiSev = "SELECT
                       COUNT(1) AS total,
@@ -75,71 +142,46 @@ $yestodayEnd   = $today - $secPer - 1;
                 $yejiSevCount[] = $sev['total'];
                 $yejiSevName[]  = "'".$sev['Tdate']."'";
         }
-        
-        print_r($yejiSev);
-        
-    }else{
-//最近7天
-$nearSev = $today - $secPer * 7;
-$yejiSev = "SELECT
-              COUNT(1) AS total,
-			  SUM(OrderTotal) AS Tmoney,
-			  FROM_UNIXTIME(OrderDate, '%m.%d') AS Tdate
-			FROM
-			  ".DATATABLE."_order_orderinfo
-			WHERE OrderCompany=".$_SESSION['uc']['CompanyID']."
-    			AND OrderStatus NOT IN(8,9)
-    			AND OrderDate>".$nearSev." AND OrderDate<".($today-1)."
-			GROUP BY Tdate
-			LIMIT 7 ";
-$yejiSevInfo = $db->get_results($yejiSev);
-$yejiSevLine = $yejiSevName = $yejiSevCount = array();
-foreach($yejiSevInfo as $sev){
-	$yejiSevLine[]  = $sev['Tmoney'];
-	$yejiSevCount[] = $sev['total'];
-	$yejiSevName[]  = "'".$sev['Tdate']."'";
-}
+        //最近30天
+        $thirdStart = $today - $secPer * 30;
+        $yejiThird = "SELECT
+                        COUNT(1) AS total,
+                                        SUM(OrderTotal) AS Tmoney,
+                                    FROM_UNIXTIME(OrderDate, '%m.%d') AS Tdate
+                                  FROM
+                                        ".DATATABLE."_order_orderinfo
+                                  WHERE OrderCompany=".$_SESSION['uc']['CompanyID']."
+                                                AND OrderStatus NOT IN(8,9)
+                                        AND OrderDate>".$thirdStart." AND OrderDate<".($today-1)."
+                                  GROUP BY Tdate
+                                  LIMIT 30 ";
+        $yejiThirdInfo = $db->get_results($yejiThird);
+        $yejiThirdLine = $yejiThirdName = $yejiThirdCount = array();
+        foreach($yejiThirdInfo as $sev){
+                $yejiThirdLine[]  = $sev['Tmoney'];
+                $yejiThirdCount[] = $sev['total'];
+                $yejiThirdName[]  = "'".$sev['Tdate']."'";
+        }
 
-//最近30天
-$thirdStart = $today - $secPer * 30;
-$yejiThird = "SELECT
-                COUNT(1) AS total,
-				SUM(OrderTotal) AS Tmoney,
-			    FROM_UNIXTIME(OrderDate, '%m.%d') AS Tdate
-			  FROM
-				".DATATABLE."_order_orderinfo
-			  WHERE OrderCompany=".$_SESSION['uc']['CompanyID']."
-					AND OrderStatus NOT IN(8,9)
-			        AND OrderDate>".$thirdStart." AND OrderDate<".($today-1)."
-			  GROUP BY Tdate
-			  LIMIT 30 ";
-$yejiThirdInfo = $db->get_results($yejiThird);
-$yejiThirdLine = $yejiThirdName = $yejiThirdCount = array();
-foreach($yejiThirdInfo as $sev){
-	$yejiThirdLine[]  = $sev['Tmoney'];
-	$yejiThirdCount[] = $sev['total'];
-	$yejiThirdName[]  = "'".$sev['Tdate']."'";
-}
-
-//本月业绩
-$yejiMonth = "SELECT
-                COUNT(1) AS total,
-				SUM(OrderTotal) AS Tmoney,
-				FROM_UNIXTIME(OrderDate, '%m.%d') AS Tdate
-			  FROM
-				".DATATABLE."_order_orderinfo
-			  WHERE OrderCompany=".$_SESSION['uc']['CompanyID']."
-				    AND OrderStatus NOT IN(8,9)
-				    AND FROM_UNIXTIME(OrderDate,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')
-			  GROUP BY Tdate
-			  LIMIT 30 ";
-$yejiMonthInfo = $db->get_results($yejiMonth);
-$yejiMonthLine = $yejiMonthName = $yejiMonthCount = array();
-foreach($yejiMonthInfo as $sev){
-	$yejiMonthLine[]  = $sev['Tmoney'];
-	$yejiMonthCount[] = $sev['total'];
-	$yejiMonthName[]  = "'".$sev['Tdate']."'";
-}
+        //本月业绩
+        $yejiMonth = "SELECT
+                        COUNT(1) AS total,
+                                        SUM(OrderTotal) AS Tmoney,
+                                        FROM_UNIXTIME(OrderDate, '%m.%d') AS Tdate
+                                  FROM
+                                        ".DATATABLE."_order_orderinfo
+                                  WHERE OrderCompany=".$_SESSION['uc']['CompanyID']."
+                                            AND OrderStatus NOT IN(8,9)
+                                            AND FROM_UNIXTIME(OrderDate,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')
+                                  GROUP BY Tdate
+                                  LIMIT 30 ";
+        $yejiMonthInfo = $db->get_results($yejiMonth);
+        $yejiMonthLine = $yejiMonthName = $yejiMonthCount = array();
+        foreach($yejiMonthInfo as $sev){
+                $yejiMonthLine[]  = $sev['Tmoney'];
+                $yejiMonthCount[] = $sev['total'];
+                $yejiMonthName[]  = "'".$sev['Tdate']."'";
+        }
 }
 
 ?>
