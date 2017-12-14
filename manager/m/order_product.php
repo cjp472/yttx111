@@ -97,6 +97,11 @@ if(empty($in['bdate'])) $in['bdate'] = date('Y-m-d',strtotime('-1 months'));
 			if(!empty($in['kw'])){				
 				$sqlmsg1 .= " AND (i.Name LIKE '%".$in['kw']."%' OR CONCAT(i.Pinyi,i.Coding,i.Barcode) LIKE '%".$in['kw']."%') ";
 			}
+                        //wkk 修改订单中商品明细区分商业公司和代理商
+                        $userid=$_SESSION['uinfo']['userid'];
+                        $type = $db->get_row("SELECT UserType,UserFlag,UpperID FROM ".DATABASEU.DATATABLE."_order_user where UserID = ".$userid."");
+                        if($type['UserType']=='M' && $type['UserFlag']==2)    $sqlmsg1 .=" AND i.AgentID= ".$userid." ";
+                        if($type['UserType']=='S' && $type['UserFlag']==2)    $sqlmsg1 .=" AND i.AgentID= ".$type['UpperID']." ";
 			/**
 			$rowsql = "select count(*) as allrow
 			FROM ".DATATABLE."_view_index_cart c 
