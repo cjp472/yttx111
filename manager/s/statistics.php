@@ -38,7 +38,7 @@ if ($user_flag == '2')
     $dataSql = "SELECT
         LEFT(o.OrderSN, 8) AS ODate,
         SUM(o.OrderTotal) AS OTotal,
-        COUNT(*) AS totalnumber
+        COUNT(DISTINCT o.OrderID) AS totalnumber
     FROM
         ".DATATABLE."_order_orderinfo o
         inner join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID 
@@ -52,12 +52,11 @@ if ($user_flag == '2')
         AND o.OrderStatus != 9" . $where ."
     GROUP BY LEFT(o.OrderSN,8) DESC
     ";              
-
     //待审核订单
     $dataSql0 = "SELECT
         LEFT(o.OrderSN, 8) AS ODate,
         SUM(o.OrderTotal) AS OTotal,
-        COUNT(*) AS totalnumber
+        COUNT(DISTINCT o.OrderID) AS totalnumber
     FROM
         ".DATATABLE."_order_orderinfo o
         inner join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID 
@@ -79,7 +78,7 @@ else // 商业公司客情能看到所有订单
     $dataSql = "SELECT
         LEFT(o.OrderSN, 8) AS ODate,
         SUM(o.OrderTotal) AS OTotal,
-        COUNT(*) AS totalnumber
+        COUNT(DISTINCT o.OrderID) AS totalnumber
     FROM
         ".DATATABLE."_order_orderinfo o
         inner join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID 
@@ -96,7 +95,7 @@ else // 商业公司客情能看到所有订单
     $dataSql0 = "SELECT
         LEFT(o.OrderSN, 8) AS ODate,
         SUM(o.OrderTotal) AS OTotal,
-        COUNT(*) AS totalnumber
+        COUNT(DISTINCT o.OrderID) AS totalnumber
     FROM
         ".DATATABLE."_order_orderinfo o
         inner join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID 

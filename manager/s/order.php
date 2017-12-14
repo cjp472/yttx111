@@ -174,9 +174,16 @@ if(!empty($valuearr['audit_type']) && $valuearr['audit_type']=="on"){
 	if ($user_flag == '2')
 	{
             $type = $db->get_row("SELECT UserType,UserFlag,UpperID FROM ".DATABASEU.DATATABLE."_order_user where UserID = ".$_SESSION['uinfo']['userid']."");
-            $sqlnum  ="select count(distinct o.OrderID) as allrow  from rsung_order_orderinfo as o, rsung_order_salerclient as s where o.OrderUserID = s.ClientID and s.salerid = ".$_SESSION['uinfo']['userid']." and EXISTS ( select c.OrderID from rsung_order_content_index i,rsung_order_cart c where i.Id=c.ContentID and i.agentid= ".$type['UpperID']." and c.orderid=o.OrderID ) ".$sdmsg;
-            $datasql = "select o.* from rsung_order_orderinfo as o, rsung_order_salerclient as s where o.OrderUserID = s.ClientID and s.salerid = ".$_SESSION['uinfo']['userid']." and EXISTS ( select c.OrderID from rsung_order_content_index i,rsung_order_cart c where i.Id=c.ContentID and i.agentid= ".$type['UpperID']." and c.orderid=o.OrderID ) ".$sdmsg." Order by o.OrderID Desc";
-	}
+                $sqlnum = "select count(distinct o.OrderID) as allrow from ".DATATABLE."_order_orderinfo o left join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID 
+                                left join ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+                                where o.OrderCompany = ".$_SESSION['uinfo']['ucompany']." and s.SalerID=".$_SESSION['uinfo']['userid'].
+                                " and c.AgentID=".$type['UpperID']." ".$sdmsg." ";               
+		$datasql = "SELECT DISTINCT o.OrderID,o.* FROM ".DATATABLE."_order_orderinfo o inner join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID  
+			left join ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+			where o.OrderCompany = ".$_SESSION['uinfo']['ucompany']." and s.SalerID=".$_SESSION['uinfo']['userid'].
+			" and c.AgentID=".$type['UpperID']." ".$sdmsg." Order by o.OrderID Desc";
+            
+        }
 	else // 商业公司客情能看到所有订单
 	{
 		$sqlnum = "select count(*) as allrow from ".DATATABLE."_order_orderinfo o left join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID where  o.OrderCompany = ".$_SESSION['uinfo']['ucompany']." and s.SalerID=".$_SESSION['uinfo']['userid']." ".$sdmsg." ";
