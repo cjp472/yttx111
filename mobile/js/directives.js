@@ -172,7 +172,6 @@ directiveModule
 				/* 压缩图片 */
 			        lrz(file, {
 			            width: 280,           
-			            height: 350,
 			            quality: 0.8 //设置压缩参数
 			        }).then(function (rst) {
 			            /* 处理成功后执行 */
@@ -181,6 +180,7 @@ directiveModule
 //			               _hidden.val(rst.base64);
 
 						params.v.param = rst.base64;
+//						params.v.param = e.target.result;
 						params.v.name = _id;
       					params.v.user_id = parseInt(window.localStorage.getItem('ClientID'));
 
