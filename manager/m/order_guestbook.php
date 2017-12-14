@@ -95,6 +95,14 @@ if(empty($in['cid'])) $in['cid'] = '';
 			{				
 				$sqlmsg .= " AND (s.Content LIKE '%".$in['kw']."%' OR o.OrderSN LIKE '%".$in['kw']."%') ";
 			}
+                        //wkk修改订单留言 区分代理商和商业公司
+                        $user_flag = trim($_SESSION['uinfo']['userflag']);
+                        if($user_flag=="2"){
+                                $subsql = "SELECT DISTINCT o.OrderID AS allow FROM "
+                                .DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+                                where OrderCompany = ".$_SESSION['uinfo']['ucompany']." and c.AgentID= ".$_SESSION['uinfo']['userid']."";
+                                $sqlmsg.=" and o.OrderID in(".$subsql.")";
+                        }
 			$rowsql = "select count(*) as allrow
 			FROM ".DATATABLE."_order_ordersubmit s 
 			inner join ".DATATABLE."_order_orderinfo o on s.OrderID=o.OrderID where s.CompanyID=".$_SESSION['uinfo']['ucompany']." and s.Status='客户留言' and o.OrderCompany=".$_SESSION['uinfo']['ucompany']." ".$sqlmsg;
@@ -102,7 +110,6 @@ if(empty($in['cid'])) $in['cid'] = '';
 			$InfoDataNum = $db->get_row($rowsql);			
 			$datasql = "select s.*,o.OrderID,o.OrderSN,o.OrderUserID FROM ".DATATABLE."_order_ordersubmit s 
 			inner join ".DATATABLE."_order_orderinfo o on s.OrderID=o.OrderID  where s.CompanyID=".$_SESSION['uinfo']['ucompany']." and s.Status='客户留言' and o.OrderCompany=".$_SESSION['uinfo']['ucompany']." ".$sqlmsg." ORDER BY s.ID DESC ";
-			
 			$page = new ShowPage;
 			$page->PageSize = 50;
 			$page->Total    = $InfoDataNum['allrow'];

@@ -96,7 +96,7 @@ $rp = array('-','|','DHB',' ');
      		 </thead> 
       		
       		<tbody>
-<?
+<?php
 		$sqlmsg = '';
 		if(!empty($in['sid']))
 		{
@@ -113,7 +113,11 @@ $rp = array('-','|','DHB',' ');
 			}
 		}
 	if(!empty($in['kw']))  $sqlmsg .= " and (Name like '%".$in['kw']."%' or Coding like '%".$in['kw']."%' or Pinyi like '%".strtoupper($in['kw'])."%' ) ";
-
+        //修改库存明细 区分商业公司和代理商
+        $userid=$_SESSION['uinfo']['userid'];
+	$type = $db->get_row("SELECT UserType,UserFlag,UpperID FROM ".DATABASEU.DATATABLE."_order_user where UserID = ".$userid."");
+	if($type['UserType']=='M' && $type['UserFlag']==2)    $sqlmsg .=" AND AgentID= ".$userid." ";
+	if($type['UserType']=='S' && $type['UserFlag']==2)    $sqlmsg .=" AND AgentID= ".$type['UpperID']." ";
 	$InfoDataNum = $db->get_row("SELECT count(*) as allrow FROM ".DATATABLE."_order_content_index where CompanyID = ".$_SESSION['uinfo']['ucompany']." ".$sqlmsg." and FlagID=0 ");		
 	$datasql     = "SELECT ID,SiteID,Name,Coding,Units,Casing,Coding,Color,Model,Specification FROM ".DATATABLE."_order_content_index where CompanyID = ".$_SESSION['uinfo']['ucompany']." ".$sqlmsg." and FlagID=0 ORDER BY OrderID DESC, ID DESC";
 

@@ -45,6 +45,10 @@ if(empty($in['endDate'])){
 
 $where .= " AND FROM_UNIXTIME(o.OrderDate) BETWEEN '".$in['beginDate']." 00:00:00' AND '".$in['endDate']." 23:59:59' ";
 
+if ($_SESSION['uinfo']['userflag']==2) {
+    $agent=$db->get_row("SELECT UpperID FROM ".DATABASEU.DATATABLE."_order_user WHERE UserID=".$_SESSION['uinfo']['userid']."");
+    $where .= " AND i.AgentID=".$agent['UpperID']."";
+}
 //购买商品
 $data_sql = "SELECT c.ContentID,COUNT(1) AS cnt,i.Coding,i.Name,SUM(c.ContentNumber) AS ContentNumber,SUM(c.ContentSend) AS ContentSend,SUM(c.ContentPrice * c.ContentNumber * c.ContentPercent * 0.1) AS Total
               FROM ".DATATABLE."_order_cart AS c

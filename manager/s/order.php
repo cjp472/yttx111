@@ -161,7 +161,7 @@ if(!empty($valuearr['audit_type']) && $valuearr['audit_type']=="on"){
                 </tr>
      		 </thead>      		
       		<tbody>
-<?
+<?php
 	if(isset($in['sid']) && $in['sid']!='') 	$sdmsg .= " and OrderStatus = ".intval($in['sid'])." ";
 	if(!empty($in['stype'])) 	$sdmsg .= " and o.OrderSaler ='".$in['stype']."' ";
 	if(!empty($in['kw']))   $sdmsg .= " and o.OrderSN like binary '%%".trim($in['kw'])."%%' ";
@@ -169,25 +169,18 @@ if(!empty($valuearr['audit_type']) && $valuearr['audit_type']=="on"){
 	if(!empty($in['edate'])) $sdmsg .= ' and o.OrderDate < '.strtotime($in['edate'].'23:59:59').'';
 
 
-	//wangd 2017-11-29 判断是否为代理商客情，代理商客情只能看到自己所管辖商品相关的订单
+	//wangd 2017-11-29 判断是否为代理商客情，代理商客情只能看到自己所 管辖商品相关的订单 wkk修改sql语句
 	$user_flag = trim($_SESSION['uinfo']['userflag']);
 	if ($user_flag == '2')
 	{
-		$type = $db->get_row("SELECT UserType,UserFlag,UpperID FROM ".DATABASEU.DATATABLE."_order_user where UserID = ".$_SESSION['uinfo']['userid']."");
-
-		$sqlnum = "select count(distinct o.OrderID) as allrow from ".DATATABLE."_order_orderinfo o left join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID 
-			left join ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
-			where o.OrderCompany = ".$_SESSION['uinfo']['ucompany']." and s.SalerID=".$_SESSION['uinfo']['userid'].
-			" and c.AgentID=".$type['UpperID']." ".$sdmsg." ";
-		$datasql = "SELECT o.* FROM ".DATATABLE."_order_orderinfo o inner join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID  
-			left join ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
-			where o.OrderCompany = ".$_SESSION['uinfo']['ucompany']." and s.SalerID=".$_SESSION['uinfo']['userid'].
-			" and c.AgentID=".$type['UpperID']." ".$sdmsg." Order by o.OrderID Desc";	
+            $type = $db->get_row("SELECT UserType,UserFlag,UpperID FROM ".DATABASEU.DATATABLE."_order_user where UserID = ".$_SESSION['uinfo']['userid']."");
+            $sqlnum  ="select count(distinct o.OrderID) as allrow  from rsung_order_orderinfo as o, rsung_order_salerclient as s where o.OrderUserID = s.ClientID and s.salerid = ".$_SESSION['uinfo']['userid']." and EXISTS ( select c.OrderID from rsung_order_content_index i,rsung_order_cart c where i.Id=c.ContentID and i.agentid= ".$type['UpperID']." and c.orderid=o.OrderID ) ".$sdmsg;
+            $datasql = "select o.* from rsung_order_orderinfo as o, rsung_order_salerclient as s where o.OrderUserID = s.ClientID and s.salerid = ".$_SESSION['uinfo']['userid']." and EXISTS ( select c.OrderID from rsung_order_content_index i,rsung_order_cart c where i.Id=c.ContentID and i.agentid= ".$type['UpperID']." and c.orderid=o.OrderID ) ".$sdmsg." Order by o.OrderID Desc";
 	}
 	else // 商业公司客情能看到所有订单
 	{
 		$sqlnum = "select count(*) as allrow from ".DATATABLE."_order_orderinfo o left join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID where  o.OrderCompany = ".$_SESSION['uinfo']['ucompany']." and s.SalerID=".$_SESSION['uinfo']['userid']." ".$sdmsg." ";
-		$datasql = "SELECT o.* FROM ".DATATABLE."_order_orderinfo o inner join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID  where o.OrderCompany = ".$_SESSION['uinfo']['ucompany']." and s.SalerID=".$_SESSION['uinfo']['userid']."  ".$sdmsg." Order by o.OrderID Desc";	
+		$datasql = "SELECT o.* FROM ".DATATABLE."_order_orderinfo o inner join ".DATATABLE."_order_salerclient s ON o.OrderUserID=s.ClientID  where o.OrderCompany = ".$_SESSION['uinfo']['ucompany']." and s.SalerID=".$_SESSION['uinfo']['userid']."  ".$sdmsg." Order by o.OrderID Desc";
 	}
 
 	$InfoDataNum = $db->get_row($sqlnum);
@@ -228,7 +221,25 @@ if(!empty($valuearr['audit_type']) && $valuearr['audit_type']=="on"){
 				    ?>
 					</td>
                   <td >
-					<? echo "<span title='金额' class=font12>¥ ".$lsv['OrderTotal']."</span><br /><span title='付款方式'>".$paytypearr[$lsv['OrderPayType']]."</span><br /><span title='付款状态' class=red>".$pay_status_arr[$lsv['OrderPayStatus']]."</span><br />";?>
+					<?
+					//2017-12-12 ymm 判断当前登录的人的身份如果是代理商的客情的话就查询出对应的订单信息
+				   $user_flag = trim($_SESSION['uinfo']['userflag']);
+				   if ($user_flag == '2'){
+				        $agent=$db->get_row("select UpperID from ".DATABASEU.DATATABLE."_order_user where UserID=".$_SESSION['uinfo']['userid']."");
+				        $agentid=$agent['UpperID'];
+				        $sql1 = "select ContentPrice,ContentNumber,ContentPercent from ".DATATABLE."_view_index_cart where CompanyID=".$_SESSION['uinfo']['ucompany']." and OrderID=".$lsv['OrderID']." and AgentID=".$agentid." order by SiteID asc, BrandID asc, ID asc";
+				    }
+				    else //管理员和商业公司可以看到所有订单
+				    {
+				        $sql1 = "select ContentPrice,ContentNumber,ContentPercent from ".DATATABLE."_view_index_cart where CompanyID=".$_SESSION['uinfo']['ucompany']." and OrderID=".$lsv['OrderID']." order by SiteID asc, BrandID asc, ID asc";
+				    }
+				   $total=$db->get_results($sql1);
+				   $alltotal=0;
+				   //2017-12-12 ymm 算出负责的订单总金额
+				  foreach ($total as $key => $cvar) {
+				  	$alltotal+=$cvar['ContentNumber']*$cvar['ContentPrice']*$cvar['ContentPercent']/10;
+				  }
+					 echo "<span title='金额' class=font12>¥ ".$alltotal."</span><br /><span title='付款方式'>".$paytypearr[$lsv['OrderPayType']]."</span><br /><span title='付款状态' class=red>".$pay_status_arr[$lsv['OrderPayStatus']]."</span><br />";?>
 					</td>
                   <td >&nbsp;&nbsp;<? 
 					if(!empty($valuearr['audit_type']) && $valuearr['audit_type']=="on")

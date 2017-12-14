@@ -101,7 +101,7 @@ $rp = array('-','|','DHB',' ');
      		 </thead> 
       		
       		<tbody>
-<?
+<?php
 		$sqlmsg = '';
 		if(!empty($in['sid']))
 		{
@@ -118,7 +118,11 @@ $rp = array('-','|','DHB',' ');
 			}
 		}
 	if(!empty($in['kw']))  $sqlmsg .= " and (Name like binary '%%".$in['kw']."%%' or Coding like '%%".$in['kw']."%%' or Pinyi like '%%".strtoupper($in['kw'])."%%' ) ";
-
+       //修改wkk 区分商业公司客情官和代理商客情官
+        $userid=$_SESSION['uinfo']['userid'];
+	$type = $db->get_row("SELECT UserType,UserFlag,UpperID FROM ".DATABASEU.DATATABLE."_order_user where UserID = ".$userid."");
+	if($type['UserType']=='M' && $type['UserFlag']==2)    $sqlmsg .=" AND AgentID= ".$userid." ";
+	if($type['UserType']=='S' && $type['UserFlag']==2)    $sqlmsg .=" AND AgentID= ".$type['UpperID']." ";
 	$InfoDataNum = $db->get_row("SELECT count(*) as allrow FROM ".DATATABLE."_order_content_index where CompanyID = ".$_SESSION['uinfo']['ucompany']." ".$sqlmsg." and FlagID=0 ");		
 	$datasql     = "SELECT ID,SiteID,Name,Coding,Units,Casing,Coding,Color,Specification FROM ".DATATABLE."_order_content_index where CompanyID = ".$_SESSION['uinfo']['ucompany']." ".$sqlmsg." and FlagID=0 ORDER BY OrderID DESC, ID DESC";
 
@@ -178,7 +182,7 @@ $rp = array('-','|','DHB',' ');
                   <td align="right" class="bold" ><? if(empty($snallarr[$lsv['ID']]['c'])) echo "0"; else echo $snallarr[$lsv['ID']]['c'];?>&nbsp;</td>
 				  <td align="center"><? echo $lsv['Units'];?>&nbsp;</td>
                 </tr>
-<?
+<?php
 			}else{
 				if(empty($lsv['Color']))			 $lsv['Color']				= "统一";
 				if(empty($lsv['Specification'])) $lsv['Specification'] = "统一";

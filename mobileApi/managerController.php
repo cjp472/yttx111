@@ -972,17 +972,34 @@ class managerController{
 				$sql .= " limit ".$param['begin'].",".intval($param['step']);
 				
 				$oinfo  = $db->get_results ( $sql );
-
 				$smgc = " and OrderStatus = 0 ";
+				$scart = '';
 				//wangd 2017-11-30 判断是否为代理商或者其客情，代理商只能看到自己相关的订单
 				if($cidarr['UserFlag']==2)
 				{
 					$type = $db->get_row("SELECT UserType,UserFlag,UpperID FROM ".DB_DATABASEU.DATATABLE."_order_user where UserID=".$cidarr['UserID']."");
-					if($type['UserType']=='M')    $smgc .=" AND t.AgentID= ".$cidarr['UserID']." ";
-					if($type['UserType']=='S')    $smgc .=" AND t.AgentID= ".$type['UpperID']." ";	
+					if($type['UserType']=='M'){
+						$smgc .=" AND t.AgentID= ".$cidarr['UserID']." ";
+						$scart .=" AND AgentID= ".$cidarr['UserID']." "; 
+					}
+					if($type['UserType']=='S'){
+						$smgc .=" AND t.AgentID= ".$type['UpperID']." ";
+						$scart .=" AND AgentID= ".$type['UpperID']." ";
+					}	
 					$countAudit  = $db->get_row("select count(*) as allrow from ".$sdatabase.DATATABLE."_order_orderinfo o
 						left join ".DATATABLE."_view_index_cart t ON o.OrderID=t.OrderID 
 						where OrderCompany=".$cidarr['CompanyID']." ".$smgc." ".$csmg." ");
+					//2017-12-12 ymm 如果是代理商或者代理商的客情的话就查询出他们管辖订单下的商品总价
+					foreach ($oinfo as $key => $val) {
+						$total_sql = "SELECT ContentPrice,ContentNumber,ContentPercent from ".$sdatabase.DATATABLE."_view_index_cart where CompanyID=".$cidarr['CompanyID']." and OrderID=".$val['OrderID'].$scart." order by SiteID asc, BrandID asc, ID asc";
+						$total = $db->get_results($total_sql);
+						$alltotal=0;
+						//2017-12-12 ymm 算出负责的订单总金额
+						foreach ($total as $ckey => $cvar) {
+							$alltotal+=$cvar['ContentNumber']*$cvar['ContentPrice']*$cvar['ContentPercent']/10;
+						}
+						$oinfo[$key]['OrderTotal']=$alltotal;
+					}
 				}
 				else
 				{
@@ -1118,7 +1135,13 @@ class managerController{
 					if($type['UserType']=='S' && $type['UserFlag']==2)	$sqlc .=" AND AgentID= ".$type['UpperID']." ";
 
 					$cinfo  = $db->get_results ( $sqlc );
-					$infoall = $cinfo;
+					$infoall=$cinfo;
+					//2017-12-12 ymm 将订单的总价换成当前登录的人下的订单下的所管辖的商品的总价
+					$OrderTotal=0;
+					foreach ($cinfo as $key => $cvar) {
+					$OrderTotal+=$cvar['ContentNumber']*$cvar['ContentPrice']*$cvar['ContentPercent']/10;
+					}
+					$oinfo['OrderTotal']=$OrderTotal;
                 	$sqlg   = "select Name,Coding,Units,ContentColor,ContentSpecification,ContentPrice,ContentNumber,'g' as conType from ".$sdatabase.DATATABLE."_view_index_gifts where OrderID=".$oinfo['OrderID']." and CompanyID=".$cid." ";
                 	$ginfo  = $db->get_results($sqlg);
                 	//$infoall = $ginfo;

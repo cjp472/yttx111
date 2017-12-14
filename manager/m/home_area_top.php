@@ -5,62 +5,126 @@ $secPer = 86400;
 $today  = strtotime(date('Y-m-d')." 23:59:59") + 1;
 $yestodayStart = $today - $secPer * 2;
 $yestodayEnd   = $today - $secPer - 1;
+//获取当前登录用户的类型 和ID wkk
+$user_flag = trim($_SESSION['uinfo']['userflag']);
+$userid=$_SESSION['uinfo']['userid'];
+if($user_flag == '2'){
+           		$subsql = "SELECT DISTINCT o.OrderID AS allow FROM "
+			.DATATABLE."_order_orderinfo o LEFT JOIN ".DATATABLE."_view_index_cart c ON o.OrderID=c.OrderID 
+			where OrderCompany = ".$_SESSION['uinfo']['ucompany']." and c.AgentID= ".$userid."";
+    //昨天
+    $areaYesSql = "SELECT 
+                                      SUM(o.OrderTotal) AS total,
+                                      a.AreaName 
+                                    FROM
+                                      rsung_order_orderinfo AS o 
+                                      LEFT JOIN ".DATATABLE."_order_client AS c 
+                                        ON o.OrderUserID=c.ClientID 
+                                      LEFT JOIN ".DATATABLE."_order_area AS a 
+                                        ON c.ClientArea=a.AreaID 
+                                    WHERE o.OrderCompany=".$_SESSION['uc']['CompanyID']." 
+                                              AND o.OrderStatus NOT IN (8, 9)
+                                              and o.OrderID in(".$subsql.")
+                                          AND o.OrderDate>".$yestodayStart." AND o.OrderDate<".$yestodayEnd."
+                                    GROUP BY a.AreaID
+                                    ORDER BY total DESC
+                                    LIMIT 10";
+    $areaYesInfo = $db->get_results($areaYesSql);
 
-//昨天
-$areaYesSql = "SELECT 
-				  SUM(o.OrderTotal) AS total,
-				  a.AreaName 
-				FROM
-				  rsung_order_orderinfo AS o 
-				  LEFT JOIN ".DATATABLE."_order_client AS c 
-				    ON o.OrderUserID=c.ClientID 
-				  LEFT JOIN ".DATATABLE."_order_area AS a 
-				    ON c.ClientArea=a.AreaID 
-				WHERE o.OrderCompany=".$_SESSION['uc']['CompanyID']." 
-					  AND o.OrderStatus NOT IN (8, 9)
-				      AND o.OrderDate>".$yestodayStart." AND o.OrderDate<".$yestodayEnd."
-				GROUP BY a.AreaID
-				ORDER BY total DESC
-				LIMIT 10";
-$areaYesInfo = $db->get_results($areaYesSql);
+    //7天
+    $nearSev = $today - $secPer * 7;
+    $areaSevSql = "SELECT
+                                      SUM(o.OrderTotal) AS total,
+                                      a.AreaName
+                                    FROM
+                                      rsung_order_orderinfo AS o
+                                      LEFT JOIN ".DATATABLE."_order_client AS c
+                                        ON o.OrderUserID = c.ClientID
+                                      LEFT JOIN ".DATATABLE."_order_area AS a
+                                        ON c.ClientArea = a.AreaID
+                                    WHERE o.OrderCompany = ".$_SESSION['uc']['CompanyID']."
+                                              AND o.OrderStatus NOT IN (8, 9)
+                                              and o.OrderID in(".$subsql.")
+                                              AND o.OrderDate>".$nearSev." AND o.OrderDate<".($today-1)."
+                                    GROUP BY a.AreaID
+                                    ORDER BY total DESC
+                                    LIMIT 10";
+    $areaSevInfo = $db->get_results($areaSevSql);
 
-//7天
-$nearSev = $today - $secPer * 7;
-$areaSevSql = "SELECT
-				  SUM(o.OrderTotal) AS total,
-				  a.AreaName
-				FROM
-				  rsung_order_orderinfo AS o
-				  LEFT JOIN ".DATATABLE."_order_client AS c
-				    ON o.OrderUserID = c.ClientID
-				  LEFT JOIN ".DATATABLE."_order_area AS a
-				    ON c.ClientArea = a.AreaID
-				WHERE o.OrderCompany = ".$_SESSION['uc']['CompanyID']."
-					  AND o.OrderStatus NOT IN (8, 9)
-					  AND o.OrderDate>".$nearSev." AND o.OrderDate<".($today-1)."
-				GROUP BY a.AreaID
-				ORDER BY total DESC
-				LIMIT 10";
-$areaSevInfo = $db->get_results($areaSevSql);
+    //本月
+    $areaMonthSql = "SELECT
+                                      SUM(o.OrderTotal) AS total,
+                                      a.AreaName
+                                    FROM
+                                      rsung_order_orderinfo AS o
+                                      LEFT JOIN ".DATATABLE."_order_client AS c
+                                        ON o.OrderUserID = c.ClientID
+                                      LEFT JOIN ".DATATABLE."_order_area AS a
+                                        ON c.ClientArea = a.AreaID
+                                    WHERE o.OrderCompany = ".$_SESSION['uc']['CompanyID']."
+                                              AND o.OrderStatus NOT IN (8, 9)
+                                              and o.OrderID in(".$subsql.")
+                                              AND FROM_UNIXTIME(o.OrderDate,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')
+                                    GROUP BY a.AreaID
+                                    ORDER BY total DESC
+                                    LIMIT 10";
+    $areaMonthInfo = $db->get_results($areaMonthSql);
+}else{
+    //昨天
+    $areaYesSql = "SELECT 
+                                      SUM(o.OrderTotal) AS total,
+                                      a.AreaName 
+                                    FROM
+                                      rsung_order_orderinfo AS o 
+                                      LEFT JOIN ".DATATABLE."_order_client AS c 
+                                        ON o.OrderUserID=c.ClientID 
+                                      LEFT JOIN ".DATATABLE."_order_area AS a 
+                                        ON c.ClientArea=a.AreaID 
+                                    WHERE o.OrderCompany=".$_SESSION['uc']['CompanyID']." 
+                                              AND o.OrderStatus NOT IN (8, 9)
+                                          AND o.OrderDate>".$yestodayStart." AND o.OrderDate<".$yestodayEnd."
+                                    GROUP BY a.AreaID
+                                    ORDER BY total DESC
+                                    LIMIT 10";
+    $areaYesInfo = $db->get_results($areaYesSql);
 
-//本月
-$areaMonthSql = "SELECT
-				  SUM(o.OrderTotal) AS total,
-				  a.AreaName
-				FROM
-				  rsung_order_orderinfo AS o
-				  LEFT JOIN ".DATATABLE."_order_client AS c
-				    ON o.OrderUserID = c.ClientID
-				  LEFT JOIN ".DATATABLE."_order_area AS a
-				    ON c.ClientArea = a.AreaID
-				WHERE o.OrderCompany = ".$_SESSION['uc']['CompanyID']."
-					  AND o.OrderStatus NOT IN (8, 9)
-					  AND FROM_UNIXTIME(o.OrderDate,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')
-				GROUP BY a.AreaID
-				ORDER BY total DESC
-				LIMIT 10";
-$areaMonthInfo = $db->get_results($areaMonthSql);
+    //7天
+    $nearSev = $today - $secPer * 7;
+    $areaSevSql = "SELECT
+                                      SUM(o.OrderTotal) AS total,
+                                      a.AreaName
+                                    FROM
+                                      rsung_order_orderinfo AS o
+                                      LEFT JOIN ".DATATABLE."_order_client AS c
+                                        ON o.OrderUserID = c.ClientID
+                                      LEFT JOIN ".DATATABLE."_order_area AS a
+                                        ON c.ClientArea = a.AreaID
+                                    WHERE o.OrderCompany = ".$_SESSION['uc']['CompanyID']."
+                                              AND o.OrderStatus NOT IN (8, 9)
+                                              AND o.OrderDate>".$nearSev." AND o.OrderDate<".($today-1)."
+                                    GROUP BY a.AreaID
+                                    ORDER BY total DESC
+                                    LIMIT 10";
+    $areaSevInfo = $db->get_results($areaSevSql);
 
+    //本月
+    $areaMonthSql = "SELECT
+                                      SUM(o.OrderTotal) AS total,
+                                      a.AreaName
+                                    FROM
+                                      rsung_order_orderinfo AS o
+                                      LEFT JOIN ".DATATABLE."_order_client AS c
+                                        ON o.OrderUserID = c.ClientID
+                                      LEFT JOIN ".DATATABLE."_order_area AS a
+                                        ON c.ClientArea = a.AreaID
+                                    WHERE o.OrderCompany = ".$_SESSION['uc']['CompanyID']."
+                                              AND o.OrderStatus NOT IN (8, 9)
+                                              AND FROM_UNIXTIME(o.OrderDate,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')
+                                    GROUP BY a.AreaID
+                                    ORDER BY total DESC
+                                    LIMIT 10";
+    $areaMonthInfo = $db->get_results($areaMonthSql);
+}
 unset($yestodayStart, $yestodayEnd, $nearSev);
 ?>
   <li style="height:45%">

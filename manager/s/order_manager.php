@@ -317,11 +317,13 @@ include_once ("arr_data.php");
         <td class="font14">&nbsp;</td>
         <td class="font14" colspan="2" align="right">
             <?php if($oinfo['OrderSpecial'] == 'T') { ?>
-                <span style="text-decoration:line-through;"> 原价 ¥ <? echo $alltotal = sprintf("%01.2f", $orderPure + $orderPure * $oinfo['InvoiceTax'] / 100);?>&nbsp;</span><br/>
-                特价 ¥ <? echo $alltotal = sprintf("%01.2f", round($oinfo['OrderTotal'],2));?>&nbsp;
+                <span style="text-decoration:line-through;"> 原价 ¥ <? echo 
+                //2017-12-12 ymm 之前的订单总价是根据表里面的订单总价显示的，现在是根据现在登录的人在当前订单下有多少自己负责的商品
+                $alltotal = sprintf("%01.2f", $orderPure + $orderPure * $oinfo['InvoiceTax'] / 100);?>&nbsp;</span><br/>
+                特价 ¥ <? echo $alltotal = sprintf("%01.2f", round($alltotal,2));?>&nbsp;
 
             <?php } else { ?>
-                ¥ <? echo $alltotal = sprintf("%01.2f", round($oinfo['OrderTotal'],2));?>&nbsp;
+                ¥ <? echo $alltotal = sprintf("%01.2f", round($alltotal,2));?>&nbsp;
             <?php } ?>
         </td>
     </tr>
